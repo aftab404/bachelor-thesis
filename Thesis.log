@@ -1,4 +1,4 @@
-This is LuaHBTeX, Version 1.24.0 (MiKTeX 26.2) (format=lualatex 2026.4.23)  24 APR 2026 14:26
+This is LuaHBTeX, Version 1.24.0 (MiKTeX 26.2) (format=lualatex 2026.4.23)  24 APR 2026 14:57
  restricted system commands enabled.
  file:line:error style messages enabled.
 **c:/Users/AftabKhan/Desktop/Seminar_Report/Thesis
@@ -1888,9 +1888,8 @@ Package biblatex Info: Automatic encoding selection.
 
 \openout4 = Thesis.bcf
 Package biblatex Info: Trying to load bibliographic data...
-Package biblatex Info: ... file 'Thesis.bbl' not found.
-
-No file Thesis.bbl.
+Package biblatex Info: ... file 'Thesis.bbl' found.
+ (./Thesis.bbl)
 Package biblatex Info: Reference section=0 on input line 17.
 Package biblatex Info: Reference segment=0 on input line 17.
 \g__cctab_next_cctab=\catcodetable17
@@ -1904,6 +1903,7 @@ File: UdS.pdf Graphic file (type pdf)
 Package luatex.def Info: UdS.pdf  used on input line 19.
 (luatex.def)             Requested size: 142.26378pt x 56.99316pt.
 LaTeX Font Info:    Trying to load font information for U+msa on input line 19.
+
 
 (C:/Users/AftabKhan/AppData/Local/Programs/MiKTeX/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
@@ -2003,37 +2003,6 @@ luaotfload | resolve : sequence of 3 lookups yielded nothing appropriate. [1
  (./Content/Chapter_Introduction.tex
 chapter I.
 
-LaTeX Warning: Citation 'wiki:Linear_programming' on page 1 undefined on input 
-line 4.
-
-
-LaTeX Warning: Citation 'kunwar2022introduction' on page 1 undefined on input l
-ine 4.
-
-
-LaTeX Warning: Citation 'wiki:Integer_programming' on page 1 undefined on input
- line 6.
-
-
-LaTeX Warning: Citation 'MarkoThesisMsc' on page 1 undefined on input line 9.
-
-
-LaTeX Warning: Citation 'DeniThesisMsc' on page 1 undefined on input line 9.
-
-
-LaTeX Warning: Citation 'MarkoThesisBsc' on page 1 undefined on input line 9.
-
-
-LaTeX Warning: Citation 'MaksimThesisMsc' on page 1 undefined on input line 9.
-
-
-LaTeX Warning: Citation 'vaswani2023attentionneed' on page 1 undefined on input
- line 12.
-
-
-Underfull \vbox (badness 6445) has occurred while \output is active []
-
-
 warning  (pdf backend): ignoring duplicate destination with the name 'page.1'
 [1
 
@@ -2042,6 +2011,9 @@ warning  (pdf backend): ignoring duplicate destination with the name 'page.1'
 
 
 ]
+Underfull \vbox (badness 1721) has occurred while \output is active []
+
+
 warning  (pdf backend): ignoring duplicate destination with the name 'page.2'
 [2]) [3]
 \openout2 = Content/Chapter_RelatedWork.aux
@@ -2053,61 +2025,7 @@ warning  (pdf backend): ignoring duplicate destination with the name 'page.2'
 
 ]
 chapter II.
-
-LaTeX Warning: Citation 'zhang2024solvinggeneralnaturallanguagedescriptionoptim
-ization' on page 5 undefined on input line 4.
-
-
-Overfull \hbox (267.72197pt too wide) in paragraph at lines 4--5
-\TU/lmr/m/n/12 (LLMs) and math-e-mat-i-cal op-ti-miza-tion. A promi-nent ex-am-p
-le is \TU/lmr/b/n/12 OptLLM \TU/lmr/m/n/12 [[]],
- []
-
-
-LaTeX Warning: Citation 'jiang2025llmoptlearningdefinesolve' on page 5 undefine
-d on input line 8.
-
-
-LaTeX Warning: Citation 'huang2025llmsmathematicalmodelingbridging' on page 5 u
-ndefined on input line 11.
-
-
-Overfull \hbox (124.47585pt too wide) in paragraph at lines 11--12
-\TU/lmr/m/n/12 While the afore-men-tioned frame-works fo-cus on gen-er-a-tion, 
-\TU/lmr/b/n/12 Mamo \TU/lmr/m/n/12 [[]]
- []
-
-[5]
-
-LaTeX Warning: Citation 'vaswani2023attentionneed' on page 6 undefined on input
- line 17.
-
-
-LaTeX Warning: Citation 'Jiang_2026' on page 6 undefined on input line 19.
-
-
-LaTeX Warning: Citation 'liu2023codegeneratedchatgptreally' on page 6 undefined
- on input line 22.
-
-
-LaTeX Warning: Citation 'chen2021evaluatinglargelanguagemodels' on page 6 undef
-ined on input line 24.
-
-
-Overfull \hbox (122.19864pt too wide) in paragraph at lines 24--25
-[]\TU/lmr/m/n/12 EvalPlus builds upon es-tab-lished datasets, most no-tably \TU
-/lmr/m/it/12 Hu-manEval \TU/lmr/m/n/12 [[]]
- []
-
-
-LaTeX Warning: Citation 'mozannar2025magenticuihumanintheloopagenticsystems' on
- page 6 undefined on input line 29.
-
-
-Underfull \vbox (badness 3701) has occurred while \output is active []
-
- [6])
-[7]
+[5] [6]) [7]
 \openout2 = Content/Chapter_Concept.aux
  (./Content/Chapter_Concept.tex [8
 
@@ -2117,9 +2035,6 @@ Underfull \vbox (badness 3701) has occurred while \output is active []
 
 ]
 chapter III.
-
-LaTeX Warning: Citation 'MarkoThesisMsc' on page 9 undefined on input line 10.
-
 Package microtype Info: Loading generic protrusion settings for font family
 (microtype)             `lmtt' (encoding: TU).
 (microtype)             For optimal results, create family-specific settings.
@@ -2127,7 +2042,7 @@ Package microtype Info: Loading generic protrusion settings for font family
 [9] [10]
 warning  (file static/new.pdf) (pdf inclusion): PDF inclusion: found PDF version
  '1.7', but at most version '1.5' allowed
-<static/new.pdf, id=146, 493.845pt x 262.0992pt>
+<static/new.pdf, id=183, 493.845pt x 262.0992pt>
 File: static/new.pdf Graphic file (type pdf)
 <use static/new.pdf>
 Package luatex.def Info: static/new.pdf  used on input line 48.
@@ -2142,23 +2057,7 @@ Package luatex.def Info: static/new.pdf  used on input line 48.
 
 ]
 chapter IV.
-[13]
-
-LaTeX Warning: Citation 'DeniThesisMsc' on page 14 undefined on input line 18.
-
-
-LaTeX Warning: Citation 'MarkoThesisBsc' on page 14 undefined on input line 21.
-
-
-
-LaTeX Warning: Citation 'MaksimThesisMsc' on page 14 undefined on input line 21
-.
-
-
-LaTeX Warning: Citation 'MarkoThesisMsc' on page 14 undefined on input line 24.
-
-
-[14]
+[13] [14]
 Underfull \vbox (badness 1264) has occurred while \output is active []
 
  [15])
@@ -2177,18 +2076,19 @@ Underfull \vbox (badness 3240) has occurred while \output is active []
 
 ])
 [18]
+chapter without number
+[19
 
-LaTeX Warning: Empty bibliography on input line 50.
 
 
+
+
+
+] [20]
 \openout2 = Content/Appendix.aux
-(./Content/Appendix.tex
+ (./Content/Appendix.tex
 chapter A.
-) [19
-
-
-
-
+) [21
 
 
 
@@ -2207,43 +2107,35 @@ Package cleveref Info: loaded `english' language definitions on input line 10.
 LaTeX2e <2025-11-01>
 L3 programming layer <2026-03-20>
  ***********
-
-
-LaTeX Warning: There were undefined references.
-
-
-Package biblatex Warning: Please (re)run Biber on the file:
-(biblatex)                Thesis
-(biblatex)                and rerun LaTeX afterwards.
-
 Package logreq Info: Writing requests to 'Thesis.run.xml'.
 
 \openout1 = Thesis.run.xml
 )
 
 Here is how much of LuaTeX's memory you used:
- 47996 strings out of 475900
+ 48098 strings out of 475900
  100000,2373549 words of node,token memory allocated
- 769 words of node memory still in use:
-   7 hlist, 2 vlist, 2 rule, 1 local_par, 4 glue, 5 kern, 1 penalty, 3 glyph, 29
- attribute, 83 glue_spec, 15 attribute_list, 4 write, 1 pdf_action nodes
-   avail lists: 1:2,2:1680,3:391,4:83,5:401,6:122,7:6913,8:41,9:661,10:20,11:613
-,12:2
- 69432 multiletter control sequences out of 65536+600000
- 64 fonts using 4208847 bytes
- 122i,21n,114p,11599b,2490s stack positions out of 10000i,1000n,20000p,200000b,200000s
-<c:/users/aftabkhan/appdata/local/programs/miktex/fonts/opentype/public/lm/lmmon
-o12-regular.otf><c:/users/aftabkhan/appdata/local/programs/miktex/fonts/opentype
-/public/lm/lmroman12-italic.otf><c:/users/aftabkhan/appdata/local/programs/mikte
-x/fonts/opentype/public/lm/lmroman10-italic.otf><c:/users/aftabkhan/appdata/loca
-l/programs/miktex/fonts/opentype/public/lm/lmroman10-regular.otf><c:/users/aftab
-khan/appdata/local/programs/miktex/fonts/opentype/public/lm/lmroman12-regular.ot
-f><c:/users/aftabkhan/appdata/local/programs/miktex/fonts/opentype/public/lm/lmr
-omandemi10-regular.otf><C:/Users/AftabKhan/AppData/Local/Programs/MiKTeX/fonts/t
-ype1/public/amsfonts/cm/cmr12.pfb>
-Output written on Thesis.pdf (25 pages, 214963 bytes).
+ 839 words of node memory still in use:
+   7 hlist, 2 vlist, 2 rule, 1 local_par, 4 glue, 5 kern, 1 penalty, 3 glyph, 39
+ attribute, 85 glue_spec, 20 attribute_list, 4 write, 6 pdf_action nodes
+   avail lists: 1:3,2:1716,3:457,4:139,5:401,6:125,7:6706,8:80,9:671,10:16,11:56
+8,12:2
+ 69511 multiletter control sequences out of 65536+600000
+ 65 fonts using 4339415 bytes
+ 122i,21n,114p,11599b,2980s stack positions out of 10000i,1000n,20000p,200000b,200000s
+<c:/users/aftabkhan/appdata/local/programs/miktex/fonts/opentype/public/lm/lmrom
+ancaps10-regular.otf><c:/users/aftabkhan/appdata/local/programs/miktex/fonts/ope
+ntype/public/lm/lmmono12-regular.otf><c:/users/aftabkhan/appdata/local/programs/
+miktex/fonts/opentype/public/lm/lmroman12-italic.otf><c:/users/aftabkhan/appdata
+/local/programs/miktex/fonts/opentype/public/lm/lmroman10-italic.otf><c:/users/a
+ftabkhan/appdata/local/programs/miktex/fonts/opentype/public/lm/lmroman10-regula
+r.otf><c:/users/aftabkhan/appdata/local/programs/miktex/fonts/opentype/public/lm
+/lmroman12-regular.otf><c:/users/aftabkhan/appdata/local/programs/miktex/fonts/o
+pentype/public/lm/lmromandemi10-regular.otf><C:/Users/AftabKhan/AppData/Local/Pr
+ograms/MiKTeX/fonts/type1/public/amsfonts/cm/cmr12.pfb>
+Output written on Thesis.pdf (27 pages, 239010 bytes).
 
-PDF statistics: 326 PDF objects out of 1000 (max. 8388607)
- 78 named destinations out of 1000 (max. 1048576)
- 200 words of extra memory for PDF output out of 10000 (max. 100000000)
+PDF statistics: 411 PDF objects out of 1000 (max. 8388607)
+ 96 named destinations out of 1000 (max. 1048576)
+ 208 words of extra memory for PDF output out of 10000 (max. 100000000)
 

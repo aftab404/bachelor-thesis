@@ -9,16 +9,32 @@
         "-file-line-error",
         "%DOC%"
       ]
+    },
+    {
+      "name": "biber",
+      "command": "biber",
+      "args": [
+        "%DOCFILE%"
+      ]
     }
   ],
   "latex-workshop.latex.recipes": [
     {
-      "name": "lualatex",
+      "name": "lualatex ➜ biber ➜ lualatex*2",
+      "tools": [
+        "lualatex",
+        "biber",
+        "lualatex",
+        "lualatex"
+      ]
+    },
+    {
+      "name": "lualatex only",
       "tools": [
         "lualatex"
       ]
     }
   ],
-  // "latex-workshop.latex.autoBuild.run": "onSave",
-  "latex-workshop.latex.recipe.default": "lastUsed"
+  "latex-workshop.latex.recipe.default": "lualatex ➜ biber ➜ lualatex*2",
+  "latex-workshop.latex.autoBuild.run": "onSave"
 }
