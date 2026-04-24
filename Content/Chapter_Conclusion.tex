@@ -1,0 +1,27 @@
+\chapter{Conclusion}
+\section{Summary}
+This thesis has presented a novel architecture for integrating an AI agent as a "first-class collaborator" within a web-based Optimization Platform. By bridging the gap between natural language processing and visual modeling, the proposed system addresses the core challenges of inefficiency and high entry barriers in Mixed-Integer Linear Programming (MILP).
+
+The primary technical contribution of this work is the "Phantom User" paradigm. By utilizing a headless browser automation layer (Puppeteer), the AI agent is able to join collaborative modeling sessions as a virtual participant. This approach leverages the platform's existing Operational Transformation (OT) infrastructure, ensuring that AI-driven modifications are synchronized in real-time across all connected clients without requiring invasive changes to the legacy backend.
+
+To ensure the reliability of the system, we implemented a multi-layered safety framework. A dedicated validation layer enforces syntactic and structural correctness of the LLM-generated XML-like markup, effectively mitigating the risk of model corruption due to hallucinations. Furthermore, a stateful "Human-in-the-Loop" workflow ensures that the user remains the ultimate authority, providing a mechanism for iterative feedback and final approval of all agent-led changes.
+
+In conclusion, this work demonstrates that AI agents can move beyond being simple "tools" to become active, collaborative participants in complex technical domains, significantly enhancing the accessibility and productivity of optimization modeling.
+
+\section{Current Status and Next Steps}
+While the theoretical architecture has been established, the implementation is currently in a functional prototype stage. This section outlines the current capabilities and the prioritized milestones for future development.
+
+\subsection{Implementation Status}
+The core communication pipeline between the \emph{Solver-Panel} frontend and the \emph{AI-Agent} backend service is fully operational. A dedicated chat interface has been integrated into the modeler, enabling natural language interaction. Currently, the backend service successfully utilizes Puppeteer to join collaborative sessions and the OpenAI API to translate user prompts into model updates. The agent is capable of perceiving the model state, generating modifications, and applying them directly to the Document Object Model (DOM) of the shared workspace.
+
+\subsection{Future Milestones}
+To reach the final vision of a robust and secure collaborative environment, the following components are currently under development:
+
+\begin{itemize}
+    \item \textbf{Human-in-the-Loop Implementation:} The current version applies changes directly to the model. The next phase involves implementing the full iterative feedback loop (Accept/Reject/Refine) using a stateful framework like LangGraph. This will ensure that all AI-driven modifications remain tentative until they receive explicit user approval.
+    
+    \item \textbf{Schema-Based Validation:} Work is ongoing to define a formal grammar for the platform's XML-like syntax. This schema will form the basis of the validation layer, allowing the agent to detect and correct "hallucinations" or syntax errors before they are presented to the user.
+    
+    \item \textbf{UI/UX Enhancements:} To improve the collaborative experience, further UI features will be added to provide the user with clear visual cues regarding the agent’s current state (e.g., "Thinking," "Validating," or "Awaiting Review").
+\end{itemize}
+

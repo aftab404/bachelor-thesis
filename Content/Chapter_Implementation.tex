@@ -1,0 +1,72 @@
+\chapter{Implementation}
+In this chapter, we move from the conceptual design to the concrete implementation of the proposed architecture. We discuss the technologies and frameworks employed, how the individual components are interconnected, and the design decisions made during implementation. 
+
+\section{High-Level System Architecture}
+\subsection{Overview}
+The primary access point of the Optimization Modeler platform is the \textbf{Solver-Panel}, which is implemented as an Angular application. It is responsible for core functionalities such as user authentication, model creation and editing, and multi-user collaboration. The Solver-Panel communicates with the backend service introduced in this work, which hosts the AI agent and the auxiliary services required to support the proposed architecture.
+
+User interaction with the AI agent takes place through a chat interface embedded within the Angular application. When the user submits a prompt via this chat interface, the request is sent to the backend API service using HTTP-based communication.
+
+\subsection{Class Hierarchy}
+We now describe the concrete classes involved in the architecture. The \textbf{Solver-Panel} class provides the frontend interface of the Optimization Modeler. On the backend, we implement an Express.js-based service referred to as the \textbf{AI-Agent} service. This service consists of two main components. The first is the \textbf{LLM} service, which provides an abstraction layer for interacting with large language models—in our case, OpenAI’s GPT-based models—through their API. The second component is the \textbf{Puppeteer-Controller}, which is responsible for controlling a server-side browser instance using the Puppeteer automation framework. This controller enables the AI agent to interact with the Optimization Modeler by programmatically accessing and manipulating the Document Object Model (DOM).
+
+
+\section{Solver-Panel Frontend}
+This section describes the user-facing component of the Optimization Platform, referred to as the \emph{Solver-Panel}, and its integration with the AI agent service.
+
+\subsection{User Authentication}
+Users begin by creating an account and authenticating via the Solver-Panel's dedicated security layer. This infrastructure manages user sessions and access control for various optimization workspaces. The underlying authentication workflows and the management of user identities are implemented following the architecture established by Begaj \cite{DeniThesisMsc}.
+
+\subsection{Internal Modeler}
+The core of the interface is the Optimization Modeler, a vanilla JavaScript module integrated into the Angular-based Solver-Panel application. Once authenticated, users can construct Mixed-Integer Linear Programs (MILPs) using an intuitive drag-and-drop interface. This visual representation is backed by a domain-specific, XML-like markup language. Any operation performed within the graphical Document Object Model (DOM) is automatically translated into this syntax, which serves as the source of truth for the optimization model \cite{MarkoThesisBsc, MaksimThesisMsc}.
+
+\subsection{Collaboration and Agent Invitation}
+The platform supports multi-user collaboration through a link-sharing architecture. Users can generate and share session links that allow others to join a workspace with either read-only or editing privileges \cite{MarkoThesisMsc}. To facilitate AI assistance, we extended this mechanism to include an ``Invite AI Agent'' functionality. 
+
+When triggered, the frontend sends an HTTP POST request to the AI agent service's \texttt{invokeai} (or \texttt{/puppet}) endpoint. This request includes the \texttt{writeUrl} (edit link) of the current session. The backend server uses this link to launch a headless browser instance that connects to the workspace, effectively joining the session as a virtual collaborator.
+
+\subsection{Chat Interface and Request Processing}
+
+To enable natural language interaction, the modeler includes a dedicated chat interface. When a user submits a query, the frontend invokes the agent's \texttt{processrequest} (or \texttt{/openai}) API endpoint. The payload for this request consists of two primary components: the current state of the optimization model (extracted in its XML format) and the user's natural language prompt. The agent service then leverages a Large Language Model to interpret the request within the context of the existing model, generating the necessary modifications which are subsequently applied back to the workspace.
+
+
+\section{Browser Automation Layer}
+\subsection{Initialization}
+When the API endpoint \texttt{invokeAI} is called, the \texttt{puppetInit()} method of the Puppeteer controller is executed first. This method launches an instance of a headless browser (Google Chrome) on the server, navigates to the login page of the Optimization Modeler, enters the authentication credentials associated with the AI user, and completes the login process.
+
+After the AI user has successfully authenticated, Puppeteer is used again to navigate to the \texttt{editURL} received in the response body. Visiting this URL opens the shared instance of the optimization model within the browser. Since this browser instance runs on the backend server, the shared modeler instance can now be accessed and manipulated programmatically through the backend.
+
+
+\subsection{DOM Manipulation}
+This layer is responsible for handling DOM manipulation by leveraging the capabilities provided by the Puppeteer service. After the user submits a request through the chat interface and the LLM service generates the corresponding output, the backend accesses the \texttt{innerHTML} of the modeler instance’s document body and replaces the current model with the model generated by the LLM.
+
+This operation triggers the same internal update mechanisms as those invoked when a human user manually modifies the model through the interface. As a result, the change is propagated automatically to all users connected to the same collaborative session, ensuring consistency across all active instances.
+
+
+
+
+
+\section{LLM Integration}
+
+\subsection{Context}
+When a user submits a request through the chat interface, the \texttt{/openaiResponse} endpoint is invoked. This endpoint receives the current state of the optimization model along with the user’s prompt in the request body. The backend then forwards this information to the LLM as contextual input.
+
+Providing the current state of the model allows the LLM to understand what the user is currently working on and the progress made so far. The quality and usefulness of the LLM’s output are strongly influenced by the clarity and specificity of the user prompt; consequently, more detailed prompts generally result in more accurate and helpful responses.
+
+\subsection{Prompt Engineering}
+Prompt engineering plays a crucial role in generating functional and reliable outputs from large language models. While users are encouraged to formulate prompts that clearly and precisely describe their requirements, system-level prompts must also be carefully designed.
+
+The LLM must be explicitly instructed about its role and responsibilities. In our case, the model operates as part of an AI agent whose purpose is to assist users in creating and modifying optimization models. The system prompt therefore includes a clear description of this role, as well as the current model state and the user’s request.
+
+In addition, the prompt may include one or more illustrative examples that demonstrate the expected input–output behavior. This approach leverages the few-shot learning capabilities of LLMs, enabling the model to better align its responses with the desired format and semantics.
+
+
+
+%\section{Validation Engine}
+%\subsection{Schema}
+%\subsection{Validation Loop}
+
+%\section{Stateful AI-Agent}
+
+
+
