@@ -3,54 +3,54 @@
 \contentsline {section}{\numberline {1}Context}{1}{section.1.1}%
 \contentsline {subsection}{\numberline {1.1}Mixed-Integer Linear Programming}{1}{subsection.1.1.1}%
 \contentsline {subsection}{\numberline {1.2}Optimization Platform}{1}{subsection.1.1.2}%
-\contentsline {subsection}{\numberline {1.3}Human-AI Collaboration}{1}{subsection.1.1.3}%
+\contentsline {subsection}{\numberline {1.3}Human-AI Collaboration}{2}{subsection.1.1.3}%
 \contentsline {section}{\numberline {2}Challenges}{2}{section.1.2}%
-\contentsline {section}{\numberline {3}Goal}{2}{section.1.3}%
-\contentsline {section}{\numberline {4}Solution Outline}{3}{section.1.4}%
-\contentsline {subsection}{\numberline {4.1}AI-Agent Collaborator}{3}{subsection.1.4.1}%
-\contentsline {subsection}{\numberline {4.2}Iterative Feedback}{3}{subsection.1.4.2}%
-\contentsline {subsection}{\numberline {4.3}Safety and Validation}{3}{subsection.1.4.3}%
-\contentsline {chapter}{\numberline {II}Related Work}{5}{chapter.2}%
-\contentsline {section}{\numberline {1}LLMs and Mathematical Modeling}{5}{section.2.1}%
-\contentsline {subsection}{\numberline {1.1}End-to-End Modeler and Solver Archirecture}{5}{subsection.2.1.1}%
-\contentsline {subsection}{\numberline {1.2}Natural Langauge to Formal Specification}{5}{subsection.2.1.2}%
-\contentsline {subsection}{\numberline {1.3}LLM Benchmark for Optimization Modeling}{5}{subsection.2.1.3}%
-\contentsline {section}{\numberline {2}AI Code Generation}{6}{section.2.2}%
-\contentsline {subsection}{\numberline {2.1}Current State}{6}{subsection.2.2.1}%
-\contentsline {subsection}{\numberline {2.2}Coding Agents}{6}{subsection.2.2.2}%
-\contentsline {subsection}{\numberline {2.3}LLM Benchmarking for Code Generation}{7}{subsection.2.2.3}%
-\contentsline {section}{\numberline {3}Human-in-the-loop Architecture}{7}{section.2.3}%
-\contentsline {subsection}{\numberline {3.1}Agentic Development Environments}{7}{subsection.2.3.1}%
-\contentsline {subsection}{\numberline {3.2}Domain-Specific Agentic Systems}{8}{subsection.2.3.2}%
-\contentsline {subsection}{\numberline {3.3}Magentic-UI}{9}{subsection.2.3.3}%
-\contentsline {chapter}{\numberline {III}Concept}{11}{chapter.3}%
-\contentsline {section}{\numberline {1}The Collaboration Paradigm}{11}{section.3.1}%
-\contentsline {subsection}{\numberline {1.1}Human-to-Human Collaboration}{11}{subsection.3.1.1}%
-\contentsline {subsection}{\numberline {1.2}AI Agent Integration into the Collaborative Workspace}{12}{subsection.3.1.2}%
-\contentsline {section}{\numberline {2}Schema Validation}{12}{section.3.2}%
-\contentsline {section}{\numberline {3}Human-in-the-Loop}{12}{section.3.3}%
-\contentsline {section}{\numberline {4}System Workflow}{13}{section.3.4}%
-\contentsline {chapter}{\numberline {IV}Implementation}{15}{chapter.4}%
-\contentsline {section}{\numberline {1}High-Level System Architecture}{15}{section.4.1}%
-\contentsline {subsection}{\numberline {1.1}Overview}{15}{subsection.4.1.1}%
-\contentsline {subsection}{\numberline {1.2}Class Hierarchy}{15}{subsection.4.1.2}%
-\contentsline {section}{\numberline {2}Solver-Panel Frontend}{16}{section.4.2}%
-\contentsline {subsection}{\numberline {2.1}User Authentication}{16}{subsection.4.2.1}%
-\contentsline {subsection}{\numberline {2.2}Internal Modeler}{16}{subsection.4.2.2}%
-\contentsline {subsection}{\numberline {2.3}Collaboration and Agent Invitation}{16}{subsection.4.2.3}%
-\contentsline {subsection}{\numberline {2.4}Chat Interface and Request Processing}{16}{subsection.4.2.4}%
-\contentsline {section}{\numberline {3}Browser Automation Layer}{17}{section.4.3}%
-\contentsline {subsection}{\numberline {3.1}Initialization}{17}{subsection.4.3.1}%
-\contentsline {subsection}{\numberline {3.2}DOM Manipulation}{17}{subsection.4.3.2}%
-\contentsline {section}{\numberline {4}LLM Integration}{17}{section.4.4}%
-\contentsline {subsection}{\numberline {4.1}Context}{17}{subsection.4.4.1}%
-\contentsline {subsection}{\numberline {4.2}Prompt Engineering}{18}{subsection.4.4.2}%
-\contentsline {chapter}{\numberline {V}Conclusion}{19}{chapter.5}%
-\contentsline {section}{\numberline {1}Summary}{19}{section.5.1}%
-\contentsline {section}{\numberline {2}Current Status and Next Steps}{19}{section.5.2}%
-\contentsline {subsection}{\numberline {2.1}Implementation Status}{20}{subsection.5.2.1}%
-\contentsline {subsection}{\numberline {2.2}Future Milestones}{20}{subsection.5.2.2}%
-\contentsline {chapter}{\nonumberline Bibliography}{21}{chapter*.4}%
-\contentsline {chapter}{\numberline {A}An Appendix}{23}{appendix.A}%
+\contentsline {section}{\numberline {3}Goal}{3}{section.1.3}%
+\contentsline {section}{\numberline {4}Solution Outline}{4}{section.1.4}%
+\contentsline {subsection}{\numberline {4.1}AI-Agent Collaborator}{4}{subsection.1.4.1}%
+\contentsline {subsection}{\numberline {4.2}Iterative Feedback}{4}{subsection.1.4.2}%
+\contentsline {subsection}{\numberline {4.3}Safety and Validation}{5}{subsection.1.4.3}%
+\contentsline {chapter}{\numberline {II}Related Work}{7}{chapter.2}%
+\contentsline {section}{\numberline {1}LLMs and Mathematical Modeling}{7}{section.2.1}%
+\contentsline {subsection}{\numberline {1.1}End-to-End Modeler and Solver Archirecture}{7}{subsection.2.1.1}%
+\contentsline {subsection}{\numberline {1.2}Natural Langauge to Formal Specification}{7}{subsection.2.1.2}%
+\contentsline {subsection}{\numberline {1.3}LLM Benchmark for Optimization Modeling}{7}{subsection.2.1.3}%
+\contentsline {section}{\numberline {2}AI Code Generation}{8}{section.2.2}%
+\contentsline {subsection}{\numberline {2.1}Current State}{8}{subsection.2.2.1}%
+\contentsline {subsection}{\numberline {2.2}Coding Agents}{8}{subsection.2.2.2}%
+\contentsline {subsection}{\numberline {2.3}LLM Benchmarking for Code Generation}{9}{subsection.2.2.3}%
+\contentsline {section}{\numberline {3}Human-in-the-loop Architecture}{9}{section.2.3}%
+\contentsline {subsection}{\numberline {3.1}Agentic Development Environments}{9}{subsection.2.3.1}%
+\contentsline {subsection}{\numberline {3.2}Domain-Specific Agentic Systems}{10}{subsection.2.3.2}%
+\contentsline {subsection}{\numberline {3.3}Magentic-UI}{11}{subsection.2.3.3}%
+\contentsline {chapter}{\numberline {III}Concept}{13}{chapter.3}%
+\contentsline {section}{\numberline {1}The Collaboration Paradigm}{13}{section.3.1}%
+\contentsline {subsection}{\numberline {1.1}Human-to-Human Collaboration}{13}{subsection.3.1.1}%
+\contentsline {subsection}{\numberline {1.2}AI Agent Integration into the Collaborative Workspace}{14}{subsection.3.1.2}%
+\contentsline {section}{\numberline {2}Schema Validation}{14}{section.3.2}%
+\contentsline {section}{\numberline {3}Human-in-the-Loop}{14}{section.3.3}%
+\contentsline {section}{\numberline {4}System Workflow}{15}{section.3.4}%
+\contentsline {chapter}{\numberline {IV}Implementation}{17}{chapter.4}%
+\contentsline {section}{\numberline {1}High-Level System Architecture}{17}{section.4.1}%
+\contentsline {subsection}{\numberline {1.1}Overview}{17}{subsection.4.1.1}%
+\contentsline {subsection}{\numberline {1.2}Class Hierarchy}{17}{subsection.4.1.2}%
+\contentsline {section}{\numberline {2}Solver-Panel Frontend}{18}{section.4.2}%
+\contentsline {subsection}{\numberline {2.1}User Authentication}{18}{subsection.4.2.1}%
+\contentsline {subsection}{\numberline {2.2}Internal Modeler}{18}{subsection.4.2.2}%
+\contentsline {subsection}{\numberline {2.3}Collaboration and Agent Invitation}{18}{subsection.4.2.3}%
+\contentsline {subsection}{\numberline {2.4}Chat Interface and Request Processing}{18}{subsection.4.2.4}%
+\contentsline {section}{\numberline {3}Browser Automation Layer}{19}{section.4.3}%
+\contentsline {subsection}{\numberline {3.1}Initialization}{19}{subsection.4.3.1}%
+\contentsline {subsection}{\numberline {3.2}DOM Manipulation}{19}{subsection.4.3.2}%
+\contentsline {section}{\numberline {4}LLM Integration}{19}{section.4.4}%
+\contentsline {subsection}{\numberline {4.1}Context}{19}{subsection.4.4.1}%
+\contentsline {subsection}{\numberline {4.2}Prompt Engineering}{20}{subsection.4.4.2}%
+\contentsline {chapter}{\numberline {V}Conclusion}{21}{chapter.5}%
+\contentsline {section}{\numberline {1}Summary}{21}{section.5.1}%
+\contentsline {section}{\numberline {2}Current Status and Next Steps}{21}{section.5.2}%
+\contentsline {subsection}{\numberline {2.1}Implementation Status}{22}{subsection.5.2.1}%
+\contentsline {subsection}{\numberline {2.2}Future Milestones}{22}{subsection.5.2.2}%
+\contentsline {chapter}{\nonumberline Bibliography}{23}{chapter*.4}%
+\contentsline {chapter}{\numberline {A}An Appendix}{25}{appendix.A}%
 \def \@chapapp {\appendixname }
 \providecommand \tocbasic@end@toc@file {}\tocbasic@end@toc@file 

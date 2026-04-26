@@ -62,14 +62,6 @@
       \field{note}{[Accessed 26-04-2026]}
       \field{title}{antigravity.google}
     \endentry
-    \entry{assistantui}{misc}{}{}
-      \field{sortinit}{a}
-      \field{sortinithash}{2f401846e2029bad6b3ecc16d50031e2}
-      \field{labeltitlesource}{title}
-      \field{howpublished}{\url{https://www.assistant-ui.com/}}
-      \field{note}{[Accessed 26-04-2026]}
-      \field{title}{assistant-ui --- assistant-ui.com}
-    \endentry
     \entry{DeniThesisMsc}{misc}{}{}
       \name{author}{1}{}{%
         {{hash=5c0d61673f9f518cc5b078bdd4653428}{%
@@ -545,6 +537,14 @@
       \field{howpublished}{\url{http://en.wikipedia.org/w/index.php?title=Integer\%20programming&oldid=1325150256}}
       \field{title}{{Integer programming} --- {W}ikipedia{,} The Free Encyclopedia}
       \field{year}{2026}
+    \endentry
+    \entry{assistantui}{misc}{}{}
+      \field{sortinit}{I}
+      \field{sortinithash}{8d291c51ee89b6cd86bf5379f0b151d8}
+      \field{labeltitlesource}{title}
+      \field{howpublished}{\url{https://www.assistant-ui.com/docs}}
+      \field{note}{[Accessed 26-04-2026]}
+      \field{title}{{I}ntroduction --- assistant-ui.com}
     \endentry
     \entry{jiang2025llmoptlearningdefinesolve}{misc}{}{}
       \name{author}{7}{}{%
