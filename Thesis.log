@@ -1,4 +1,4 @@
-This is LuaHBTeX, Version 1.24.0 (MiKTeX 26.2) (format=lualatex 2026.4.23)  24 APR 2026 18:48
+This is LuaHBTeX, Version 1.24.0 (MiKTeX 26.2) (format=lualatex 2026.4.23)  26 APR 2026 18:31
  restricted system commands enabled.
  file:line:error style messages enabled.
 **c:/Users/AftabKhan/Desktop/Seminar_Report/Thesis
@@ -2025,31 +2025,31 @@ warning  (pdf backend): ignoring duplicate destination with the name 'page.2'
 
 ]
 chapter II.
-[5] [6]) [7] [8]
+[5] [6] [7] [8]) [9]
 \openout2 = Content/Chapter_Concept.aux
- (./Content/Chapter_Concept.tex
+ (./Content/Chapter_Concept.tex [10
+
+
+
+
+
+]
 chapter III.
 Package microtype Info: Loading generic protrusion settings for font family
 (microtype)             `lmtt' (encoding: TU).
 (microtype)             For optimal results, create family-specific settings.
 (microtype)             See the microtype manual for details.
-[9
-
-
-
-
-
-] [10]
+[11] [12]
 warning  (file static/new.pdf) (pdf inclusion): PDF inclusion: found PDF version
  '1.7', but at most version '1.5' allowed
-<static/new.pdf, id=197, 493.845pt x 262.0992pt>
+<static/new.pdf, id=226, 493.845pt x 262.0992pt>
 File: static/new.pdf Graphic file (type pdf)
 <use static/new.pdf>
 Package luatex.def Info: static/new.pdf  used on input line 48.
 (luatex.def)             Requested size: 284.52756pt x 151.0058pt.
-) [11<./static/new.pdf>]
+) [13<./static/new.pdf>]
 \openout2 = Content/Chapter_Implementation.aux
- (./Content/Chapter_Implementation.tex [12
+ (./Content/Chapter_Implementation.tex [14
 
 
 
@@ -2057,38 +2057,44 @@ Package luatex.def Info: static/new.pdf  used on input line 48.
 
 ]
 chapter IV.
-[13] [14]
+[15] [16]
 Underfull \vbox (badness 1264) has occurred while \output is active []
 
- [15])
-[16]
+ [17])
+[18]
 \openout2 = Content/Chapter_Conclusion.aux
  (./Content/Chapter_Conclusion.tex
 chapter V.
 
 Underfull \vbox (badness 3240) has occurred while \output is active []
 
- [17
+ [19
 
 
 
 
 
 ])
-[18]
+[20]
 chapter without number
-[19
+[21
 
 
 
 
 
 
-] [20]
+]
+Overfull \hbox (5.19989pt too wide) in paragraph at lines 50--50
+[]\TU/lmr/m/n/12 Google Workspace. \TU/lmr/m/it/12 AI Tools for Busi-ness | Goog
+le Workspace --- workspace.google.com\TU/lmr/m/n/12 .
+ []
+
+[22]
 \openout2 = Content/Appendix.aux
  (./Content/Appendix.tex
 chapter A.
-) [21
+) [23
 
 
 
@@ -2113,16 +2119,16 @@ Package logreq Info: Writing requests to 'Thesis.run.xml'.
 )
 
 Here is how much of LuaTeX's memory you used:
- 48115 strings out of 475900
+ 48156 strings out of 475900
  100000,2373549 words of node,token memory allocated
- 875 words of node memory still in use:
-   7 hlist, 2 vlist, 2 rule, 1 local_par, 4 glue, 5 kern, 1 penalty, 3 glyph, 45
- attribute, 85 glue_spec, 23 attribute_list, 4 write, 9 pdf_action nodes
-   avail lists: 1:4,2:1711,3:467,4:143,5:422,6:123,7:7755,8:80,9:671,10:18,11:70
-5,12:2
- 69523 multiletter control sequences out of 65536+600000
+ 899 words of node memory still in use:
+   7 hlist, 2 vlist, 2 rule, 1 local_par, 4 glue, 5 kern, 1 penalty, 3 glyph, 49
+ attribute, 85 glue_spec, 25 attribute_list, 4 write, 11 pdf_action nodes
+   avail lists: 1:4,2:1707,3:452,4:151,5:476,6:120,7:8488,8:80,9:671,10:21,11:81
+4,12:2
+ 69550 multiletter control sequences out of 65536+600000
  65 fonts using 4339415 bytes
- 122i,21n,114p,11599b,2975s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 122i,21n,114p,11599b,2954s stack positions out of 10000i,1000n,20000p,200000b,200000s
 <c:/users/aftabkhan/appdata/local/programs/miktex/fonts/opentype/public/lm/lmrom
 ancaps10-regular.otf><c:/users/aftabkhan/appdata/local/programs/miktex/fonts/ope
 ntype/public/lm/lmmono12-regular.otf><c:/users/aftabkhan/appdata/local/programs/
@@ -2133,9 +2139,9 @@ r.otf><c:/users/aftabkhan/appdata/local/programs/miktex/fonts/opentype/public/lm
 /lmroman12-regular.otf><c:/users/aftabkhan/appdata/local/programs/miktex/fonts/o
 pentype/public/lm/lmromandemi10-regular.otf><C:/Users/AftabKhan/AppData/Local/Pr
 ograms/MiKTeX/fonts/type1/public/amsfonts/cm/cmr12.pfb>
-Output written on Thesis.pdf (27 pages, 246811 bytes).
+Output written on Thesis.pdf (29 pages, 262601 bytes).
 
-PDF statistics: 434 PDF objects out of 1000 (max. 8388607)
- 101 named destinations out of 1000 (max. 1048576)
+PDF statistics: 475 PDF objects out of 1000 (max. 8388607)
+ 115 named destinations out of 1000 (max. 1048576)
  208 words of extra memory for PDF output out of 10000 (max. 100000000)
 

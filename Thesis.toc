@@ -20,34 +20,37 @@
 \contentsline {subsection}{\numberline {2.2}Coding Agents}{6}{subsection.2.2.2}%
 \contentsline {subsection}{\numberline {2.3}LLM Benchmarking for Code Generation}{7}{subsection.2.2.3}%
 \contentsline {section}{\numberline {3}Human-in-the-loop Architecture}{7}{section.2.3}%
-\contentsline {chapter}{\numberline {III}Concept}{9}{chapter.3}%
-\contentsline {section}{\numberline {1}The Collaboration Paradigm}{9}{section.3.1}%
-\contentsline {subsection}{\numberline {1.1}Human-to-Human Collaboration}{9}{subsection.3.1.1}%
-\contentsline {subsection}{\numberline {1.2}AI Agent Integration into the Collaborative Workspace}{10}{subsection.3.1.2}%
-\contentsline {section}{\numberline {2}Schema Validation}{10}{section.3.2}%
-\contentsline {section}{\numberline {3}Human-in-the-Loop}{10}{section.3.3}%
-\contentsline {section}{\numberline {4}System Workflow}{11}{section.3.4}%
-\contentsline {chapter}{\numberline {IV}Implementation}{13}{chapter.4}%
-\contentsline {section}{\numberline {1}High-Level System Architecture}{13}{section.4.1}%
-\contentsline {subsection}{\numberline {1.1}Overview}{13}{subsection.4.1.1}%
-\contentsline {subsection}{\numberline {1.2}Class Hierarchy}{13}{subsection.4.1.2}%
-\contentsline {section}{\numberline {2}Solver-Panel Frontend}{14}{section.4.2}%
-\contentsline {subsection}{\numberline {2.1}User Authentication}{14}{subsection.4.2.1}%
-\contentsline {subsection}{\numberline {2.2}Internal Modeler}{14}{subsection.4.2.2}%
-\contentsline {subsection}{\numberline {2.3}Collaboration and Agent Invitation}{14}{subsection.4.2.3}%
-\contentsline {subsection}{\numberline {2.4}Chat Interface and Request Processing}{14}{subsection.4.2.4}%
-\contentsline {section}{\numberline {3}Browser Automation Layer}{15}{section.4.3}%
-\contentsline {subsection}{\numberline {3.1}Initialization}{15}{subsection.4.3.1}%
-\contentsline {subsection}{\numberline {3.2}DOM Manipulation}{15}{subsection.4.3.2}%
-\contentsline {section}{\numberline {4}LLM Integration}{15}{section.4.4}%
-\contentsline {subsection}{\numberline {4.1}Context}{15}{subsection.4.4.1}%
-\contentsline {subsection}{\numberline {4.2}Prompt Engineering}{16}{subsection.4.4.2}%
-\contentsline {chapter}{\numberline {V}Conclusion}{17}{chapter.5}%
-\contentsline {section}{\numberline {1}Summary}{17}{section.5.1}%
-\contentsline {section}{\numberline {2}Current Status and Next Steps}{17}{section.5.2}%
-\contentsline {subsection}{\numberline {2.1}Implementation Status}{18}{subsection.5.2.1}%
-\contentsline {subsection}{\numberline {2.2}Future Milestones}{18}{subsection.5.2.2}%
-\contentsline {chapter}{\nonumberline Bibliography}{19}{chapter*.4}%
-\contentsline {chapter}{\numberline {A}An Appendix}{21}{appendix.A}%
+\contentsline {subsection}{\numberline {3.1}Agentic Development Environments}{7}{subsection.2.3.1}%
+\contentsline {subsection}{\numberline {3.2}Domain-Specific Agentic Systems}{8}{subsection.2.3.2}%
+\contentsline {subsection}{\numberline {3.3}Magentic-UI}{9}{subsection.2.3.3}%
+\contentsline {chapter}{\numberline {III}Concept}{11}{chapter.3}%
+\contentsline {section}{\numberline {1}The Collaboration Paradigm}{11}{section.3.1}%
+\contentsline {subsection}{\numberline {1.1}Human-to-Human Collaboration}{11}{subsection.3.1.1}%
+\contentsline {subsection}{\numberline {1.2}AI Agent Integration into the Collaborative Workspace}{12}{subsection.3.1.2}%
+\contentsline {section}{\numberline {2}Schema Validation}{12}{section.3.2}%
+\contentsline {section}{\numberline {3}Human-in-the-Loop}{12}{section.3.3}%
+\contentsline {section}{\numberline {4}System Workflow}{13}{section.3.4}%
+\contentsline {chapter}{\numberline {IV}Implementation}{15}{chapter.4}%
+\contentsline {section}{\numberline {1}High-Level System Architecture}{15}{section.4.1}%
+\contentsline {subsection}{\numberline {1.1}Overview}{15}{subsection.4.1.1}%
+\contentsline {subsection}{\numberline {1.2}Class Hierarchy}{15}{subsection.4.1.2}%
+\contentsline {section}{\numberline {2}Solver-Panel Frontend}{16}{section.4.2}%
+\contentsline {subsection}{\numberline {2.1}User Authentication}{16}{subsection.4.2.1}%
+\contentsline {subsection}{\numberline {2.2}Internal Modeler}{16}{subsection.4.2.2}%
+\contentsline {subsection}{\numberline {2.3}Collaboration and Agent Invitation}{16}{subsection.4.2.3}%
+\contentsline {subsection}{\numberline {2.4}Chat Interface and Request Processing}{16}{subsection.4.2.4}%
+\contentsline {section}{\numberline {3}Browser Automation Layer}{17}{section.4.3}%
+\contentsline {subsection}{\numberline {3.1}Initialization}{17}{subsection.4.3.1}%
+\contentsline {subsection}{\numberline {3.2}DOM Manipulation}{17}{subsection.4.3.2}%
+\contentsline {section}{\numberline {4}LLM Integration}{17}{section.4.4}%
+\contentsline {subsection}{\numberline {4.1}Context}{17}{subsection.4.4.1}%
+\contentsline {subsection}{\numberline {4.2}Prompt Engineering}{18}{subsection.4.4.2}%
+\contentsline {chapter}{\numberline {V}Conclusion}{19}{chapter.5}%
+\contentsline {section}{\numberline {1}Summary}{19}{section.5.1}%
+\contentsline {section}{\numberline {2}Current Status and Next Steps}{19}{section.5.2}%
+\contentsline {subsection}{\numberline {2.1}Implementation Status}{20}{subsection.5.2.1}%
+\contentsline {subsection}{\numberline {2.2}Future Milestones}{20}{subsection.5.2.2}%
+\contentsline {chapter}{\nonumberline Bibliography}{21}{chapter*.4}%
+\contentsline {chapter}{\numberline {A}An Appendix}{23}{appendix.A}%
 \def \@chapapp {\appendixname }
 \providecommand \tocbasic@end@toc@file {}\tocbasic@end@toc@file 

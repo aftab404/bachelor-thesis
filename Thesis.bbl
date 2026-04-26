@@ -19,6 +19,14 @@
 
 \refsection{0}
   \datalist[entry]{nty/global//global/global/global}
+    \entry{overleaf}{misc}{}{}
+      \field{sortinit}{A}
+      \field{sortinithash}{2f401846e2029bad6b3ecc16d50031e2}
+      \field{labeltitlesource}{title}
+      \field{howpublished}{\url{https://www.overleaf.com/about/ai-features}}
+      \field{note}{[Accessed 26-04-2026]}
+      \field{title}{{A}{I} features --- overleaf.com}
+    \endentry
     \entry{claudeCodeAgent}{misc}{}{}
       \name{author}{1}{}{%
         {{hash=f431db65cea024a5f19eab835afefee2}{%
@@ -45,6 +53,22 @@
       \verb{url}
       \verb https://code.claude.com/docs/en/overview
       \endverb
+    \endentry
+    \entry{antigravity}{misc}{}{}
+      \field{sortinit}{a}
+      \field{sortinithash}{2f401846e2029bad6b3ecc16d50031e2}
+      \field{labeltitlesource}{title}
+      \field{howpublished}{\url{https://antigravity.google/}}
+      \field{note}{[Accessed 26-04-2026]}
+      \field{title}{antigravity.google}
+    \endentry
+    \entry{assistantui}{misc}{}{}
+      \field{sortinit}{a}
+      \field{sortinithash}{2f401846e2029bad6b3ecc16d50031e2}
+      \field{labeltitlesource}{title}
+      \field{howpublished}{\url{https://www.assistant-ui.com/}}
+      \field{note}{[Accessed 26-04-2026]}
+      \field{title}{assistant-ui --- assistant-ui.com}
     \endentry
     \entry{DeniThesisMsc}{misc}{}{}
       \name{author}{1}{}{%
@@ -391,6 +415,48 @@
       \verb https://arxiv.org/abs/2107.03374
       \endverb
     \endentry
+    \entry{cursor}{misc}{}{}
+      \field{sortinit}{C}
+      \field{sortinithash}{4d103a86280481745c9c897c925753c0}
+      \field{labeltitlesource}{title}
+      \field{howpublished}{\url{https://cursor.com/product}}
+      \field{note}{[Accessed 26-04-2026]}
+      \field{title}{{C}ursor · {A}gent --- cursor.com}
+    \endentry
+    \entry{forootani2025surveymathematicalreasoningoptimization}{misc}{}{}
+      \name{author}{1}{}{%
+        {{hash=33a25b1f89846a85943d606aa99ec591}{%
+           family={Forootani},
+           familyi={F\bibinitperiod},
+           given={Ali},
+           giveni={A\bibinitperiod}}}%
+      }
+      \strng{namehash}{33a25b1f89846a85943d606aa99ec591}
+      \strng{fullhash}{33a25b1f89846a85943d606aa99ec591}
+      \strng{fullhashraw}{33a25b1f89846a85943d606aa99ec591}
+      \strng{bibnamehash}{33a25b1f89846a85943d606aa99ec591}
+      \strng{authorbibnamehash}{33a25b1f89846a85943d606aa99ec591}
+      \strng{authornamehash}{33a25b1f89846a85943d606aa99ec591}
+      \strng{authorfullhash}{33a25b1f89846a85943d606aa99ec591}
+      \strng{authorfullhashraw}{33a25b1f89846a85943d606aa99ec591}
+      \field{sortinit}{F}
+      \field{sortinithash}{2638baaa20439f1b5a8f80c6c08a13b4}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{eprintclass}{cs.AI}
+      \field{eprinttype}{arXiv}
+      \field{title}{A Survey on Mathematical Reasoning and Optimization with Large Language Models}
+      \field{year}{2025}
+      \verb{eprint}
+      \verb 2503.17726
+      \endverb
+      \verb{urlraw}
+      \verb https://arxiv.org/abs/2503.17726
+      \endverb
+      \verb{url}
+      \verb https://arxiv.org/abs/2503.17726
+      \endverb
+    \endentry
     \entry{geminicli}{misc}{}{}
       \name{author}{1}{}{%
         {{hash=8b36e9207c24c76e6719268e49201d94}{%
@@ -698,6 +764,14 @@
       \verb https://arxiv.org/abs/2305.01210
       \endverb
     \endentry
+    \entry{microsoftCopilot}{misc}{}{}
+      \field{sortinit}{M}
+      \field{sortinithash}{4625c616857f13d17ce56f7d4f97d451}
+      \field{labeltitlesource}{title}
+      \field{howpublished}{\url{https://www.microsoft.com/de-de/microsoft-365-copilot}}
+      \field{note}{[Accessed 26-04-2026]}
+      \field{title}{{M}icrosoft 365 {C}opilot | {K}{I}-{P}roduktivitätswerkzeuge für die {A}rbeit --- microsoft.com}
+    \endentry
     \entry{MaksimThesisMsc}{misc}{}{}
       \name{author}{1}{}{%
         {{hash=8d3b37431f4c43a685135152793ae23f}{%
@@ -928,6 +1002,14 @@
       \verb https://github.com/features/copilot
       \endverb
     \endentry
+    \entry{v0}{misc}{}{}
+      \field{sortinit}{v}
+      \field{sortinithash}{afb52128e5b4dc4b843768c0113d673b}
+      \field{labeltitlesource}{title}
+      \field{howpublished}{\url{https://v0.app/}}
+      \field{note}{[Accessed 26-04-2026]}
+      \field{title}{v0 by {V}ercel - {B}uild {A}gents, {A}pps, and {W}ebsites with {A}{I} --- v0.app}
+    \endentry
     \entry{vaswani2023attentionneed}{misc}{}{}
       \name{author}{8}{}{%
         {{hash=7f28e84700536646dd6620a0db07ad09}{%
@@ -996,6 +1078,38 @@
       \verb{url}
       \verb https://arxiv.org/abs/1706.03762
       \endverb
+    \endentry
+    \entry{visualstudio}{misc}{}{}
+      \field{sortinit}{V}
+      \field{sortinithash}{afb52128e5b4dc4b843768c0113d673b}
+      \field{labeltitlesource}{title}
+      \field{howpublished}{\url{https://code.visualstudio.com/}}
+      \field{note}{[Accessed 26-04-2026]}
+      \field{title}{{V}isual {S}tudio {C}ode - {T}he open source {A}{I} code editor | {Y}our home for multi-agent development --- code.visualstudio.com}
+    \endentry
+    \entry{googleWorkspace}{misc}{}{}
+      \name{author}{1}{}{%
+        {{hash=defa514e9d90f9563e66cf2842b55799}{%
+           family={Workspace},
+           familyi={W\bibinitperiod},
+           given={Google},
+           giveni={G\bibinitperiod}}}%
+      }
+      \strng{namehash}{defa514e9d90f9563e66cf2842b55799}
+      \strng{fullhash}{defa514e9d90f9563e66cf2842b55799}
+      \strng{fullhashraw}{defa514e9d90f9563e66cf2842b55799}
+      \strng{bibnamehash}{defa514e9d90f9563e66cf2842b55799}
+      \strng{authorbibnamehash}{defa514e9d90f9563e66cf2842b55799}
+      \strng{authornamehash}{defa514e9d90f9563e66cf2842b55799}
+      \strng{authorfullhash}{defa514e9d90f9563e66cf2842b55799}
+      \strng{authorfullhashraw}{defa514e9d90f9563e66cf2842b55799}
+      \field{sortinit}{W}
+      \field{sortinithash}{4315d78024d0cea9b57a0c6f0e35ed0d}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{howpublished}{\url{http://workspace.google.com/solutions/ai/}}
+      \field{note}{[Accessed 26-04-2026]}
+      \field{title}{{A}{I} {T}ools for {B}usiness | {G}oogle {W}orkspace --- workspace.google.com}
     \endentry
     \entry{yang2025codefoundationmodelsagents}{misc}{}{}
       \name{author}{71}{}{%

@@ -2392,16 +2392,23 @@
     <bcf:citekey order="14" intorder="1">yang2025codefoundationmodelsagents</bcf:citekey>
     <bcf:citekey order="15" intorder="1">yang2025codefoundationmodelsagents</bcf:citekey>
     <bcf:citekey order="16" intorder="1">copilot</bcf:citekey>
-    <bcf:citekey order="17" intorder="1">geminicli</bcf:citekey>
-    <bcf:citekey order="17" intorder="2">claudeCodeAgent</bcf:citekey>
+    <bcf:citekey order="17" intorder="1">forootani2025surveymathematicalreasoningoptimization</bcf:citekey>
     <bcf:citekey order="18" intorder="1">liu2023codegeneratedchatgptreally</bcf:citekey>
     <bcf:citekey order="19" intorder="1">chen2021evaluatinglargelanguagemodels</bcf:citekey>
-    <bcf:citekey order="20" intorder="1">mozannar2025magenticuihumanintheloopagenticsystems</bcf:citekey>
-    <bcf:citekey order="21" intorder="1">MarkoThesisMsc</bcf:citekey>
-    <bcf:citekey order="22" intorder="1">DeniThesisMsc</bcf:citekey>
-    <bcf:citekey order="23" intorder="1">MarkoThesisBsc</bcf:citekey>
-    <bcf:citekey order="23" intorder="2">MaksimThesisMsc</bcf:citekey>
-    <bcf:citekey order="24" intorder="1">MarkoThesisMsc</bcf:citekey>
+    <bcf:citekey order="20" intorder="1">cursor</bcf:citekey>
+    <bcf:citekey order="21" intorder="1">antigravity</bcf:citekey>
+    <bcf:citekey order="22" intorder="1">visualstudio</bcf:citekey>
+    <bcf:citekey order="23" intorder="1">v0</bcf:citekey>
+    <bcf:citekey order="24" intorder="1">microsoftCopilot</bcf:citekey>
+    <bcf:citekey order="25" intorder="1">googleWorkspace</bcf:citekey>
+    <bcf:citekey order="26" intorder="1">overleaf</bcf:citekey>
+    <bcf:citekey order="27" intorder="1">assistantui</bcf:citekey>
+    <bcf:citekey order="28" intorder="1">mozannar2025magenticuihumanintheloopagenticsystems</bcf:citekey>
+    <bcf:citekey order="29" intorder="1">MarkoThesisMsc</bcf:citekey>
+    <bcf:citekey order="30" intorder="1">DeniThesisMsc</bcf:citekey>
+    <bcf:citekey order="31" intorder="1">MarkoThesisBsc</bcf:citekey>
+    <bcf:citekey order="31" intorder="2">MaksimThesisMsc</bcf:citekey>
+    <bcf:citekey order="32" intorder="1">MarkoThesisMsc</bcf:citekey>
   </bcf:section>
   <!-- SORTING TEMPLATES -->
   <bcf:sortingtemplate name="nty">
