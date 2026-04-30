@@ -1,4 +1,4 @@
-This is LuaHBTeX, Version 1.24.0 (MiKTeX 26.2) (format=lualatex 2026.4.23)  30 APR 2026 15:00
+This is LuaHBTeX, Version 1.24.0 (MiKTeX 26.2) (format=lualatex 2026.4.23)  30 APR 2026 15:07
  restricted system commands enabled.
  file:line:error style messages enabled.
 **c:/Users/AftabKhan/Desktop/Seminar_Report/Thesis
@@ -2082,7 +2082,7 @@ chapter V.
  (./Content/Chapter_Conclusion.tex
 chapter VI.
 
-Underfull \vbox (badness 3240) has occurred while \output is active []
+Underfull \vbox (badness 1895) has occurred while \output is active []
 
  [37
 
@@ -2141,7 +2141,7 @@ Here is how much of LuaTeX's memory you used:
  947 words of node memory still in use:
    7 hlist, 2 vlist, 2 rule, 1 local_par, 4 glue, 5 kern, 1 penalty, 3 glyph, 67
  attribute, 85 glue_spec, 34 attribute_list, 4 write, 10 pdf_action nodes
-   avail lists: 1:4,2:2131,3:510,4:165,5:508,6:150,7:8495,8:80,9:797,10:25,11:81
+   avail lists: 1:4,2:2131,3:510,4:165,5:510,6:150,7:8495,8:80,9:797,10:25,11:81
 4,12:2
  69607 multiletter control sequences out of 65536+600000
  68 fonts using 4717999 bytes
@@ -2161,7 +2161,7 @@ sers/AftabKhan/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi
 12.pfb><C:/Users/AftabKhan/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsf
 onts/cm/cmr12.pfb><C:/Users/AftabKhan/AppData/Local/Programs/MiKTeX/fonts/type1/
 public/amsfonts/cm/cmsy10.pfb>
-Output written on Thesis.pdf (47 pages, 275446 bytes).
+Output written on Thesis.pdf (47 pages, 275066 bytes).
 
 PDF statistics: 727 PDF objects out of 1000 (max. 8388607)
  226 named destinations out of 1000 (max. 1048576)

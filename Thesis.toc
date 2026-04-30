@@ -79,9 +79,9 @@
 \contentsline {section}{\numberline {6}Summary}{36}{section.5.6}%
 \contentsline {chapter}{\numberline {VI}Conclusion}{37}{chapter.6}%
 \contentsline {section}{\numberline {1}Summary}{37}{section.6.1}%
-\contentsline {section}{\numberline {2}Current Status and Next Steps}{37}{section.6.2}%
-\contentsline {subsection}{\numberline {2.1}Implementation Status}{38}{subsection.6.2.1}%
-\contentsline {subsection}{\numberline {2.2}Future Milestones}{38}{subsection.6.2.2}%
+\contentsline {section}{\numberline {2}Limitations and Future Work}{38}{section.6.2}%
+\contentsline {subsection}{\numberline {2.1}Current Limitations}{38}{subsection.6.2.1}%
+\contentsline {subsection}{\numberline {2.2}Future Directions}{38}{subsection.6.2.2}%
 \contentsline {chapter}{\nonumberline Bibliography}{39}{chapter*.6}%
 \contentsline {chapter}{\numberline {A}An Appendix}{41}{appendix.A}%
 \def \@chapapp {\appendixname }

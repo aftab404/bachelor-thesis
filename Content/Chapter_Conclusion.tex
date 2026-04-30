@@ -1,27 +1,35 @@
 \chapter{Conclusion}
 \section{Summary}
-This thesis has presented a novel architecture for integrating an AI agent as a "first-class collaborator" within a web-based Optimization Platform. By bridging the gap between natural language processing and visual modeling, the proposed system addresses the core challenges of inefficiency and high entry barriers in Mixed-Integer Linear Programming (MILP).
+This thesis investigated how an AI agent can be integrated as a first-class collaborator in a web-based optimization platform for Mixed-Integer Linear Programming (MILP). The core objective was not to add a detached assistant, but to embed an execution-capable agent directly into the existing collaborative modeling workflow.
 
-The primary technical contribution of this work is the "Phantom User" paradigm. By utilizing a headless browser automation layer (Puppeteer), the AI agent is able to join collaborative modeling sessions as a virtual participant. This approach leverages the platform's existing Operational Transformation (OT) infrastructure, ensuring that AI-driven modifications are synchronized in real-time across all connected clients without requiring invasive changes to the legacy backend.
+The implemented architecture combines: (i) in-modeler chat interaction, (ii) stateful LangGraph-based orchestration, (iii) a browser automation bridge using Puppeteer for environment-side execution, and (iv) human-in-the-loop supervision with iterative feedback. This design allows the agent to operate on the current shared workspace state, generate context-aware model updates, and apply validated changes through the same collaboration channel used by human participants.
 
-To ensure the reliability of the system, we implemented a multi-layered safety framework. A dedicated validation layer enforces syntactic and structural correctness of the LLM-generated XML-like markup, effectively mitigating the risk of model corruption due to hallucinations. Furthermore, a stateful "Human-in-the-Loop" workflow ensures that the user remains the ultimate authority, providing a mechanism for iterative feedback and final approval of all agent-led changes.
-
-In conclusion, this work demonstrates that AI agents can move beyond being simple "tools" to become active, collaborative participants in complex technical domains, significantly enhancing the accessibility and productivity of optimization modeling.
-
-\section{Current Status and Next Steps}
-While the theoretical architecture has been established, the implementation is currently in a functional prototype stage. This section outlines the current capabilities and the prioritized milestones for future development.
-
-\subsection{Implementation Status}
-The core communication pipeline between the \emph{Solver-Panel} frontend and the \emph{AI-Agent} backend service is fully operational. A dedicated chat interface has been integrated into the modeler, enabling natural language interaction. Currently, the backend service successfully utilizes Puppeteer to join collaborative sessions and the OpenAI API to translate user prompts into model updates. The agent is capable of perceiving the model state, generating modifications, and applying them directly to the Document Object Model (DOM) of the shared workspace.
-
-\subsection{Future Milestones}
-To reach the final vision of a robust and secure collaborative environment, the following components are currently under development:
-
+With respect to the research questions introduced in this thesis, the work provides the following contributions:
 \begin{itemize}
-    \item \textbf{Human-in-the-Loop Implementation:} The current version applies changes directly to the model. The next phase involves implementing the full iterative feedback loop (Accept/Reject/Refine) using a stateful framework like LangGraph. This will ensure that all AI-driven modifications remain tentative until they receive explicit user approval.
-    
-    \item \textbf{Schema-Based Validation:} Work is ongoing to define a formal grammar for the platform's XML-like syntax. This schema will form the basis of the validation layer, allowing the agent to detect and correct "hallucinations" or syntax errors before they are presented to the user.
-    
-    \item \textbf{UI/UX Enhancements:} To improve the collaborative experience, further UI features will be added to provide the user with clear visual cues regarding the agent’s current state (e.g., "Thinking," "Validating," or "Awaiting Review").
+    \item \textbf{Reduction of modeling effort:} The architecture operationalizes natural-language-driven model editing and establishes an evaluation framework for measuring manual versus AI-assisted modeling speed.
+    \item \textbf{Lowering entry barriers:} The integrated assistant provides on-demand support inside the existing modeling interface, reducing dependence on deep prior platform expertise.
+    \item \textbf{Improved collaborative quality under supervision:} The system formalizes a stateful proposal-review loop where users retain final authority over acceptance, rejection, and refinement of generated updates.
 \end{itemize}
+
+Overall, the thesis demonstrates that AI support in optimization modeling is most effective when it is stateful, environment-aware, and explicitly supervised, rather than purely autonomous or prompt-only.
+
+\section{Limitations and Future Work}
+Although the prototype demonstrates feasibility and end-to-end integration, several limitations remain and motivate future work.
+
+\subsection{Current Limitations}
+\begin{itemize}
+    \item The implementation currently prioritizes research prototyping and architectural integration over production hardening.
+    \item Evaluation results depend on the selected task set and participant distribution; broader empirical studies are required for stronger generalization claims.
+    \item Reliability can be further improved by expanding and standardizing validator coverage across all model transformation cases.
+\end{itemize}
+
+\subsection{Future Directions}
+\begin{itemize}
+    \item \textbf{Extended validation pipeline:} Integrate modeler-native validators as a stricter pre-commit gate across all update paths, with richer error diagnostics for iterative correction.
+    \item \textbf{Larger-scale evaluation:} Conduct broader user studies with diverse optimization domains and statistically grounded comparisons of efficiency, accessibility, and quality metrics.
+    \item \textbf{Operational hardening:} Improve observability, service robustness, and deployment standardization for long-running collaborative sessions.
+    \item \textbf{Interaction refinement:} Add richer UI feedback for agent state transitions (generation, validation, waiting-for-approval) to further improve transparency and trust.
+\end{itemize}
+
+In conclusion, this work establishes a practical and extensible foundation for human-AI co-modeling in optimization platforms and shows that first-class collaborative agents are a viable direction for improving both productivity and accessibility in technical modeling workflows.
 
