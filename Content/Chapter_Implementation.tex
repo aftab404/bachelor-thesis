@@ -1,72 +1,221 @@
 \chapter{Implementation}
-In this chapter, we move from the conceptual design to the concrete implementation of the proposed architecture. We discuss the technologies and frameworks employed, how the individual components are interconnected, and the design decisions made during implementation. 
+This chapter translates the conceptual architecture into the implemented system. It describes how the AI collaborator is integrated into the existing Optimization Platform, how requests move across services, and how generated updates are applied to shared workspaces in a human-in-the-loop workflow.
 
-\section{High-Level System Architecture}
-\subsection{Overview}
-The primary access point of the Optimization Modeler platform is the \textbf{Solver-Panel}, which is implemented as an Angular application. It is responsible for core functionalities such as user authentication, model creation and editing, and multi-user collaboration. The Solver-Panel communicates with the backend service introduced in this work, which hosts the AI agent and the auxiliary services required to support the proposed architecture.
+\section{Implementation Overview}
+\subsection{System Components}
+The implementation is organized around four concrete components:
+\begin{enumerate}
+    \item \textbf{Solver-Panel (Angular):} User-facing entry point for authentication, collaboration, and modeler access.
+    \item \textbf{Modeler runtime (JavaScript/React integration):} Hosts the visual modeling canvas and embeds the AI chat interface.
+    \item \textbf{Agent orchestration service (Python):} Executes stateful LLM workflow logic and human-feedback loops using LangGraph \cite{langchainLangGraph}.
+    \item \textbf{Automation bridge (Node.js):} Controls browser-level interactions and DOM-side workspace updates through Puppeteer \cite{pptrPuppeteerPuppeteer, chromiumHome}.
+\end{enumerate}
 
-User interaction with the AI agent takes place through a chat interface embedded within the Angular application. When the user submits a prompt via this chat interface, the request is sent to the backend API service using HTTP-based communication.
+This decomposition preserves existing platform functionality \cite{MarkoThesisMsc, DeniThesisMsc, MarkoThesisBsc, MaksimThesisMsc} while adding AI collaboration as an orthogonal capability.
 
-\subsection{Class Hierarchy}
-We now describe the concrete classes involved in the architecture. The \textbf{Solver-Panel} class provides the frontend interface of the Optimization Modeler. On the backend, we implement an Express.js-based service referred to as the \textbf{AI-Agent} service. This service consists of two main components. The first is the \textbf{LLM} service, which provides an abstraction layer for interacting with large language models—in our case, OpenAI’s GPT-based models—through their API. The second component is the \textbf{Puppeteer-Controller}, which is responsible for controlling a server-side browser instance using the Puppeteer automation framework. This controller enables the AI agent to interact with the Optimization Modeler by programmatically accessing and manipulating the Document Object Model (DOM).
+\subsection{End-to-End Request Path}
+At runtime, the high-level request path is:
+\begin{enumerate}
+    \item A user invites the AI collaborator into an active editable workspace.
+    \item The frontend mounts and exposes a chat interface inside the modeler context.
+    \item User messages are sent through the chat runtime to the orchestration backend.
+    \item The orchestration service builds context from conversation state and current model state.
+    \item If required, tool calls trigger browser-layer operations through HTTP endpoints.
+    \item The resulting model update is applied to the shared workspace and becomes visible to collaborators.
+    \item The user may accept, reject, or refine through an interrupt-driven feedback loop.
+\end{enumerate}
 
+\section{Frontend Integration}
+\subsection{Agent Invitation}
+The integration extends the existing collaboration workflow by adding an ``Invite AI Agent'' action in the internal modeler view, implemented through the \texttt{inviteAI()} method in \texttt{internal-modeler.component.ts}. This method is the concrete frontend entry point for agent invocation.
 
-\section{Solver-Panel Frontend}
-This section describes the user-facing component of the Optimization Platform, referred to as the \emph{Solver-Panel}, and its integration with the AI agent service.
+Operationally, \texttt{inviteAI()} performs the following sequence:
+\begin{enumerate}
+    \item Ensure that a collaboration context exists; if not, create one through the existing master-user collaboration builder.
+    \item Retrieve the workspace edit link from the master collaboration object (the write-capable collaboration URL).
+    \item Send an HTTP request to the automation bridge endpoint:
+    \[
+    \texttt{POST /puppet}
+    \]
+    with JSON payload:
+    \[
+    \{\texttt{"link"}:\ \texttt{<writeUrl>}\}
+    \]
+    \item Update frontend UI state to expose the AI collaborator controls after successful invocation.
+\end{enumerate}
 
-\subsection{User Authentication}
-Users begin by creating an account and authenticating via the Solver-Panel's dedicated security layer. This infrastructure manages user sessions and access control for various optimization workspaces. The underlying authentication workflows and the management of user identities are implemented following the architecture established by Begaj \cite{DeniThesisMsc}.
+On the backend side, this endpoint is defined in the Node/Express bridge service (\texttt{Ai-Agent/index.js}) as \texttt{POST /puppet}. The endpoint delegates to the Puppeteer initialization routine, which launches a server-side headless Chrome browser session and navigates it to the provided collaborative write URL. This browser session acts as the AI agent's execution environment, allowing the agent to join the current collaboration session as an editing participant and interact with the same live modeler state as human users.
 
-\subsection{Internal Modeler}
-The core of the interface is the Optimization Modeler, a vanilla JavaScript module integrated into the Angular-based Solver-Panel application. Once authenticated, users can construct Mixed-Integer Linear Programs (MILPs) using an intuitive drag-and-drop interface. This visual representation is backed by a domain-specific, XML-like markup language. Any operation performed within the graphical Document Object Model (DOM) is automatically translated into this syntax, which serves as the source of truth for the optimization model \cite{MarkoThesisBsc, MaksimThesisMsc}.
+The invitation path remains role-aware because it reuses the platform's existing edit/read collaboration semantics. Therefore, no parallel permission model is introduced; the AI participant is integrated through the same collaboration boundary already used for human users.
 
-\subsection{Collaboration and Agent Invitation}
-The platform supports multi-user collaboration through a link-sharing architecture. Users can generate and share session links that allow others to join a workspace with either read-only or editing privileges \cite{MarkoThesisMsc}. To facilitate AI assistance, we extended this mechanism to include an ``Invite AI Agent'' functionality. 
+\subsection{Embedded Chat Runtime}
+The chat interface is mounted directly in the modeler container, not as an external application. The implementation uses assistant-ui with a React-based modal/thread runtime \cite{assistantui}, so user interaction remains co-located with model editing.
 
-When triggered, the frontend sends an HTTP POST request to the AI agent service's \texttt{invokeai} (or \texttt{/puppet}) endpoint. This request includes the \texttt{writeUrl} (edit link) of the current session. The backend server uses this link to launch a headless browser instance that connects to the workspace, effectively joining the session as a virtual collaborator.
+Communication between assistant-ui and LangGraph is implemented through the LangGraph runtime adapter in the frontend. Concretely, the runtime defines three core operations: \texttt{create}, \texttt{load}, and \texttt{stream}. During \texttt{create}, the frontend requests a new thread from the LangGraph API and stores the returned external thread identifier in the assistant-ui runtime state. During \texttt{load}, the frontend retrieves the thread state from LangGraph and reconstructs the local conversation view (messages and pending interrupts). This ensures that chat state remains persistent across UI reloads and modal reopen events.
 
-\subsection{Chat Interface and Request Processing}
+During active interaction, assistant-ui invokes the \texttt{stream} operation for each user turn. The frontend sends the message payload (plus runtime command metadata) to the LangGraph run-stream endpoint and subscribes to incremental response events. These streamed events are rendered token-by-token in the assistant-ui thread, which provides immediate user feedback and preserves conversational continuity. In parallel, command responses from LangGraph (e.g., interrupt/resume requirements in the human-in-the-loop flow) are surfaced in the same thread UI so that users can explicitly approve, reject, or refine the current proposal.
 
-To enable natural language interaction, the modeler includes a dedicated chat interface. When a user submits a query, the frontend invokes the agent's \texttt{processrequest} (or \texttt{/openai}) API endpoint. The payload for this request consists of two primary components: the current state of the optimization model (extracted in its XML format) and the user's natural language prompt. The agent service then leverages a Large Language Model to interpret the request within the context of the existing model, generating the necessary modifications which are subsequently applied back to the workspace.
+At the protocol level, assistant-ui is therefore responsible for interaction orchestration in the browser (thread lifecycle, rendering, user actions), while LangGraph is responsible for stateful agent execution on the backend (graph transitions, tool calls, and interrupt logic). The integration boundary is a thread-oriented API contract: assistant-ui sends user turns and commands, and LangGraph returns streamed model outputs plus state updates.
 
+\subsection{Model Context Injection}
+For each conversational turn, the frontend retrieves the current state of the active modeler instance and injects it into the request context before forwarding the user message. This mechanism is implemented in the chat runtime path by querying the modeler state (HTML/instance representation) and prepending it as a system-level context message for the agent run.
 
-\section{Browser Automation Layer}
-\subsection{Initialization}
-When the API endpoint \texttt{invokeAI} is called, the \texttt{puppetInit()} method of the Puppeteer controller is executed first. This method launches an instance of a headless browser (Google Chrome) on the server, navigates to the login page of the Optimization Modeler, enters the authentication credentials associated with the AI user, and completes the login process.
+The injected context serves two implementation goals. First, it grounds the model in the \emph{current} workspace snapshot, including already defined variables, constraints, objectives, and structural nesting. Second, it provides enough local state to interpret referential instructions such as ``modify the existing capacity constraint,'' ``add this variable to the objective,'' or ``update the bound we added earlier.'' Without explicit context injection, such instructions would be ambiguous or incorrectly resolved.
 
-After the AI user has successfully authenticated, Puppeteer is used again to navigate to the \texttt{editURL} received in the response body. Visiting this URL opens the shared instance of the optimization model within the browser. Since this browser instance runs on the backend server, the shared modeler instance can now be accessed and manipulated programmatically through the backend.
+From a data-flow perspective, each user turn is transformed into a composite payload:
+\begin{enumerate}
+    \item current workspace/model representation (system context),
+    \item conversational history (thread messages),
+    \item current user instruction (new turn),
+    \item optional runtime command metadata (e.g., interrupt resume input).
+\end{enumerate}
 
+This design improves consistency across iterative runs, because the agent does not rely on implicit memory alone; it receives an explicit state snapshot at invocation time. In practice, this reduces context drift and helps keep generated updates aligned with the latest model state, which is particularly important in collaborative sessions where the workspace can change between turns.
 
-\subsection{DOM Manipulation}
-This layer is responsible for handling DOM manipulation by leveraging the capabilities provided by the Puppeteer service. After the user submits a request through the chat interface and the LLM service generates the corresponding output, the backend accesses the \texttt{innerHTML} of the modeler instance’s document body and replaces the current model with the model generated by the LLM.
+\section{Agent Orchestration Service}
+\subsection{LangGraph Workflow Realization}
+The orchestration backend is implemented as a state graph with explicit nodes and conditional transitions \cite{langchainLangGraph}. In API terms, the frontend and backend communicate through LangGraph's thread-and-run abstraction introduced in the embedded chat subsection:
+\begin{itemize}
+    \item \textbf{Thread:} persistent conversation/state container for one chat session.
+    \item \textbf{create:} initializes a new thread and returns an external thread identifier.
+    \item \textbf{load:} retrieves stored thread state (messages and pending interrupts).
+    \item \textbf{stream:} starts a run on a thread and returns incremental output events.
+    \item \textbf{command:} runtime control input, used for actions such as interrupt resume.
+\end{itemize}
 
-This operation triggers the same internal update mechanisms as those invoked when a human user manually modifies the model through the interface. As a result, the change is propagated automatically to all users connected to the same collaborative session, ensuring consistency across all active instances.
+Operationally, assistant-ui uses these API primitives to drive LangGraph execution: each user turn is sent through a streamed run bound to a thread ID; LangGraph then executes the state graph, emits partial outputs, and persists updated state back to that same thread.
 
+At graph level, the implemented flow includes:
+\begin{itemize}
+    \item an LLM node for proposal generation,
+    \item a tool node for external actions,
+    \item and a human-feedback node for interrupt/resume control.
+\end{itemize}
 
+This graph-level structure directly realizes the intended HITL execution loop:
+\[
+\text{request} \rightarrow \text{generation} \rightarrow \text{tool/action} \rightarrow \text{feedback} \rightarrow (\text{regenerate or terminate})
+\]
 
+More concretely, LangGraph executes this loop by evaluating conditional edges after each node execution. If the LLM response requires a tool call, control moves to the tool node; if human approval is required, an interrupt state is emitted and exposed to the frontend. The frontend then sends a command (resume payload), and graph execution continues from the interrupt point instead of restarting from scratch. This resume semantics is the key mechanism that turns a normal chat pipeline into a stateful human-in-the-loop workflow.
 
+Compared to ad-hoc request handlers, this implementation provides explicit state transitions, observable control flow, deterministic routing conditions, and durable conversational state across turns.
 
-\section{LLM Integration}
+\subsection{Graph States}
+The implemented orchestration can be described as a set of explicit graph states, where each state has a narrowly defined responsibility in the request lifecycle.
 
-\subsection{Context}
-When a user submits a request through the chat interface, the \texttt{/openaiResponse} endpoint is invoked. This endpoint receives the current state of the optimization model along with the user’s prompt in the request body. The backend then forwards this information to the LLM as contextual input.
+\textbf{LLM State (Generation State).}
+This state is responsible for proposal generation. It receives the composite context (thread history, current model snapshot, and current user instruction), applies system-level constraints, and produces either:
+\begin{itemize}
+    \item a candidate model update, or
+    \item a tool-call request when external environment interaction is required.
+\end{itemize}
+In other words, this state determines \emph{what} should happen next.
 
-Providing the current state of the model allows the LLM to understand what the user is currently working on and the progress made so far. The quality and usefulness of the LLM’s output are strongly influenced by the clarity and specificity of the user prompt; consequently, more detailed prompts generally result in more accurate and helpful responses.
+\textbf{Tools State (Execution State).}
+This state executes external actions through bound tools, such as opening/joining a collaborative workspace session, reading the current model content, or applying generated model updates through the automation bridge. Tool outputs are fed back into graph state so the next LLM step can reason over fresh environment results. This state therefore implements \emph{environment-grounded execution} rather than pure text generation.
 
-\subsection{Prompt Engineering}
-Prompt engineering plays a crucial role in generating functional and reliable outputs from large language models. While users are encouraged to formulate prompts that clearly and precisely describe their requirements, system-level prompts must also be carefully designed.
+\textbf{HITL State (Approval/Feedback State).}
+This state materializes human-in-the-loop control through interrupt and resume semantics. When user confirmation is required, the graph emits an interrupt that is surfaced to the frontend. The user can then approve, reject, or provide refinement feedback; the returned command resumes graph execution from the suspended state. This keeps user authority inside the orchestration loop rather than outside it.
 
-The LLM must be explicitly instructed about its role and responsibilities. In our case, the model operates as part of an AI agent whose purpose is to assist users in creating and modifying optimization models. The system prompt therefore includes a clear description of this role, as well as the current model state and the user’s request.
+\textbf{Validation State (Reliability State).}
+A dedicated validation state has been integrated into the implemented graph. This state executes before the final commit and verifies that AI-generated output conforms to modeler constraints and schema expectations. Instead of introducing an ad-hoc validator, the implementation reuses the validation logic already present in the modeler stack (i.e., existing modeler validators and checks) as callable validation tools within the graph. This provides a deterministic acceptance gate:
+\[
+\text{generated output} \rightarrow \text{modeler validator checks} \rightarrow (\text{accept} \mid \text{return errors for refinement})
+\]
+and would further reduce the risk of structurally valid but semantically inconsistent updates.
 
-In addition, the prompt may include one or more illustrative examples that demonstrate the expected input–output behavior. This approach leverages the few-shot learning capabilities of LLMs, enabling the model to better align its responses with the desired format and semantics.
+\subsection{Tool Binding and External Actions}
+The orchestration service binds explicit tool functions to the LangGraph tool node. Tool binding means that callable Python functions are registered as agent-available actions; when the LLM decides that external execution is required, it emits a tool call instead of plain text, and LangGraph dispatches that call to the bound function.
 
+The relevant runtime tools are:
+\begin{itemize}
+    \item \textbf{\texttt{open\_webbrowser(url)}}: Initializes environment access by calling the automation bridge endpoint for browser/session startup and workspace join. This is used to attach the agent to a collaborative modeler session.
+    \item \textbf{\texttt{get\_current\_html()}}: Retrieves the current model representation from the active browser-side modeler instance. This is used when the agent needs fresh environment state before generating or refining an update.
+    \item \textbf{\texttt{update\_html(new\_html)}}: Applies generated model content back to the live modeler DOM through the automation bridge. This is the execution step that materializes the agent proposal in the shared workspace.
+\end{itemize}
 
+In addition, development/testing helper tools (e.g., arithmetic helpers used during graph experiments) can be bound in the same mechanism, but they are not part of the production modeling flow.
 
-%\section{Validation Engine}
-%\subsection{Schema}
-%\subsection{Validation Loop}
+These tools call the Node automation bridge via HTTP, which keeps environment execution separate from LLM reasoning logic.
 
-%\section{Stateful AI-Agent}
+This separation is architecturally important: the Python service decides \emph{what} change to perform, while the automation bridge performs \emph{how} the change is enacted in the browser session.
 
+\subsection{Prompt and Constraint Strategy}
+The implemented prompting strategy uses a strong \emph{system prompt} as a behavioral contract for the agent. In this context, the system prompt is the highest-priority instruction layer passed to the model at run time; it defines the agent role, task boundaries, expected output format, and non-negotiable constraints. User messages are interpreted within this envelope rather than in isolation.
 
+For this thesis, the system prompt is designed around the optimization modeler's domain-specific markup language. It explicitly specifies:
+\begin{itemize}
+    \item required structural organization (root tags, mandatory blocks, nesting rules),
+    \item allowed elements and attributes for variables, objectives, constraints, loops, and script blocks,
+    \item and validation-critical prohibitions (forbidden nesting patterns and structurally invalid combinations).
+\end{itemize}
+This design reduces under-specified generation and keeps outputs aligned with the modeler's parser and execution expectations.
 
+The prompt also helps in three practical ways. First, it improves \textbf{format reliability} by reducing malformed outputs. Second, it improves \textbf{semantic alignment} by reminding the model that it acts as a mathematical modeling assistant, not a generic chatbot. Third, it improves \textbf{repairability}: when validation errors occur, the same constraint framework can be reused to guide the model toward corrected output in the next iteration.
+
+In addition to core instructions, the implementation can include \emph{example-based prompting}. Terminologically, this is often referred to as \textbf{one-shot} (one example) or \textbf{few-shot} (multiple examples) prompting. This is not model training in the machine-learning sense; instead, it is in-context conditioning at inference time. The examples demonstrate target input-output behavior (e.g., natural-language request to valid markup transformation), which helps the model imitate the desired structure and reduce ambiguity in difficult cases.
+
+Overall, the prompt layer acts as a soft specification interface between natural-language intent and executable model transformations, complementing downstream validation and human-in-the-loop supervision.
+
+\subsection{Validation Gate Before Model Application}
+Before any AI-generated optimization model update is committed to the collaborative workspace, it should pass a validation gate based on the modeler package's existing validators/checks. The purpose of this gate is to ensure that generated output is not only well-formed text, but structurally and semantically compatible with the modeler's expected representation.
+
+Conceptually, the validation pipeline is:
+\[
+\text{LLM output} \rightarrow \text{modeler validators} \rightarrow (\text{accept and apply} \mid \text{reject and refine})
+\]
+
+In this design, validation is executed before DOM mutation. If the validator layer accepts the generated artifact, the update is forwarded to the automation execution path and applied to the active modeler instance. If validation fails, the error diagnostics are returned to the orchestration loop and used as structured feedback for the next generation attempt. This keeps invalid or partially inconsistent updates from propagating to collaborators.
+
+Reusing modeler-native validators has two implementation advantages. First, it aligns AI output quality checks with the same rule set already used by the platform, avoiding divergence between AI and manual editing paths. Second, it creates a deterministic acceptance criterion that can be audited and improved incrementally as the validator suite evolves.
+
+\section{Browser Automation Execution Layer}
+\subsection{Session Initialization}
+The Node.js automation bridge exposes HTTP endpoints for browser lifecycle actions. Initialization starts when the frontend invitation flow calls:
+\[
+\texttt{POST /puppet}
+\]
+with payload containing the collaborative write URL. In the bridge service, this endpoint delegates to the Puppeteer bootstrap method (\texttt{puppetInit(link)}), which performs the complete startup sequence.
+
+Concretely, initialization executes the following steps:
+\begin{enumerate}
+    \item \textbf{Browser launch:} start a Puppeteer-controlled Chrome instance on the server side and create a new page context.
+    \item \textbf{Viewport/session setup:} configure runtime viewport and browser page state used for subsequent modeler interaction.
+    \item \textbf{Authentication flow:} navigate to the platform login route and submit AI-account credentials through scripted form interactions.
+    \item \textbf{Workspace attach:} after successful login, navigate to the received collaboration write URL.
+    \item \textbf{Persistent page binding:} store the initialized page handle for later read/write calls (model retrieval and model update endpoints).
+\end{enumerate}
+
+After this sequence, the automation layer is attached to the same live collaborative modeler session as human users. Subsequent tool calls can therefore operate on the active workspace state without reinitializing browser context on every request.
+
+\subsection{Workspace Read/Write Operations}
+After initialization, the runtime follows a concrete execution path for each user prompt. The main steps are as follows:
+
+\begin{enumerate}
+    \item \textbf{Prompt-to-tool transition:} \\
+    The user prompt is processed in the LangGraph loop. When the LLM determines that a model mutation is required, it emits a call to the bound \texttt{update\_html(new\_html)} tool.
+
+    \item \textbf{Tool invocation and endpoint call:} \\
+    The Python tool function \texttt{update\_html} sends a
+    \[
+    \texttt{POST /update-html}
+    \]
+    request to the Node automation bridge with the following payload:
+    \[
+    \{\texttt{"newHTML"}:\ \texttt{<generated-model-markup>}\}
+    \]
+    This endpoint is handled in \texttt{Ai-Agent/index.js}, where the request is forwarded to \texttt{puppetEditModel(newHTML)}.
+
+    \item \textbf{Browser-side model update:} \\
+    Inside \texttt{puppetEditModel} (\texttt{Ai-Agent/puppet.js}), Puppeteer executes:
+    \[
+    \texttt{page.\$eval('div[name="Inst1"]', (el, newHTML) => el.innerHTML = newHTML)}
+    \]
+    This operation replaces the content of the active model instance container in the live modeler session. The selector \texttt{div[name="Inst1"]} targets the currently open model instance view used by the platform runtime.
+
+    \item \textbf{Propagation to collaborators:} \\
+    Because the mutation occurs directly in the live collaborative modeler DOM, the platform's existing synchronization channel propagates the resulting workspace change to connected participants. Thus, the agent update appears in the same shared session context as human edits.
+\end{enumerate}
+
+Additionally, read operations are available through \texttt{get\_current\_html()} (Python tool) and \texttt{GET /get-html} (Node bridge), enabling the agent to fetch the latest workspace state before subsequent generation cycles.

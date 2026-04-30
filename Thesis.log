@@ -1,4 +1,4 @@
-This is LuaHBTeX, Version 1.24.0 (MiKTeX 26.2) (format=lualatex 2026.4.23)  30 APR 2026 12:02
+This is LuaHBTeX, Version 1.24.0 (MiKTeX 26.2) (format=lualatex 2026.4.23)  30 APR 2026 15:00
  restricted system commands enabled.
  file:line:error style messages enabled.
 **c:/Users/AftabKhan/Desktop/Seminar_Report/Thesis
@@ -1669,7 +1669,8 @@ File: bkm-pdftex.def 2023-12-10 v1.31 bookmark driver for pdfTeX and luaTeX (HO
 )) (./Thesis.aux (./Content/Sworn_Declaration.aux)
 (./Content/Chapter_Introduction.aux) (./Content/Chapter_RelatedWork.aux)
 (./Content/Chapter_Concept.aux) (./Content/Chapter_Implementation.aux)
-(./Content/Chapter_Conclusion.aux) (./Content/Appendix.aux))
+(./Content/Chapter_Evaluation.aux) (./Content/Chapter_Conclusion.aux)
+(./Content/Appendix.aux))
 \openout1 = Thesis.aux
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 17.
@@ -1976,23 +1977,24 @@ Package tocbasic Info: character protrusion at toc deactivated on input line 20
 .
  (./Thesis.toc
 Package cleveref Info: loaded `english' language definitions on input line 1.
-)
-\tf@toc=\write5
-
-\openout5 = Thesis.toc
 luaotfload | resolve : sequence of 3 lookups yielded nothing appropriate.
 luaotfload | resolve : sequence of 3 lookups yielded nothing appropriate.
 luaotfload | resolve : sequence of 3 lookups yielded nothing appropriate.
 luaotfload | resolve : sequence of 3 lookups yielded nothing appropriate. [1
 
 
-]
+])
+\tf@toc=\write5
+
+\openout5 = Thesis.toc
+Package cleveref Info: loaded `english' language definitions on input line 27.
+ [2]
 \openout2 = Content/Sworn_Declaration.aux
- (./Content/Sworn_Declaration.tex [2
+ (./Content/Sworn_Declaration.tex [3
 
 
 
-] [3])
+])
 [4
 
 
@@ -2048,27 +2050,50 @@ Package microtype Info: Loading generic protrusion settings for font family
 (microtype)             `lmtt' (encoding: TU).
 (microtype)             For optimal results, create family-specific settings.
 (microtype)             See the microtype manual for details.
- [24]
-Underfull \vbox (badness 1264) has occurred while \output is active []
+ [24] [25] [26] [27]
+LaTeX Font Info:    Font shape `TU/lmtt/bx/n' in size <12> not available
+(Font)              Font shape `TU/lmtt/b/n' tried instead on input line 133.
+ [28]
+Underfull \vbox (badness 3158) has occurred while \output is active []
 
- [25])
-[26]
+ [29]
+Overfull \hbox (12.75166pt too wide) in paragraph at lines 196--198
+\TU/lmr/m/n/12 that a model mu-ta-tion is re-quired, it emits a call to the boun
+d \TU/lmtt/m/n/12 update_html(new_html)
+ []
+
+
+Overfull \hbox (24.2035pt too wide) detected at line 214
+[]
+ []
+
+[30]) [31]
+\openout2 = Content/Chapter_Evaluation.aux
+ (./Content/Chapter_Evaluation.tex [32
+
+
+
+
+
+]
+chapter V.
+[33] [34] [35]) [36]
 \openout2 = Content/Chapter_Conclusion.aux
  (./Content/Chapter_Conclusion.tex
-chapter V.
+chapter VI.
 
 Underfull \vbox (badness 3240) has occurred while \output is active []
 
- [27
+ [37
 
 
 
 
 
 ])
-[28]
+[38]
 chapter without number
-[29
+[39
 
 
 
@@ -2081,11 +2106,11 @@ Overfull \hbox (5.19989pt too wide) in paragraph at lines 50--50
 le Workspace --- workspace.google.com\TU/lmr/m/n/12 .
  []
 
-[30]
+[40]
 \openout2 = Content/Appendix.aux
  (./Content/Appendix.tex
 chapter A.
-) [31
+) [41
 
 
 
@@ -2099,7 +2124,8 @@ Package cleveref Info: loaded `english' language definitions on input line 10.
  (./Content/Sworn_Declaration.aux)
 (./Content/Chapter_Introduction.aux) (./Content/Chapter_RelatedWork.aux)
 (./Content/Chapter_Concept.aux) (./Content/Chapter_Implementation.aux)
-(./Content/Chapter_Conclusion.aux) (./Content/Appendix.aux))
+(./Content/Chapter_Evaluation.aux) (./Content/Chapter_Conclusion.aux)
+(./Content/Appendix.aux))
  ***********
 LaTeX2e <2025-11-01>
 L3 programming layer <2026-03-20>
@@ -2110,30 +2136,34 @@ Package logreq Info: Writing requests to 'Thesis.run.xml'.
 )
 
 Here is how much of LuaTeX's memory you used:
- 48194 strings out of 475900
+ 48342 strings out of 475900
  100000,2373549 words of node,token memory allocated
- 887 words of node memory still in use:
-   7 hlist, 2 vlist, 2 rule, 1 local_par, 4 glue, 5 kern, 1 penalty, 3 glyph, 47
- attribute, 85 glue_spec, 24 attribute_list, 4 write, 10 pdf_action nodes
-   avail lists: 1:3,2:1872,3:478,4:165,5:490,6:136,7:8493,8:80,9:719,10:25,11:81
+ 947 words of node memory still in use:
+   7 hlist, 2 vlist, 2 rule, 1 local_par, 4 glue, 5 kern, 1 penalty, 3 glyph, 67
+ attribute, 85 glue_spec, 34 attribute_list, 4 write, 10 pdf_action nodes
+   avail lists: 1:4,2:2131,3:510,4:165,5:508,6:150,7:8495,8:80,9:797,10:25,11:81
 4,12:2
- 69544 multiletter control sequences out of 65536+600000
- 65 fonts using 4339415 bytes
- 122i,20n,114p,11599b,2954s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 69607 multiletter control sequences out of 65536+600000
+ 68 fonts using 4717999 bytes
+ 122i,21n,114p,11599b,4365s stack positions out of 10000i,1000n,20000p,200000b,200000s
 <c:/users/aftabkhan/appdata/local/programs/miktex/fonts/opentype/public/lm/lmrom
 ancaps10-regular.otf><c:/users/aftabkhan/appdata/local/programs/miktex/fonts/ope
-ntype/public/lm/lmmono12-regular.otf><c:/users/aftabkhan/appdata/local/programs/
-miktex/fonts/opentype/public/lm/lmroman12-italic.otf><c:/users/aftabkhan/appdata
-/local/programs/miktex/fonts/opentype/public/lm/lmroman10-italic.otf><c:/users/a
-ftabkhan/appdata/local/programs/miktex/fonts/opentype/public/lm/lmroman10-regula
-r.otf><c:/users/aftabkhan/appdata/local/programs/miktex/fonts/opentype/public/lm
-/lmroman12-regular.otf><c:/users/aftabkhan/appdata/local/programs/miktex/fonts/o
-pentype/public/lm/lmromandemi10-regular.otf><C:/Users/AftabKhan/AppData/Local/Pr
-ograms/MiKTeX/fonts/type1/public/amsfonts/cm/cmr12.pfb><C:/Users/AftabKhan/AppDa
-ta/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy10.pfb>
-Output written on Thesis.pdf (37 pages, 218731 bytes).
+ntype/public/lm/lmroman8-regular.otf><c:/users/aftabkhan/appdata/local/programs/
+miktex/fonts/opentype/public/lm/lmmonolt10-bold.otf><c:/users/aftabkhan/appdata/
+local/programs/miktex/fonts/opentype/public/lm/lmmono12-regular.otf><c:/users/af
+tabkhan/appdata/local/programs/miktex/fonts/opentype/public/lm/lmroman12-italic.
+otf><c:/users/aftabkhan/appdata/local/programs/miktex/fonts/opentype/public/lm/l
+mroman10-italic.otf><c:/users/aftabkhan/appdata/local/programs/miktex/fonts/open
+type/public/lm/lmroman10-regular.otf><c:/users/aftabkhan/appdata/local/programs/
+miktex/fonts/opentype/public/lm/lmroman12-regular.otf><c:/users/aftabkhan/appdat
+a/local/programs/miktex/fonts/opentype/public/lm/lmromandemi10-regular.otf><C:/U
+sers/AftabKhan/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi
+12.pfb><C:/Users/AftabKhan/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsf
+onts/cm/cmr12.pfb><C:/Users/AftabKhan/AppData/Local/Programs/MiKTeX/fonts/type1/
+public/amsfonts/cm/cmsy10.pfb>
+Output written on Thesis.pdf (47 pages, 275446 bytes).
 
-PDF statistics: 573 PDF objects out of 1000 (max. 8388607)
- 162 named destinations out of 1000 (max. 1048576)
- 232 words of extra memory for PDF output out of 10000 (max. 100000000)
+PDF statistics: 727 PDF objects out of 1000 (max. 8388607)
+ 226 named destinations out of 1000 (max. 1048576)
+ 288 words of extra memory for PDF output out of 10000 (max. 100000000)
 

@@ -1,1 +1,141 @@
 \chapter{Evaluation}
+
+\section{Evaluation Goals}
+This chapter evaluates whether the implemented AI collaborator addresses the research questions formulated in the introduction:
+\begin{itemize}
+    \item Can an integrated, stateful, and supervised agent architecture reduce modeling effort for routine and repetitive tasks?
+    \item Can such an architecture lower entry barriers for users with limited optimization expertise?
+    \item Can it improve the efficiency and quality of collaborative MILP model development?
+\end{itemize}
+
+To answer these questions, we evaluate the system along three dimensions: efficiency, accessibility, and output quality under human supervision.
+
+\section{Experimental Setup}
+\subsection{System Configuration}
+The evaluated prototype corresponds to the implementation described in the previous chapter:
+\begin{itemize}
+    \item an Angular-based Solver-Panel and integrated modeler frontend,
+    \item an embedded chat runtime for user-agent interaction,
+    \item a Python-based orchestration service using LangGraph \cite{langchainLangGraph},
+    \item and a Node.js automation bridge using Puppeteer for browser-level model operations \cite{pptrPuppeteerPuppeteer}.
+\end{itemize}
+
+The LLM layer is accessed through API-based model routing (OpenRouter/OpenAI-compatible interface), and generated model updates are applied inside the live collaborative workspace.
+
+\subsection{Task Design}
+We use a set of representative MILP modeling tasks with increasing complexity (small, medium, and large). Each task requires users to create or modify variables, objectives, and constraints in the modeler. For each task, two execution modes are compared:
+\begin{enumerate}
+    \item \textbf{Manual mode:} modeling only through direct UI interaction.
+    \item \textbf{AI-assisted mode:} modeling with the first-class AI collaborator through natural-language requests and iterative feedback.
+\end{enumerate}
+
+\subsection{Participants and Procedure}
+Participants are grouped by experience level (e.g., beginner/intermediate/advanced with optimization modeling). Each participant solves the same task set in both modes. To reduce learning effects, task order should be counter-balanced across participants.
+
+For each run, we log completion time, interaction effort, number of correction cycles, and final model validity. The same acceptance criteria are used for manual and AI-assisted runs.
+
+\section{Metrics}
+\subsection{Efficiency Metrics}
+\begin{itemize}
+    \item \textbf{Task Completion Time (TCT):} end-to-end time from task start to accepted final model.
+    \item \textbf{Modeling Speed:} number of completed modeling operations per minute.
+    \item \textbf{Speedup Factor:}
+    \[
+    \text{Speedup} = \frac{T_{\text{manual}}}{T_{\text{AI}}}
+    \]
+    where values $>1$ indicate faster completion with AI assistance.
+\end{itemize}
+
+\subsection{Effort and Accessibility Metrics}
+\begin{itemize}
+    \item \textbf{Interaction Count:} number of UI operations (manual mode) versus number of prompts/feedback turns (AI mode).
+    \item \textbf{Correction Iterations:} number of refinement cycles until user acceptance.
+    \item \textbf{Onboarding Performance:} task success rate and completion time for low-experience users.
+\end{itemize}
+
+\subsection{Quality and Reliability Metrics}
+\begin{itemize}
+    \item \textbf{Syntactic Validity Rate:} fraction of generated updates passing structural checks.
+    \item \textbf{Accepted Suggestion Ratio:} accepted proposals divided by total AI proposals.
+    \item \textbf{Final Model Quality:} whether resulting models satisfy task requirements and solver feasibility conditions.
+\end{itemize}
+
+\section{Results by Research Question}
+\subsection{RQ1: Reduction of Modeling Effort}
+To answer RQ1, we compare manual and AI-assisted completion times and interaction counts for routine and repetitive modeling tasks.
+
+\begin{table}[h]
+\centering
+\caption{Manual vs AI-assisted efficiency comparison (fill with measured values).}
+\label{tab:rq1_efficiency}
+\begin{tabular}{lccc}
+\hline
+\textbf{Task} & \textbf{Manual Time (min)} & \textbf{AI Time (min)} & \textbf{Speedup} \\
+\hline
+Small task & -- & -- & -- \\
+Medium task & -- & -- & -- \\
+Large task & -- & -- & -- \\
+\hline
+\end{tabular}
+\end{table}
+
+Interpretation criterion: if AI-assisted runs show consistently lower completion time and reduced interaction overhead, RQ1 is supported.
+
+\subsection{RQ2: Lowering Entry Barriers}
+To answer RQ2, we focus on participants with limited optimization/modeler experience and compare:
+\begin{itemize}
+    \item task completion rate,
+    \item completion time,
+    \item and number of blocked situations (periods where users cannot proceed without support).
+\end{itemize}
+
+\begin{table}[h]
+\centering
+\caption{Accessibility indicators for low-experience users (fill with measured values).}
+\label{tab:rq2_accessibility}
+\begin{tabular}{lccc}
+\hline
+\textbf{Metric} & \textbf{Manual} & \textbf{AI-Assisted} & \textbf{Improvement} \\
+\hline
+Completion rate (\%) & -- & -- & -- \\
+Avg. completion time (min) & -- & -- & -- \\
+Blocked situations per task & -- & -- & -- \\
+\hline
+\end{tabular}
+\end{table}
+
+Interpretation criterion: improved completion outcomes and fewer blocked situations in AI-assisted mode support RQ2.
+
+\subsection{RQ3: Efficiency and Quality in Collaborative Development}
+To answer RQ3, we evaluate collaborative sessions where users and the AI agent co-develop a model through iterative proposal-review cycles.
+
+\begin{table}[h]
+\centering
+\caption{Collaborative quality and supervision metrics (fill with measured values).}
+\label{tab:rq3_quality}
+\begin{tabular}{lcc}
+\hline
+\textbf{Metric} & \textbf{Value} & \textbf{Interpretation} \\
+\hline
+Syntactic validity rate (\%) & -- & Structural reliability of generated updates \\
+Accepted suggestion ratio (\%) & -- & Practical usefulness of proposals \\
+Avg. correction iterations & -- & Refinement overhead under HITL \\
+Final feasible models (\%) & -- & End-state model quality \\
+\hline
+\end{tabular}
+\end{table}
+
+Interpretation criterion: high validity and feasibility with manageable correction loops support RQ3, showing that collaboration quality improves without removing user control.
+
+\section{Threats to Validity}
+\subsection{Internal Validity}
+Learning effects and prompt-quality variance may influence measured performance. Counter-balanced task ordering and standardized task instructions mitigate these effects.
+
+\subsection{External Validity}
+Results from prototype tasks and a limited participant set may not generalize to all optimization domains. Future studies should include broader industrial case studies and larger user cohorts.
+
+\subsection{Construct Validity}
+Time-based metrics alone cannot capture all benefits of collaboration quality. Therefore, efficiency metrics are complemented by validity, acceptance, and refinement metrics.
+
+\section{Summary}
+This evaluation framework directly addresses all three research questions by combining quantitative efficiency comparisons (manual versus AI-assisted), accessibility indicators for less-experienced users, and quality/reliability metrics for collaborative HITL modeling. The resulting evidence determines whether the implemented first-class AI collaborator improves modeling speed, reduces entry barriers, and increases collaborative model-development quality.
