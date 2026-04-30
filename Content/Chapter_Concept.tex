@@ -1,52 +1,171 @@
 \chapter{Concept}
-This chapter presents the detailed conceptual design of the proposed architecture. It explains how the different components of the system interact with each other and how they come together to form a cohesive solution.
 
-\section{The Collaboration Paradigm}
+\section{Overview}
+The proposed concept models the AI agent as a \emph{first-class collaborator} in the existing Optimization Platform instead of treating it as an external helper. This design decision follows the same collaboration paradigm already established for human users in prior platform work \cite{MarkoThesisMsc, DeniThesisMsc, MarkoThesisBsc, MaksimThesisMsc}: the agent joins a shared workspace, observes the current model state, proposes modifications, and interacts with users through the same operational context.
 
-The Optimization Modeler provides a built-in multi-user collaboration architecture. Our approach builds upon this existing infrastructure in order to preserve modularity and ensure that legacy code remains untouched. In this section, we first describe how collaboration between human users is realized and then explain how the AI agent integrates into the same collaborative workflow.
+At a system level, the concept consists of five tightly integrated layers:
+\begin{enumerate}
+    \item \textbf{Optimization workspace layer}, where users and the agent operate on a shared model state.
+    \item \textbf{LLM reasoning layer}, which translates natural-language instructions into domain-specific model edits.
+    \item \textbf{Interaction layer}, which provides a persistent chat interface inside the modeler.
+    \item \textbf{Execution layer}, which applies generated edits to the web modeler through controlled browser automation.
+    \item \textbf{Control and validation layer}, which enforces human oversight and structural correctness before final acceptance.
+\end{enumerate}
 
-\subsection{Human-to-Human Collaboration}
+This chapter discusses each conceptual pillar, compares relevant alternatives, and justifies the selected design with respect to the implementation constraints of the platform.
 
-Collaboration between human users is initiated by a master user \cite{MarkoThesisMsc}, who registers and logs into the optimization platform hosted at \url{https://optimized.mpi-inf.mpg.de/modeler/}. After logging in, the master user creates a new modeling workspace and initiates a collaborative session.
+\section{Optimization Modeling}
+The Optimization Platform is centered around a visual modeler for mixed-integer linear programming (MILP), where models are represented as structured markup and rendered as editable workspace content. In this environment, modeling is inherently stateful: every change affects subsequent editing, collaboration, validation, and solving steps.
 
-To start collaboration, the user clicks the \emph{Share} button located at the bottom of the interface. This action opens a dialog containing shareable links for the current workspace. Two types of links are provided:
+Multi-user collaboration is realized through a shared workspace session with role-based access links (write/edit versus read-only), following the collaboration model established in earlier platform iterations \cite{MarkoThesisMsc, DeniThesisMsc}. Once users join the same workspace, all participants operate on a common model state instead of maintaining independent local copies. Conceptually, each edit is treated as an event against this shared state and is propagated to connected collaborators through the session channel, so that structural changes in the modeler are reflected across participants with minimal delay.
+
+Change propagation therefore follows a \emph{single-source-of-truth} pattern: updates are applied to the active workspace representation, broadcast to collaborators, and rendered in their current modeler context. This reduces merge conflicts typical of file-based workflows and enables synchronous co-modeling. At the same time, role separation remains important: users with write permissions can produce state transitions, while read-only participants observe the same evolving model without mutating it.
+
+From a conceptual perspective, this has two direct implications for AI integration. First, the agent must operate on the \emph{current workspace state} rather than on isolated prompts. Second, model updates must preserve structural consistency with the platform-specific schema used by the modeler. Consequently, the agent is not designed as a generic text completion system; it is designed as a context-aware transformation component that produces valid, executable modeling artifacts.
+
+The proposed concept therefore adopts an in-place collaboration strategy: the AI agent is invited into the same workspace channel as human collaborators and acts on the same editable model representation. This avoids synchronization issues between separate tools, preserves the platform's existing collaboration semantics, and keeps the user in a familiar workflow.
+
+\section{Large Language Models (LLMs)}
+Large Language Models (LLMs) provide the semantic interface between human intent and formal model edits. In this thesis, the LLM layer is responsible for mapping natural-language requests to platform-specific markup while respecting optimization semantics and syntactic constraints \cite{vaswani2023attentionneed, forootani2025surveymathematicalreasoningoptimization}. Unlike standard code completion tasks, this mapping requires both domain-aware reasoning and strict output-shape control.
+
+At a technical level, contemporary LLMs are predominantly transformer-based sequence models that predict the next token conditioned on prior context \cite{vaswani2023attentionneed}. During pretraining, models ingest large-scale text and code corpora and learn statistical regularities of language, structure, and reasoning patterns. After pretraining, they are typically adapted through instruction tuning and preference alignment so that they better follow user intent, produce more useful responses, and reduce unsafe behavior. In practical use, user prompts are converted into token sequences, processed through stacked self-attention and feed-forward layers, and decoded into output tokens that form the final response.
+
+The current LLM landscape is characterized by rapid iteration along three dimensions: (i) \emph{capability}, including stronger reasoning and code generation performance; (ii) \emph{interaction modality}, including support for text, code, and increasingly multimodal inputs; and (iii) \emph{deployment model}, spanning proprietary hosted APIs and open-weight/self-hosted alternatives \cite{Jiang_2026, yang2025codefoundationmodelsagents}. For engineering applications, this means model choice is no longer purely about benchmark scores; it is also about latency, cost, controllability, context-window limits, and integration ergonomics.
+
+In this context, an \emph{LLM API} is the operational interface that allows external systems to call a hosted model service programmatically. Instead of running the model weights locally, the client sends structured requests (e.g., messages, system instructions, tool schemas, generation parameters) to a remote endpoint and receives generated outputs, often with optional streaming. A representative example is the OpenAI API, where applications send chat-completion style requests and receive token-generated responses that can be consumed in real time. Conceptually, APIs decouple model consumption from model hosting: the application focuses on orchestration logic, while model serving, scaling, and infrastructure maintenance remain with the provider.
+
+For this thesis, that API-based design is particularly beneficial. It enables fast experimentation across models, simplifies integration with orchestration frameworks, and supports tool-calling patterns required for stateful, human-in-the-loop workflows. At the same time, API usage introduces practical constraints (cost, quota, rate limits, external dependency), which must be handled at the system-design level.
+
+\subsection{Alternatives}
+Several alternatives are plausible for this layer:
 \begin{itemize}
-    \item an \textbf{edit link}, which grants full editing privileges, and
-    \item a \textbf{read link}, which grants view-only access.
+    \item \textbf{Single-provider LLM integration:} Directly binding the system to one model vendor (e.g., only OpenAI or only Anthropic) simplifies initial setup but increases vendor lock-in and limits model experimentation.
+    \item \textbf{Local/self-hosted models only:} This improves deployment control and potentially data governance, but may reduce generation quality for complex optimization prompts unless substantial infrastructure and tuning effort are invested.
+    \item \textbf{Model-provider abstraction :} A dedicated routing/proxy layer under full application control can unify multiple vendor APIs behind one interface, but introduces an additional service to operate, monitor, and secure.
 \end{itemize}
 
-Depending on the intended role of the invited participant, the master user shares either the edit link or the read link. This mechanism enables fine-grained access control while maintaining a lightweight collaboration setup.
+\subsection{Choice}
+The implemented concept uses \textbf{OpenRouter} as the model-provider abstraction layer. OpenRouter is a hosted routing service that exposes an OpenAI-compatible API surface while allowing requests to be dispatched to different underlying model providers through a unified interface. In practice, the client sends a standard chat-completion style request to OpenRouter together with a model identifier; OpenRouter then forwards the request to the selected backend model and returns the generated response in a compatible format.
 
-\subsection{AI Agent Integration into the Collaborative Workspace}
+Relative to alternatives such as a custom provider gateway or a LiteLLM-based self-managed abstraction, this choice favors lower operational overhead in the thesis context: multi-model routing is available immediately without introducing an additional in-house proxy service that must be deployed and maintained. This choice is preferable for four reasons:
+\begin{enumerate}
+    \item \textbf{Model flexibility:} The architecture can switch or compare model backends with minimal pipeline changes.
+    \item \textbf{Stateful control flow:} Graph-based nodes and transitions naturally support iterative generation, tool calls, and interruption points for user feedback.
+    \item \textbf{Domain-constrained prompting:} A persistent system prompt can encode strict grammar and validation rules for the optimization markup, improving output consistency for modeling tasks.
+    \item \textbf{Pragmatic integration and maintenance:} OpenAI-compatible APIs reduce integration friction with existing libraries, while avoiding the extra reliability and observability burden of running a separate gateway component.
+\end{enumerate}
 
-The AI agent is deployed as a backend service and joins the collaborative workspace in a manner analogous to a human participant. The agent is provided with access to a web browser instance on the server through a web automation framework.
+In short, the selected design optimizes for adaptability and controllability, which are more important for this thesis than maximizing benchmark performance on generic coding tasks.
 
-When the AI agent is invited to a workspace, a browser instance is automatically launched on the server. Authentication is performed using a dedicated account that represents the AI agent, after which the edit link is visited to open the shared modeling workspace. As this browser instance runs on the server, the Document Object Model (DOM) of the application can be accessed directly via JavaScript APIs. This enables the AI agent to observe, interact with, and modify the workspace in real time, using the same interface mechanisms available to human users.
+\section{Web Automation}
+The AI agent must not only generate edits but also apply and retrieve workspace content in a live web session. This requires a browser automation layer capable of authenticated login, workspace navigation, DOM extraction, and deterministic DOM updates.
 
+Conceptually, web automation is the programmatic control of a browser instance to reproduce user-level interactions with a web application. Instead of invoking internal functions directly, an automation script executes actions at the interface level (e.g., open page, fill form fields, click controls, read DOM state), which makes the behavior closer to real end-user operation. This is particularly relevant when key platform functionality is embedded in client-side logic and collaborative UI workflows rather than being fully exposed through stable backend APIs.
 
-\section{Schema Validation}
-The output generated by the large language model (LLM) follows an XML-like syntax that is used internally by the Optimization Modeler. This syntax must conform to a predefined grammar that specifies the allowed constructs, constraints, and structural rules.
+Operationally, a web automation runtime launches a browser process, opens a page context, and then performs a sequence of scripted actions. After each action, the runtime can inspect page state through selectors and JavaScript evaluation, enabling closed-loop execution: observe current state, execute next action, and verify effect. In this thesis, that mechanism is used not only for one-time setup (authentication and workspace joining), but also as a continuous execution environment where the agent can read the current model representation and apply validated updates back to the modeler DOM.
 
-One of the major limitations of LLM-based systems is the possibility of hallucinations, meaning that the model may generate syntactically or structurally invalid output. Therefore, before any generated output is applied to the DOM, it must be validated.
+From an architectural perspective, this browser session functions as the agent's \emph{environment interface}. The LLM decides \emph{what} model transformation should be performed, while the automation layer is responsible for \emph{how} that transformation is enacted in the live collaborative workspace. This separation improves modularity: reasoning remains model- and prompt-centric, whereas execution remains UI- and state-centric.
 
-To address this, we introduce a validation layer that checks the LLM-generated output against a formally defined grammar. An XML validator is used to verify whether the output conforms to the schema. In the case of validation errors, the error messages are fed back to the model, and the generation process is repeated until a syntactically valid and parsable output is produced. This mechanism prevents invalid or hallucinated outputs from being applied to the workspace.
+\subsection{Alternatives}
+Common alternatives include:
+\begin{itemize}
+    \item \textbf{Direct internal API integration:} If all required model operations are exposed through stable backend APIs, browser automation can be avoided. In this project, however, the collaboration and model-editing logic is heavily UI-centric.
+    \item \textbf{Selenium-based automation:} Mature and widely supported, but often heavier for modern JavaScript-centric workflows.
+    \item \textbf{Playwright-based automation:} Strong multi-browser support and robust testing ergonomics, but migration would require additional adaptation effort for existing script patterns.
+\end{itemize}
+
+\subsection{Choice}
+The implemented concept uses \textbf{Puppeteer} \cite{pptrPuppeteerPuppeteer, chromiumHome}. For the current platform architecture, this is advantageous because:
+\begin{enumerate}
+    \item \textbf{Native Chromium focus:} The modeler workflow is browser-centric and JavaScript-heavy; Puppeteer provides tight control over page navigation and DOM operations in this context.
+    \item \textbf{Low conceptual overhead:} The API supports direct element evaluation and straightforward automation scripts for login, session joining, and model updates.
+    \item \textbf{Pragmatic integration speed:} A lightweight Node bridge can expose the required browser actions as HTTP endpoints consumed by the AI orchestration layer.
+\end{enumerate}
+
+Given the thesis objective (functional AI collaboration in a real platform), this choice offers the best trade-off between engineering effort and operational capability.
+
+\section{Chat-User Interaction}
+For first-class collaboration, the user-agent channel must be embedded directly in the modeler, maintain conversational context, and support iterative refinement instead of one-shot commands. In practice, chat interaction in this system is not treated as an auxiliary feature; it is the primary coordination mechanism between user intent and agent execution. Users describe desired model changes in natural language, inspect generated responses in the same interface, and continue with clarification or corrective feedback when needed.
+
+From a conceptual standpoint, this interaction model has three requirements. First, the chat must remain \emph{workspace-aware}, so that responses are grounded in the current model state rather than in isolated prompts. Second, it must support \emph{persistent multi-turn state}, because optimization edits frequently require incremental negotiation (e.g., add a variable, then constrain it, then revise objective coefficients). Third, it must support \emph{low-friction UX patterns} (message history, typing and loading states, structured rendering, clear action affordances) so that users can focus on model logic instead of interaction mechanics.
+
+\subsection{Alternatives}
+Three major alternatives were considered:
+\begin{itemize}
+    \item \textbf{External chat application:} Easy to prototype, but separates communication from the modeling context and introduces coordination friction.
+    \item \textbf{Custom chat UI from scratch:} Full control over behavior and styling, but high implementation and maintenance cost.
+    \item \textbf{Minimal command input widget:} Reduced complexity, but insufficient for long-form clarification and multi-turn collaboration.
+\end{itemize}
+
+\subsection{Choice}
+The selected implementation embeds an in-modeler conversational UI based on \textbf{assistant-ui} with runtime integration for stateful agent communication \cite{assistantui, langchainLangGraph}. The frontend implementation combines \textbf{React}, \textbf{shadcn/ui}-style component primitives, and \textbf{Tailwind CSS} utility styling. Together, these layers provide a composable foundation where agent-specific behavior can be integrated without rebuilding standard chat infrastructure from scratch.
+
+Concretely, React provides declarative state management for message streams and UI updates, assistant-ui contributes domain-specific interaction primitives (thread containers, runtime providers, transport abstractions), shadcn/ui-style components provide accessible and reusable UI building blocks, and Tailwind enables rapid and consistent visual composition within the existing modeler interface. This stack lets the implementation focus on collaboration logic (thread state, model context injection, approval flow) rather than reinventing baseline UI concerns such as layout scaffolding, interaction widgets, and component wiring.
+
+This choice is better aligned with the thesis goals because it provides:
+\begin{enumerate}
+    \item \textbf{Context-preserving interaction:} Chat and model edits live in the same workspace, reducing mental and operational context switching.
+    \item \textbf{Stateful multi-turn support:} Threaded interaction enables iterative correction, clarification, and refinement of model changes.
+    \item \textbf{Reusable integration primitives:} Runtime providers, thread components, and transport abstractions reduce boilerplate and accelerate reliable integration.
+    \item \textbf{Reduced engineering duplication:} Established UI/component tooling avoids implementing common chat features from first principles, lowering implementation risk and maintenance effort.
+\end{enumerate}
+
+Conceptually, this supports the transition from ``AI as autocomplete'' to ``AI as collaborative modeling partner.''
 
 \section{Human-in-the-Loop}
-Once the LLM-generated output has been validated and applied to the DOM, the user is presented with multiple options. The user may accept the changes and make them permanent, reject the changes—thereby discarding them entirely and reverting to the previous model state—or provide additional feedback through the chat interface.
+Human-in-the-loop (HITL) is a collaboration concept in which AI generation and human judgment are combined in a controlled decision cycle rather than delegated to fully autonomous execution \cite{mozannar2025magenticuihumanintheloopagenticsystems}. In this thesis, HITL means that the agent may propose model transformations, but the user remains the final authority for accepting, rejecting, or refining those transformations.
 
-The AI agent uses this feedback, together with the current state of the optimization model, to iteratively refine its solution. The revised output is then validated and applied to the DOM again. This process continues until the user either accepts or rejects the final solution. This human-in-the-loop mechanism ensures continuous user oversight and provides fine-grained control over the modeling process.
+This concept is necessary because optimization modeling has high semantic sensitivity: an output can be syntactically valid and still be mathematically inappropriate (e.g., incorrect bounds, missing constraints, wrong objective intent). For that reason, correctness cannot rely on generation alone. It must emerge from a joint process in which the agent accelerates drafting and the user validates domain intent.
 
-\section{System Workflow}
-The overall system workflow proceeds as follows. Once the AI agent joins the workspace, a chat interface becomes visible to the user, enabling direct communication with the agent. Through this interface, the user can request model modifications, seek assistance, or ask questions related to the optimization model.
+Operationally, this introduces a loop-type structure: \emph{user request} $\rightarrow$ \emph{agent proposal} $\rightarrow$ \emph{validation and presentation} $\rightarrow$ \emph{user feedback/approval} $\rightarrow$ \emph{regeneration or commit}. Implementing this reliably requires an orchestration library that can represent explicit states, conditional transitions, tool invocation, and interruption points for human feedback.
 
-Each user request is sent to the AI model along with the current state of the optimization model. The LLM interprets the natural language input and generates the corresponding output. Since the backend has access to the DOM of the modeler instance, the validated output can be applied directly to the workspace.
+\subsection{Alternatives}
+At the orchestration-framework level, several alternatives are possible:
+\begin{itemize}
+    \item \textbf{LangChain Agents:} Fast to prototype for tool-calling scenarios, but less explicit for graph-level state transitions in complex iterative approval flows.
+    \item \textbf{LangGraph:} Graph-based orchestration with explicit nodes, edges, conditional routing, and interruption primitives for human approval.
+    \item \textbf{n8n:} Strong visual workflow automation and integration ecosystem, but less specialized for fine-grained in-process conversational state management in code-centric agent loops.
+    \item \textbf{Microsoft AutoGen / Semantic Kernel style agent frameworks:} Useful for multi-agent and enterprise integration patterns, but often heavier than needed for a single-agent, workspace-centric HITL loop.
+    \item \textbf{Custom orchestration from scratch:} Maximum flexibility, but high implementation and maintenance overhead for retry logic, state persistence, interrupt handling, and debugging.
+\end{itemize}
 
-After the changes are applied, the user observes the updated model in their instance of the Optimization Modeler. The human-in-the-loop mechanism then allows the user to further refine, accept, or reject the generated changes before they are finalized.
+\subsection{Choice}
+This thesis selects \textbf{LangGraph} as the orchestration substrate for the HITL cycle \cite{langchainLangGraph}. LangGraph models the workflow as an explicit state graph, which directly matches the collaboration loop required by this system: generation, tool execution, user interruption, feedback integration, and conditional continuation.
 
-\begin{figure}[t]
-  \centering
-  \includegraphics[width=10cm]{static/new.pdf}
-  \caption{Overview of the proposed LLM architecture.}
-  \label{fig:architecture}
-\end{figure}
+This choice is preferable for five reasons:
+\begin{enumerate}
+    \item \textbf{Native loop representation:} Iterative request-feedback-regenerate cycles can be encoded as first-class graph transitions rather than ad-hoc callback logic.
+    \item \textbf{Interrupt-driven human control:} The framework supports explicit pause-and-resume points for user approval, aligning with HITL requirements.
+    \item \textbf{Deterministic control flow:} Conditional edges make progression criteria transparent and debuggable, which is critical for thesis-grade system analysis.
+    \item \textbf{Tool-calling compatibility:} External actions (e.g., browser interaction endpoints) can be integrated as graph tools without collapsing orchestration clarity.
+    \item \textbf{Balanced complexity:} Compared to custom orchestration, it reduces engineering overhead while still providing stronger control semantics than purely prompt-driven pipelines.
+\end{enumerate}
 
+Accordingly, HITL in this architecture is not an auxiliary safety check but the core execution paradigm: every agent output participates in a supervised loop until either user approval is reached or the proposal is discarded.
+
+\section{Backend Services}
+The backend concept follows a service-oriented architecture that separates orchestration, browser interaction, and modeler integration concerns. In practice, this includes a Python-based orchestration service and a Node-based browser-control bridge.
+
+At the infrastructure level, both components are exposed as HTTP servers. An HTTP server is a process that listens for network requests on defined endpoints (routes), executes application logic, and returns structured responses (typically JSON). This is important for the present system because it creates a clean contract between components: the modeler-facing side can call backend capabilities through stable API endpoints without depending on internal implementation details.
+
+Using HTTP-based services offers three practical advantages in this architecture. First, it provides language-agnostic interoperability, allowing Python and JavaScript services to collaborate through a common protocol. Second, it improves modularity by enabling each service (agent orchestration, browser control, validation) to evolve independently. Third, it supports deployment flexibility, since services can run on separate processes or hosts while preserving the same request interface.
+
+\subsection{Alternatives}
+Architecturally, at least three alternatives exist:
+\begin{itemize}
+    \item \textbf{Monolithic Node backend:} Single runtime for UI integration and browser automation, but reduced access to the Python-first LLM orchestration ecosystem.
+    \item \textbf{Monolithic Python backend:} Strong AI ecosystem fit, but less natural for tight integration with existing JavaScript-based browser automation scripts.
+    \item \textbf{Microservice decomposition:} Clear separation of concerns, but potentially higher deployment and observability overhead.
+\end{itemize}
+
+\subsection{Choice}
+The selected architecture uses \textbf{FastAPI + LangGraph} for agent orchestration and a \textbf{Node/Express + Puppeteer} bridge for browser-level actions. This is superior for the current project constraints because:
+\begin{enumerate}
+    \item \textbf{FastAPI + LangGraph fit the AI orchestration problem:} LangGraph has strong and mature Python support for state graphs, conditional routing, tool-calling, and interruption-based human feedback. Pairing it with FastAPI provides a lightweight, high-performance HTTP layer for exposing orchestration endpoints in a production-friendly way.
+    \item \textbf{Python is the dominant AI integration ecosystem:} Most contemporary AI/LLM tooling, orchestration libraries, and reference implementations are Python-first, which reduces integration friction and accelerates experimentation, debugging, and iteration for agent logic.
+    \item \textbf{Node.js + Puppeteer fit browser execution semantics:} Puppeteer is JavaScript-native and directly aligned with browser automation workflows. Because the target environment is a web modeler, using JavaScript for automation is natural: language and runtime conventions match the browser platform and DOM interaction model.
+    \item \textbf{JavaScript maps directly to DOM-centric operations:} DOM querying, event triggering, and in-page script evaluation are native web concepts, and JavaScript is the browser's execution language. This makes browser-side mutation and state inspection more direct than cross-language bridging patterns.
+    \item \textbf{Modular evolution:} Each service can be replaced or scaled independently (e.g., model backend changes without rewriting browser control).
+\end{enumerate}
+
+This separation also supports future enhancements such as stronger validation services, improved observability, and safer deployment boundaries.

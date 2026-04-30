@@ -1,4 +1,4 @@
-This is LuaHBTeX, Version 1.24.0 (MiKTeX 26.2) (format=lualatex 2026.4.23)  26 APR 2026 19:14
+This is LuaHBTeX, Version 1.24.0 (MiKTeX 26.2) (format=lualatex 2026.4.23)  30 APR 2026 12:02
  restricted system commands enabled.
  file:line:error style messages enabled.
 **c:/Users/AftabKhan/Desktop/Seminar_Report/Thesis
@@ -2032,21 +2032,10 @@ chapter II.
 
 ]
 chapter III.
-Package microtype Info: Loading generic protrusion settings for font family
-(microtype)             `lmtt' (encoding: TU).
-(microtype)             For optimal results, create family-specific settings.
-(microtype)             See the microtype manual for details.
-[13] [14]
-warning  (file static/new.pdf) (pdf inclusion): PDF inclusion: found PDF version
- '1.7', but at most version '1.5' allowed
-<static/new.pdf, id=235, 493.845pt x 262.0992pt>
-File: static/new.pdf Graphic file (type pdf)
-<use static/new.pdf>
-Package luatex.def Info: static/new.pdf  used on input line 48.
-(luatex.def)             Requested size: 284.52756pt x 151.0058pt.
-) [15<./static/new.pdf>]
+[13] [14] [15] [16] [17] [18] [19] [20]) [21]
 \openout2 = Content/Chapter_Implementation.aux
- (./Content/Chapter_Implementation.tex [16
+
+(./Content/Chapter_Implementation.tex [22
 
 
 
@@ -2054,27 +2043,32 @@ Package luatex.def Info: static/new.pdf  used on input line 48.
 
 ]
 chapter IV.
-[17] [18]
+[23]
+Package microtype Info: Loading generic protrusion settings for font family
+(microtype)             `lmtt' (encoding: TU).
+(microtype)             For optimal results, create family-specific settings.
+(microtype)             See the microtype manual for details.
+ [24]
 Underfull \vbox (badness 1264) has occurred while \output is active []
 
- [19])
-[20]
+ [25])
+[26]
 \openout2 = Content/Chapter_Conclusion.aux
  (./Content/Chapter_Conclusion.tex
 chapter V.
 
 Underfull \vbox (badness 3240) has occurred while \output is active []
 
- [21
+ [27
 
 
 
 
 
 ])
-[22]
+[28]
 chapter without number
-[23
+[29
 
 
 
@@ -2087,11 +2081,11 @@ Overfull \hbox (5.19989pt too wide) in paragraph at lines 50--50
 le Workspace --- workspace.google.com\TU/lmr/m/n/12 .
  []
 
-[24]
+[30]
 \openout2 = Content/Appendix.aux
  (./Content/Appendix.tex
 chapter A.
-) [25
+) [31
 
 
 
@@ -2116,16 +2110,16 @@ Package logreq Info: Writing requests to 'Thesis.run.xml'.
 )
 
 Here is how much of LuaTeX's memory you used:
- 48158 strings out of 475900
+ 48194 strings out of 475900
  100000,2373549 words of node,token memory allocated
- 899 words of node memory still in use:
-   7 hlist, 2 vlist, 2 rule, 1 local_par, 4 glue, 5 kern, 1 penalty, 3 glyph, 49
- attribute, 85 glue_spec, 25 attribute_list, 4 write, 11 pdf_action nodes
-   avail lists: 1:4,2:1707,3:454,4:151,5:475,6:120,7:8490,8:80,9:671,10:24,11:81
+ 887 words of node memory still in use:
+   7 hlist, 2 vlist, 2 rule, 1 local_par, 4 glue, 5 kern, 1 penalty, 3 glyph, 47
+ attribute, 85 glue_spec, 24 attribute_list, 4 write, 10 pdf_action nodes
+   avail lists: 1:3,2:1872,3:478,4:165,5:490,6:136,7:8493,8:80,9:719,10:25,11:81
 4,12:2
- 69550 multiletter control sequences out of 65536+600000
+ 69544 multiletter control sequences out of 65536+600000
  65 fonts using 4339415 bytes
- 122i,21n,114p,11599b,2954s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 122i,20n,114p,11599b,2954s stack positions out of 10000i,1000n,20000p,200000b,200000s
 <c:/users/aftabkhan/appdata/local/programs/miktex/fonts/opentype/public/lm/lmrom
 ancaps10-regular.otf><c:/users/aftabkhan/appdata/local/programs/miktex/fonts/ope
 ntype/public/lm/lmmono12-regular.otf><c:/users/aftabkhan/appdata/local/programs/
@@ -2135,10 +2129,11 @@ ftabkhan/appdata/local/programs/miktex/fonts/opentype/public/lm/lmroman10-regula
 r.otf><c:/users/aftabkhan/appdata/local/programs/miktex/fonts/opentype/public/lm
 /lmroman12-regular.otf><c:/users/aftabkhan/appdata/local/programs/miktex/fonts/o
 pentype/public/lm/lmromandemi10-regular.otf><C:/Users/AftabKhan/AppData/Local/Pr
-ograms/MiKTeX/fonts/type1/public/amsfonts/cm/cmr12.pfb>
-Output written on Thesis.pdf (31 pages, 269723 bytes).
+ograms/MiKTeX/fonts/type1/public/amsfonts/cm/cmr12.pfb><C:/Users/AftabKhan/AppDa
+ta/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy10.pfb>
+Output written on Thesis.pdf (37 pages, 218731 bytes).
 
-PDF statistics: 485 PDF objects out of 1000 (max. 8388607)
- 117 named destinations out of 1000 (max. 1048576)
- 208 words of extra memory for PDF output out of 10000 (max. 100000000)
+PDF statistics: 573 PDF objects out of 1000 (max. 8388607)
+ 162 named destinations out of 1000 (max. 1048576)
+ 232 words of extra memory for PDF output out of 10000 (max. 100000000)
 

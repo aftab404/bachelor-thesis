@@ -476,6 +476,14 @@
       \verb https://geminicli.com/
       \endverb
     \endentry
+    \entry{chromiumHome}{misc}{}{}
+      \field{sortinit}{H}
+      \field{sortinithash}{23a3aa7c24e56cfa16945d55545109b5}
+      \field{labeltitlesource}{title}
+      \field{howpublished}{\url{https://www.chromium.org/chromium-projects/}}
+      \field{note}{[Accessed 16-01-2026]}
+      \field{title}{{H}ome --- chromium.org}
+    \endentry
     \entry{huang2025llmsmathematicalmodelingbridging}{misc}{}{}
       \name{author}{5}{}{%
         {{hash=edf9d949a3073dc0b80f5869ad27eca0}{%
@@ -706,6 +714,14 @@
       \field{year}{2022}
       \field{pages}{21\bibrangedash 27}
       \range{pages}{7}
+    \endentry
+    \entry{langchainLangGraph}{misc}{}{}
+      \field{sortinit}{L}
+      \field{sortinithash}{7c47d417cecb1f4bd38d1825c427a61a}
+      \field{labeltitlesource}{title}
+      \field{howpublished}{\url{https://www.langchain.com/langgraph}}
+      \field{note}{[Accessed 16-01-2026]}
+      \field{title}{{L}ang{G}raph --- langchain.com}
     \endentry
     \entry{wiki:Linear_programming}{misc}{}{}
       \field{sortinit}{L}
@@ -1001,6 +1017,14 @@
       \verb{url}
       \verb https://github.com/features/copilot
       \endverb
+    \endentry
+    \entry{pptrPuppeteerPuppeteer}{misc}{}{}
+      \field{sortinit}{P}
+      \field{sortinithash}{ff3bcf24f47321b42cb156c2cc8a8422}
+      \field{labeltitlesource}{title}
+      \field{howpublished}{\url{https://pptr.dev/}}
+      \field{note}{[Accessed 16-01-2026]}
+      \field{title}{{P}uppeteer | {P}uppeteer --- pptr.dev}
     \endentry
     \entry{v0}{misc}{}{}
       \field{sortinit}{v}

@@ -2405,10 +2405,26 @@
     <bcf:citekey order="27" intorder="1">assistantui</bcf:citekey>
     <bcf:citekey order="28" intorder="1">mozannar2025magenticuihumanintheloopagenticsystems</bcf:citekey>
     <bcf:citekey order="29" intorder="1">MarkoThesisMsc</bcf:citekey>
-    <bcf:citekey order="30" intorder="1">DeniThesisMsc</bcf:citekey>
-    <bcf:citekey order="31" intorder="1">MarkoThesisBsc</bcf:citekey>
-    <bcf:citekey order="31" intorder="2">MaksimThesisMsc</bcf:citekey>
-    <bcf:citekey order="32" intorder="1">MarkoThesisMsc</bcf:citekey>
+    <bcf:citekey order="29" intorder="2">DeniThesisMsc</bcf:citekey>
+    <bcf:citekey order="29" intorder="3">MarkoThesisBsc</bcf:citekey>
+    <bcf:citekey order="29" intorder="4">MaksimThesisMsc</bcf:citekey>
+    <bcf:citekey order="30" intorder="1">MarkoThesisMsc</bcf:citekey>
+    <bcf:citekey order="30" intorder="2">DeniThesisMsc</bcf:citekey>
+    <bcf:citekey order="31" intorder="1">vaswani2023attentionneed</bcf:citekey>
+    <bcf:citekey order="31" intorder="2">forootani2025surveymathematicalreasoningoptimization</bcf:citekey>
+    <bcf:citekey order="32" intorder="1">vaswani2023attentionneed</bcf:citekey>
+    <bcf:citekey order="33" intorder="1">Jiang_2026</bcf:citekey>
+    <bcf:citekey order="33" intorder="2">yang2025codefoundationmodelsagents</bcf:citekey>
+    <bcf:citekey order="34" intorder="1">pptrPuppeteerPuppeteer</bcf:citekey>
+    <bcf:citekey order="34" intorder="2">chromiumHome</bcf:citekey>
+    <bcf:citekey order="35" intorder="1">assistantui</bcf:citekey>
+    <bcf:citekey order="35" intorder="2">langchainLangGraph</bcf:citekey>
+    <bcf:citekey order="36" intorder="1">mozannar2025magenticuihumanintheloopagenticsystems</bcf:citekey>
+    <bcf:citekey order="37" intorder="1">langchainLangGraph</bcf:citekey>
+    <bcf:citekey order="38" intorder="1">DeniThesisMsc</bcf:citekey>
+    <bcf:citekey order="39" intorder="1">MarkoThesisBsc</bcf:citekey>
+    <bcf:citekey order="39" intorder="2">MaksimThesisMsc</bcf:citekey>
+    <bcf:citekey order="40" intorder="1">MarkoThesisMsc</bcf:citekey>
   </bcf:section>
   <!-- SORTING TEMPLATES -->
   <bcf:sortingtemplate name="nty">
