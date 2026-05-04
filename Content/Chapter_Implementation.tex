@@ -156,6 +156,7 @@ This separation is architecturally important: the Python service decides \emph{w
 
 \subsection{Prompt and Constraint Strategy}
 The implemented prompting strategy uses a strong \emph{system prompt} as a behavioral contract for the agent. In this context, the system prompt is the highest-priority instruction layer passed to the model at run time; it defines the agent role, task boundaries, expected output format, and non-negotiable constraints. User messages are interpreted within this envelope rather than in isolation.
+For the full prompt specification used in this thesis implementation, see \cref{sec:appendix-system-prompt}.
 
 For this thesis, the system prompt is designed around the optimization modeler's domain-specific markup language. It explicitly specifies:
 \begin{itemize}
