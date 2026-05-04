@@ -1,4 +1,4 @@
-This is LuaHBTeX, Version 1.24.0 (MiKTeX 26.2) (format=lualatex 2026.4.23)  30 APR 2026 15:07
+This is LuaHBTeX, Version 1.24.0 (MiKTeX 26.2) (format=lualatex 2026.4.23)  4 MAY 2026 11:37
  restricted system commands enabled.
  file:line:error style messages enabled.
 **c:/Users/AftabKhan/Desktop/Seminar_Report/Thesis
@@ -2034,10 +2034,15 @@ chapter II.
 
 ]
 chapter III.
-[13] [14] [15] [16] [17] [18] [19] [20]) [21]
-\openout2 = Content/Chapter_Implementation.aux
+[13] [14] [15] [16]
+Overfull \hbox (5.96501pt too wide) in paragraph at lines 79--80
+[]\TU/lmr/b/n/12 Na-tive Chromium [[]16[]] fo-cus: \TU/lmr/m/n/12 The mod-eler 
+work-flow is browser-centric and JavaScript-
+ []
 
-(./Content/Chapter_Implementation.tex [22
+[17] [18] [19] [20]) [21]
+\openout2 = Content/Chapter_Implementation.aux
+ (./Content/Chapter_Implementation.tex [22
 
 
 
@@ -2100,17 +2105,22 @@ chapter without number
 
 
 
-]
+] [40]
+Overfull \hbox (6.29056pt too wide) in paragraph at lines 50--50
+[]$\TU/lmtt/m/n/12 https : / / developer . mozilla . org / en - {U } {S } /docs / {L } earn _ web _ development /
+ []
+
+
 Overfull \hbox (5.19989pt too wide) in paragraph at lines 50--50
 []\TU/lmr/m/n/12 Google Workspace. \TU/lmr/m/it/12 AI Tools for Busi-ness | Goog
 le Workspace --- workspace.google.com\TU/lmr/m/n/12 .
  []
 
-[40]
+[41] [42]
 \openout2 = Content/Appendix.aux
  (./Content/Appendix.tex
 chapter A.
-) [41
+) [43
 
 
 
@@ -2136,14 +2146,14 @@ Package logreq Info: Writing requests to 'Thesis.run.xml'.
 )
 
 Here is how much of LuaTeX's memory you used:
- 48342 strings out of 475900
+ 48441 strings out of 475900
  100000,2373549 words of node,token memory allocated
- 947 words of node memory still in use:
-   7 hlist, 2 vlist, 2 rule, 1 local_par, 4 glue, 5 kern, 1 penalty, 3 glyph, 67
- attribute, 85 glue_spec, 34 attribute_list, 4 write, 10 pdf_action nodes
-   avail lists: 1:4,2:2131,3:510,4:165,5:510,6:150,7:8495,8:80,9:797,10:25,11:81
-4,12:2
- 69607 multiletter control sequences out of 65536+600000
+ 1055 words of node memory still in use:
+   7 hlist, 2 vlist, 2 rule, 1 local_par, 4 glue, 5 kern, 1 penalty, 3 glyph, 85
+ attribute, 85 glue_spec, 43 attribute_list, 4 write, 19 pdf_action nodes
+   avail lists: 1:4,2:2107,3:525,4:177,5:526,6:144,7:8499,8:115,9:798,10:26,11:8
+15,12:3
+ 69682 multiletter control sequences out of 65536+600000
  68 fonts using 4717999 bytes
  122i,21n,114p,11599b,4365s stack positions out of 10000i,1000n,20000p,200000b,200000s
 <c:/users/aftabkhan/appdata/local/programs/miktex/fonts/opentype/public/lm/lmrom
@@ -2161,9 +2171,9 @@ sers/AftabKhan/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi
 12.pfb><C:/Users/AftabKhan/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsf
 onts/cm/cmr12.pfb><C:/Users/AftabKhan/AppData/Local/Programs/MiKTeX/fonts/type1/
 public/amsfonts/cm/cmsy10.pfb>
-Output written on Thesis.pdf (47 pages, 275066 bytes).
+Output written on Thesis.pdf (49 pages, 298025 bytes).
 
-PDF statistics: 727 PDF objects out of 1000 (max. 8388607)
- 226 named destinations out of 1000 (max. 1048576)
+PDF statistics: 825 PDF objects out of 1000 (max. 8388607)
+ 250 named destinations out of 1000 (max. 1048576)
  288 words of extra memory for PDF output out of 10000 (max. 100000000)
 

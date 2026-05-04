@@ -30,12 +30,12 @@
 \contentsline {subsection}{\numberline {3.1}Alternatives}{15}{subsection.3.3.1}%
 \contentsline {subsection}{\numberline {3.2}Choice}{15}{subsection.3.3.2}%
 \contentsline {section}{\numberline {4}Web Automation}{16}{section.3.4}%
-\contentsline {subsection}{\numberline {4.1}Alternatives}{16}{subsection.3.4.1}%
+\contentsline {subsection}{\numberline {4.1}Alternatives}{17}{subsection.3.4.1}%
 \contentsline {subsection}{\numberline {4.2}Choice}{17}{subsection.3.4.2}%
 \contentsline {section}{\numberline {5}Chat-User Interaction}{17}{section.3.5}%
 \contentsline {subsection}{\numberline {5.1}Alternatives}{18}{subsection.3.5.1}%
 \contentsline {subsection}{\numberline {5.2}Choice}{18}{subsection.3.5.2}%
-\contentsline {section}{\numberline {6}Human-in-the-Loop}{19}{section.3.6}%
+\contentsline {section}{\numberline {6}Human-in-the-Loop}{18}{section.3.6}%
 \contentsline {subsection}{\numberline {6.1}Alternatives}{19}{subsection.3.6.1}%
 \contentsline {subsection}{\numberline {6.2}Choice}{19}{subsection.3.6.2}%
 \contentsline {section}{\numberline {7}Backend Services}{20}{section.3.7}%
@@ -83,6 +83,6 @@
 \contentsline {subsection}{\numberline {2.1}Current Limitations}{38}{subsection.6.2.1}%
 \contentsline {subsection}{\numberline {2.2}Future Directions}{38}{subsection.6.2.2}%
 \contentsline {chapter}{\nonumberline Bibliography}{39}{chapter*.6}%
-\contentsline {chapter}{\numberline {A}An Appendix}{41}{appendix.A}%
+\contentsline {chapter}{\numberline {A}An Appendix}{43}{appendix.A}%
 \def \@chapapp {\appendixname }
 \providecommand \tocbasic@end@toc@file {}\tocbasic@end@toc@file 
