@@ -1,5 +1,5 @@
 \chapter{Implementation}
-This chapter translates the conceptual architecture into the implemented system. It describes how the AI collaborator is integrated into the existing Optimization Platform, how requests move across services, and how generated updates are applied to shared workspaces in a human-in-the-loop workflow.
+This chapter translates the conceptual architecture into the implemented system. It describes how the AI collaborator is integrated into the existing Optimization Platform, how requests move across services, and how generated updates are applied to shared workspaces in a human-in-the-loop workflow. For readers who are new to the platform internals, it is recommended to first review the prior thesis work that established the base collaboration and modeler architecture \cite{MarkoThesisMsc, DeniThesisMsc, MarkoThesisBsc, MaksimThesisMsc}. Doing so provides the full system context and makes the implementation extensions introduced in this chapter easier to follow.
 
 \section{Implementation Overview}
 \subsection{System Components}
@@ -25,7 +25,20 @@ At runtime, the high-level request path is:
     \item The user may accept, reject, or refine through an interrupt-driven feedback loop.
 \end{enumerate}
 
+\subsection{Relevant Files and Project Structure}
+To make the implementation traceable, this section highlights the primary code locations used in the AI-collaboration pipeline:
+\begin{itemize}
+    \item \textbf{Solver-Panel integration:} internal modeler component files where invitation and collaboration handoff are implemented.
+    \item \textbf{Modeler chat runtime:} modeler files responsible for mounting the assistant UI, injecting model context, and forwarding thread/run calls.
+    \item \textbf{Python orchestration:} LangGraph workflow definition, tool binding, and prompt-control logic.
+    \item \textbf{Node automation bridge:} HTTP endpoints and Puppeteer methods for browser session initialization and model DOM read/write operations.
+\end{itemize}
+
+Because the repository is a multi-module workspace, a complete structure listing is provided in the appendix for reproducibility and navigation. The detailed tree and file-role mapping are documented in \cref{sec:appendix-filestructure}.
+
 \section{Frontend Integration}
+For detailed API endpoint documentation related to this section (invitation, runtime communication, and service calls), see \cref{sec:appendix-api-endpoints}.
+
 \subsection{Agent Invitation}
 The integration extends the existing collaboration workflow by adding an ``Invite AI Agent'' action in the internal modeler view, implemented through the \texttt{inviteAI()} method in \texttt{internal-modeler.component.ts}. This method is the concrete frontend entry point for agent invocation.
 
@@ -44,7 +57,7 @@ Operationally, \texttt{inviteAI()} performs the following sequence:
     \item Update frontend UI state to expose the AI collaborator controls after successful invocation.
 \end{enumerate}
 
-On the backend side, this endpoint is defined in the Node/Express bridge service (\texttt{Ai-Agent/index.js}) as \texttt{POST /puppet}. The endpoint delegates to the Puppeteer initialization routine, which launches a server-side headless Chrome browser session and navigates it to the provided collaborative write URL. This browser session acts as the AI agent's execution environment, allowing the agent to join the current collaboration session as an editing participant and interact with the same live modeler state as human users.
+On the backend side, this endpoint is implemented in the Node/Express bridge service (\texttt{Ai-Agent/index.js}) as \texttt{POST /puppet}. When called, the endpoint invokes a Puppeteer initialization routine that launches a server-side headless Chrome browser session. The automation routine first logs the agent into the platform using its own dedicated login credentials, then navigates to the provided collaborative write URL. This browser session serves as the AI agent's execution environment, enabling the agent to join the current collaboration session as an editing participant and interact with the same live modeler state as human users.
 
 The invitation path remains role-aware because it reuses the platform's existing edit/read collaboration semantics. Therefore, no parallel permission model is introduced; the AI participant is integrated through the same collaboration boundary already used for human users.
 

@@ -1,9 +1,253 @@
-\ifgerman{
-    \chapter{Ein Anhang}
-}
-\ifenglish{
-    \chapter{An Appendix}
-}
+\chapter{Implementation File Structure}
+\label{sec:appendix-filestructure}
+
+This appendix provides an implementation-oriented file map for the AI collaborator architecture described in the main chapters. The listing focuses on the modules that are directly relevant for invitation flow, chat runtime, orchestration, and browser automation.
+
+\section{High-Level Repository Layout}
+\begingroup
+\footnotesize
+\begin{verbatim}
+optimization-platform/
+├── Solver-Panel/
+│   └── src/app/functions/internal-modeler/
+│       ├── internal-modeler.component.ts
+│       └── internal-modeler.component.html
+├── Modeler/
+│   ├── src/
+│   │   ├── modeler.js
+│   │   ├── mountAIAgent.jsx
+│   │   └── ModalAIAgent.tsx
+│   └── lib/
+│       └── chatApi.ts
+├── AI-Collaborator/
+│   └── server/
+│       ├── src/agent.py
+│       ├── main.py
+│       └── pyproject.toml
+└── Ai-Agent/
+    ├── index.js
+    ├── puppet.js
+    └── openai.js
+\end{verbatim}
+
+\section{File Responsibilities}
+\begin{itemize}
+    \item \textbf{\texttt{internal-modeler.component.ts/.html}}: Adds and wires the ``Invite AI Agent'' interaction and collaboration link handoff from frontend to automation bridge.
+    \item \textbf{\texttt{modeler.js}}: Hosts modeler runtime behavior and exposes model state access methods used by the assistant integration.
+    \item \textbf{\texttt{mountAIAgent.jsx}, \texttt{ModalAIAgent.tsx}}: Mount and run the embedded assistant-ui chat modal and bind runtime callbacks.
+    \item \textbf{\texttt{chatApi.ts}}: Implements thread creation, state retrieval, and streaming requests to the LangGraph runtime API.
+    \item \textbf{\texttt{agent.py}}: Defines LangGraph state graph, tool nodes, prompt contract, and interrupt-based HITL flow.
+    \item \textbf{\texttt{main.py}}: Exposes Python service entrypoints and API wiring.
+    \item \textbf{\texttt{index.js}}: Node/Express bridge endpoints (\texttt{/puppet}, \texttt{/update-html}, \texttt{/get-html}).
+    \item \textbf{\texttt{puppet.js}}: Puppeteer lifecycle and direct modeler DOM read/write execution.
+    \item \textbf{\texttt{openai.js}}: LLM-side helper path used by Node bridge flows.
+\end{itemize}
+
+\section{Cross-Module Execution Path}
+The operational call chain spans the listed modules as follows:
+\begin{enumerate}
+    \item Frontend invitation and chat interaction start in \texttt{Solver-Panel} and \texttt{Modeler}.
+    \item Runtime messages are forwarded to the orchestration layer in \texttt{AI-Collaborator/server}.
+    \item Tool calls are delegated to Node endpoints in \texttt{Ai-Agent/index.js}.
+    \item Puppeteer methods in \texttt{puppet.js} apply updates to the active modeler DOM.
+    \item Updated state propagates back to all collaborators through the platform's existing collaboration channel.
+\end{enumerate}
 
 % Further appendices can be added as separate chapters: \chapter{Second Appendix}
 % Appendices (or any other elements within those) can be referenced as usual with \cref.
+
+\chapter{API Endpoint Reference}
+\label{sec:appendix-api-endpoints}
+
+This appendix documents the API surfaces used by the implemented AI-collaboration pipeline. It includes the Node automation bridge endpoints, the LangGraph runtime operations used by the frontend, and the currently exposed FastAPI endpoints in the Python service.
+
+\section{Node Automation Bridge (Ai-Agent)}
+\label{sec:appendix-api-node-bridge}
+
+\begin{itemize}
+    \item \textbf{\texttt{POST /puppet}} \\
+    Payload: \texttt{\{"link": <writeUrl>\}} \\
+    Purpose: Initializes Puppeteer session and joins collaborative workspace via write URL. \\
+    Response: Confirmation text.
+
+    \item \textbf{\texttt{POST /update-html}} \\
+    Payload: \texttt{\{"newHTML": <markup>\}} \\
+    Purpose: Applies generated model markup to active modeler instance in browser session. \\
+    Response: Success flag.
+
+    \item \textbf{\texttt{GET /get-html}} \\
+    Payload: none \\
+    Purpose: Retrieves current modeler instance markup from active browser session. \\
+    Response: Current HTML payload.
+
+    \item \textbf{\texttt{POST /openai}} \\
+    Payload: \texttt{\{"currentModel": ..., "userPrompt": ...\}} \\
+    Purpose: Alternate Node-side generation path; generates and applies an update. \\
+    Response: Success flag.
+
+    \item \textbf{\texttt{GET /}} \\
+    Payload: none \\
+    Purpose: Health/check endpoint used for basic service availability checks.
+\end{itemize}
+
+\section{LangGraph Runtime API Operations (Frontend Usage)}
+\label{sec:appendix-api-langgraph}
+
+The frontend uses the \texttt{@langchain/langgraph-sdk} client against the configured runtime URL (\texttt{http://127.0.0.1:2024}) through thread/run operations:
+
+\begin{itemize}
+    \item \textbf{\texttt{threads.create()}} \\
+    Input: none \\
+    Purpose: Creates a new persistent thread and returns thread identifier used by assistant runtime.
+
+    \item \textbf{\texttt{threads.getState(threadId)}} \\
+    Input: \texttt{threadId} \\
+    Purpose: Loads persisted message state and pending interrupt metadata for chat resume.
+
+    \item \textbf{\texttt{runs.stream(threadId, assistantId, ...)}} \\
+    Input: \texttt{input.messages}, optional \texttt{command}, \texttt{streamMode} \\
+    Purpose: Starts a streamed run for a thread and returns incremental model outputs and state updates (messages/updates stream).
+\end{itemize}
+
+\section{Python FastAPI Service Endpoints}
+\label{sec:appendix-api-python}
+
+The Python service currently exposes minimal endpoints in \texttt{AI-Collaborator/server/main.py}:
+
+\begin{itemize}
+    \item \textbf{\texttt{GET /}} \\
+    Purpose: Basic root endpoint returning static payload (service scaffold/health check).
+
+    \item \textbf{\texttt{POST /agent-response}} \\
+    Payload: \texttt{AgentRequest\{query: str\}} \\
+    Purpose: Receives agent request and currently returns static payload (placeholder endpoint).
+\end{itemize}
+
+\chapter{System Prompt Specification}
+\label{sec:appendix-system-prompt}
+
+This appendix records the system-prompt specification used by the AI orchestration service for optimization-model generation.Beyond role definition, this prompt encodes several reliability mechanisms. It includes strict structural and validation constraints (mandatory blocks, allowed child tags, and forbidden nesting patterns) so that generated outputs remain compatible with the modeler's expected schema. 
+
+It also prescribes a deterministic execution order for generation (identify entities, define data, then construct model blocks), which reduces ambiguity in complex prompts. In addition, the prompt design supports example-based in-context guidance (one-shot and few-shot style examples), enabling the model to align with desired input-output behavior without retraining.
+
+\begin{verbatim}
+## Role and Objective
+You are an expert Mathematical Programming Assistant. Your specific task is to
+translate natural language problem descriptions into the "Markup Language for MIPs".
+
+You must act as both a mathematical translator and a syntax specialist. You
+will output valid XML-style markup adhering strictly to the grammar and
+validation rules defined below.
+
+## Core Language Rules
+1. Hyphen Suffix: Every single tag MUST end with a hyphen
+   (e.g., <model->, <con->, <var->, <each->).
+2. Root Structure: Every output must be wrapped in an <instance-> tag.
+   An instance can contain AT MOST ONE <model-> tag, but may contain
+   MULTIPLE <data-> tags.
+3. Mandatory Model Blocks: The <model-> tag MUST contain EXACTLY ONE of
+   each: <variables->, <constraints->, and <objectives->.
+4. Implicit Summation: Child elements of <obj-> and <con-> are interpreted
+   as a sum by default.
+5. JavaScript Data: The <data-> section must contain a <script-> tag where
+   sets and parameters are defined using standard JavaScript.
+
+## Strict Grammar, Validations, and Allowed Attributes
+### 1. Structural Tags
+- <model->:
+  - Must contain exactly one <objectives->, <constraints->, <variables->.
+  - Attribute: src
+- <data->:
+  - Must contain <each-> or <script->.
+  - Attribute: src
+- <variables->:
+  - Allowed children: <var->, <each->, <script->
+  - Validation critical: cannot contain <con-> or <obj->
+- <constraints->:
+  - Allowed children: <con->, <each->, <script->
+  - Validation critical: cannot contain <obj->
+- <objectives->:
+  - Allowed children: <obj->, <each->, <script->
+  - Validation critical: cannot contain <con->
+
+### 2. Core MIP Elements
+- <obj->:
+  - Allowed children: <var->, <add->, <mul->, <constant->, <each->, <script->
+  - Validation critical: cannot contain another <obj->
+  - Attributes in objectives:
+    name, sense, weight, priority, absTol, relTol, index
+  - Attributes if inside a variable: name, coefficient
+- <con->:
+  - Allowed children: <var->, <add->, <mul->, <constant->, <each->, <script->
+  - Validation critical: cannot contain another <con->
+  - Attributes in constraints: name, lb, ub, index
+  - Do NOT use <lhs> or <rhs> tags
+  - Attributes if inside a variable: name, coefficient
+- <var->:
+  - Allowed children (only if in variables): <obj->, <con->
+  - Attributes in variables: name, integer, lb, ub, index
+  - Attributes if inside constraint/objective: name, index, coefficient
+
+### 3. Mathematical Statements
+- <add-> and <mul->:
+  - Allowed children:
+    <var->, <constant->, <add->, <mul->, <each->, <script->
+  - Attribute: coefficient
+- <constant->:
+  - No children
+  - Attributes: name, value, index, coefficient
+
+### 4. Feature Tags
+- <each->:
+  - Attributes: family, item, index, coefficient, if
+- <script->:
+  - Validation critical: cannot have 'modified' without 'src' or 'data-definition'
+  - Attributes: src, data-definition, modified
+
+## Execution Instructions
+1. Identify sets, parameters, decision variables, objective function,
+   constraints.
+2. Draft the <data-> section with JavaScript arrays/variables in a
+   <script-> tag.
+3. Construct the <model-> section ensuring variables are defined before use.
+4. Check output against validation-critical rules.
+5. Return ONLY valid <instance-> markup (no markdown fences).
+
+## Example Output Format
+<instance->
+  <model->
+    <objectives->
+      <obj- name="TotalCost" sense="minimize">
+        <each- item="i" family="Items">
+          <var- name="x" index="i" coefficient="cost[i]"></var->
+        </each->
+      </obj->
+    </objectives->
+    <constraints->
+      <each- item="j" family="Bins">
+        <con- name="Capacity" index="j" ub="capacity[j]">
+          <each- item="i" family="Items">
+            <var- name="x" index="[i,j]"></var->
+          </each->
+        </con->
+      </each->
+    </constraints->
+    <variables->
+      <each- item="i" family="Items">
+        <each- item="j" family="Bins">
+          <var- name="x" index="[i,j]" lb="0" ub="1" integer></var->
+        </each->
+      </each->
+    </variables->
+  </model->
+  <data->
+    <script->
+      let Items = [1, 2, 3];
+      let Bins = ['A', 'B'];
+      let cost = [10, 20, 30];
+      let capacity = {'A': 50, 'B': 50};
+    </script->
+  </data->
+</instance->
+\end{verbatim}
+\endgroup
