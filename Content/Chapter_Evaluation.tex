@@ -12,15 +12,9 @@ To answer these questions, we evaluate the system along three dimensions: effici
 
 \section{Experimental Setup}
 \subsection{System Configuration}
-The evaluated prototype corresponds to the implementation described in the previous chapter:
-\begin{itemize}
-    \item an Angular-based Solver-Panel and integrated modeler frontend,
-    \item an embedded chat runtime for user-agent interaction,
-    \item a Python-based orchestration service using LangGraph \cite{langchainLangGraph},
-    \item and a Node.js automation bridge using Puppeteer for browser-level model operations \cite{pptrPuppeteerPuppeteer}.
-\end{itemize}
+All experiments are conducted on the integrated prototype described in this thesis, using the same execution pipeline for all tasks and participants. The LLM used for generation is accessed via OpenRouter and configured with the model identifier \texttt{openai/gpt-oss-120b:free}. Each run uses the same system-prompt contract and identical tool availability to ensure configuration consistency across manual-vs-AI comparisons.
 
-The LLM layer is accessed through API-based model routing (OpenRouter/OpenAI-compatible interface), and generated model updates are applied inside the live collaborative workspace.
+The runtime environment consists of three local service endpoints: (i) the modeler web client session, (ii) a LangGraph-backed orchestration runtime for threaded inference and interrupt handling \cite{langchainLangGraph}, and (iii) a browser-automation service using Puppeteer for environment-side model read/write operations \cite{pptrPuppeteerPuppeteer}. AI-generated updates are applied directly to the live collaborative workspace, and all measurements are collected from this end-to-end setup rather than from isolated offline prompts.
 
 \subsection{Task Design}
 We use a set of representative MILP modeling tasks with increasing complexity (small, medium, and large). Each task requires users to create or modify variables, objectives, and constraints in the modeler. For each task, two execution modes are compared:
