@@ -25,6 +25,13 @@ From a conceptual perspective, this has two direct implications for AI integrati
 
 The proposed concept therefore adopts an in-place collaboration strategy: the AI agent is invited into the same workspace channel as human collaborators and acts on the same editable model representation. This avoids synchronization issues between separate tools, preserves the platform's existing collaboration semantics, and keeps the user in a familiar workflow.
 
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=\linewidth]{static/optimization-model-ai.pdf}
+  \caption{Optimization model with AI agent integrated into the collaborative workspace.}
+  \label{fig:optimization-model-ai}
+\end{figure}
+
 \section{Large Language Models (LLMs)}
 Large Language Models (LLMs) \cite{wikipediaLargeLanguage} provide the semantic interface between human intent and formal model edits. In this thesis, the LLM layer is responsible for mapping natural-language requests to platform-specific markup while respecting optimization semantics and syntactic constraints. Unlike standard code completion tasks, this mapping requires both domain-aware reasoning and strict output-shape control.
 
@@ -46,6 +53,13 @@ Several alternatives are plausible for this layer:
 
 \subsection{Choice}
 The implemented concept uses \textbf{OpenRouter} \cite{openrouterOpenRouter} as the model-provider abstraction layer. OpenRouter is a hosted routing service that exposes an OpenAI-compatible API \cite{openaiOverview} surface while allowing requests to be dispatched to different underlying model providers through a unified interface. In practice, the client sends a standard chat-completion style request to OpenRouter together with a model identifier; OpenRouter then forwards the request to the selected backend model and returns the generated response in a compatible format.
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=\linewidth]{static/openrouter.pdf}
+  \caption{OpenRouter as a model-provider abstraction layer routing requests to different LLM backends.}
+  \label{fig:openrouter}
+\end{figure}
 
 Relative to alternatives such as a custom provider gateway or a LiteLLM \cite{litellmLiteLLM}-based self-managed abstraction, this choice favors lower operational overhead in the thesis context: multi-model routing is available immediately without introducing an additional in-house proxy service that must be deployed and maintained. In this project, the choice is motivated by the following concrete implementation requirements:
 \begin{enumerate}
@@ -115,6 +129,13 @@ Human-in-the-loop (HITL) is a collaboration concept in which AI generation and h
 This concept is necessary because optimization modeling has high semantic sensitivity: an output can be syntactically valid and still be mathematically inappropriate (e.g., incorrect bounds, missing constraints, wrong objective intent). For that reason, correctness cannot rely on generation alone. It must emerge from a joint process in which the agent accelerates drafting and the user validates domain intent.
 
 Operationally, this introduces a loop-type structure: \emph{user request} $\rightarrow$ \emph{agent proposal} $\rightarrow$ \emph{validation and presentation} $\rightarrow$ \emph{user feedback/approval} $\rightarrow$ \emph{regeneration or commit}. Implementing this reliably requires an orchestration library that can represent explicit states, conditional transitions, tool invocation, and interruption points for human feedback.
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=\linewidth]{static/hitl.pdf}
+  \caption{Human-in-the-loop decision cycle for AI-assisted optimization modeling.}
+  \label{fig:hitl}
+\end{figure}
 
 \subsection{Alternatives}
 At the orchestration-framework level, several alternatives are possible:

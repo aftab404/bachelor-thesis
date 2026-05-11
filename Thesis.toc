@@ -26,21 +26,21 @@
 \contentsline {chapter}{\numberline {III}Concept}{13}{chapter.3}%
 \contentsline {section}{\numberline {1}Overview}{13}{section.3.1}%
 \contentsline {section}{\numberline {2}Optimization Modeling}{13}{section.3.2}%
-\contentsline {section}{\numberline {3}Large Language Models (LLMs)}{14}{section.3.3}%
+\contentsline {section}{\numberline {3}Large Language Models (LLMs)}{15}{section.3.3}%
 \contentsline {subsection}{\numberline {3.1}Alternatives}{15}{subsection.3.3.1}%
-\contentsline {subsection}{\numberline {3.2}Choice}{15}{subsection.3.3.2}%
-\contentsline {section}{\numberline {4}Web Automation}{16}{section.3.4}%
+\contentsline {subsection}{\numberline {3.2}Choice}{16}{subsection.3.3.2}%
+\contentsline {section}{\numberline {4}Web Automation}{17}{section.3.4}%
 \contentsline {subsection}{\numberline {4.1}Alternatives}{17}{subsection.3.4.1}%
-\contentsline {subsection}{\numberline {4.2}Choice}{17}{subsection.3.4.2}%
-\contentsline {section}{\numberline {5}Chat-User Interaction}{17}{section.3.5}%
+\contentsline {subsection}{\numberline {4.2}Choice}{18}{subsection.3.4.2}%
+\contentsline {section}{\numberline {5}Chat-User Interaction}{18}{section.3.5}%
 \contentsline {subsection}{\numberline {5.1}Alternatives}{18}{subsection.3.5.1}%
-\contentsline {subsection}{\numberline {5.2}Choice}{18}{subsection.3.5.2}%
-\contentsline {section}{\numberline {6}Human-in-the-Loop}{18}{section.3.6}%
-\contentsline {subsection}{\numberline {6.1}Alternatives}{19}{subsection.3.6.1}%
-\contentsline {subsection}{\numberline {6.2}Choice}{19}{subsection.3.6.2}%
-\contentsline {section}{\numberline {7}Backend Services}{20}{section.3.7}%
-\contentsline {subsection}{\numberline {7.1}Alternatives}{20}{subsection.3.7.1}%
-\contentsline {subsection}{\numberline {7.2}Choice}{21}{subsection.3.7.2}%
+\contentsline {subsection}{\numberline {5.2}Choice}{19}{subsection.3.5.2}%
+\contentsline {section}{\numberline {6}Human-in-the-Loop}{19}{section.3.6}%
+\contentsline {subsection}{\numberline {6.1}Alternatives}{20}{subsection.3.6.1}%
+\contentsline {subsection}{\numberline {6.2}Choice}{21}{subsection.3.6.2}%
+\contentsline {section}{\numberline {7}Backend Services}{21}{section.3.7}%
+\contentsline {subsection}{\numberline {7.1}Alternatives}{22}{subsection.3.7.1}%
+\contentsline {subsection}{\numberline {7.2}Choice}{22}{subsection.3.7.2}%
 \contentsline {chapter}{\numberline {IV}Implementation}{23}{chapter.4}%
 \contentsline {section}{\numberline {1}Implementation Overview}{23}{section.4.1}%
 \contentsline {subsection}{\numberline {1.1}System Components}{23}{subsection.4.1.1}%
@@ -53,45 +53,50 @@
 \contentsline {section}{\numberline {3}Agent Orchestration Service}{26}{section.4.3}%
 \contentsline {subsection}{\numberline {3.1}LangGraph Workflow Realization}{26}{subsection.4.3.1}%
 \contentsline {subsection}{\numberline {3.2}Graph States}{27}{subsection.4.3.2}%
-\contentsline {subsection}{\numberline {3.3}Tool Binding and External Actions}{28}{subsection.4.3.3}%
+\contentsline {subsection}{\numberline {3.3}External Actions and Bridge Calls}{28}{subsection.4.3.3}%
 \contentsline {subsection}{\numberline {3.4}Prompt and Constraint Strategy}{29}{subsection.4.3.4}%
-\contentsline {subsection}{\numberline {3.5}Validation Gate Before Model Application}{29}{subsection.4.3.5}%
+\contentsline {subsection}{\numberline {3.5}Validation Gate Before Model Application}{30}{subsection.4.3.5}%
 \contentsline {section}{\numberline {4}Browser Automation Execution Layer}{30}{section.4.4}%
 \contentsline {subsection}{\numberline {4.1}Session Initialization}{30}{subsection.4.4.1}%
 \contentsline {subsection}{\numberline {4.2}Workspace Read/Write Operations}{31}{subsection.4.4.2}%
-\contentsline {chapter}{\numberline {V}Evaluation}{33}{chapter.5}%
-\contentsline {section}{\numberline {1}Evaluation Goals}{33}{section.5.1}%
-\contentsline {section}{\numberline {2}Experimental Setup}{33}{section.5.2}%
-\contentsline {subsection}{\numberline {2.1}System Configuration}{33}{subsection.5.2.1}%
-\contentsline {subsection}{\numberline {2.2}Task Design}{34}{subsection.5.2.2}%
-\contentsline {subsection}{\numberline {2.3}Participants and Procedure}{34}{subsection.5.2.3}%
-\contentsline {section}{\numberline {3}Metrics}{34}{section.5.3}%
-\contentsline {subsection}{\numberline {3.1}Efficiency Metrics}{34}{subsection.5.3.1}%
-\contentsline {subsection}{\numberline {3.2}Effort and Accessibility Metrics}{34}{subsection.5.3.2}%
-\contentsline {subsection}{\numberline {3.3}Quality and Reliability Metrics}{35}{subsection.5.3.3}%
-\contentsline {section}{\numberline {4}Results by Research Question}{35}{section.5.4}%
-\contentsline {subsection}{\numberline {4.1}RQ1: Reduction of Modeling Effort}{35}{subsection.5.4.1}%
-\contentsline {subsection}{\numberline {4.2}RQ2: Lowering Entry Barriers}{35}{subsection.5.4.2}%
-\contentsline {subsection}{\numberline {4.3}RQ3: Efficiency and Quality in Collaborative Development}{36}{subsection.5.4.3}%
-\contentsline {section}{\numberline {5}Threats to Validity}{36}{section.5.5}%
-\contentsline {subsection}{\numberline {5.1}Internal Validity}{36}{subsection.5.5.1}%
-\contentsline {subsection}{\numberline {5.2}External Validity}{36}{subsection.5.5.2}%
-\contentsline {subsection}{\numberline {5.3}Construct Validity}{36}{subsection.5.5.3}%
-\contentsline {section}{\numberline {6}Summary}{36}{section.5.6}%
-\contentsline {chapter}{\numberline {VI}Conclusion}{37}{chapter.6}%
-\contentsline {section}{\numberline {1}Summary}{37}{section.6.1}%
-\contentsline {section}{\numberline {2}Limitations and Future Work}{38}{section.6.2}%
-\contentsline {subsection}{\numberline {2.1}Current Limitations}{38}{subsection.6.2.1}%
-\contentsline {subsection}{\numberline {2.2}Future Directions}{38}{subsection.6.2.2}%
-\contentsline {chapter}{\nonumberline Bibliography}{39}{chapter*.6}%
-\contentsline {chapter}{\numberline {A}Implementation File Structure}{43}{appendix.A}%
-\contentsline {section}{\numberline {1}High-Level Repository Layout}{43}{section.A.1}%
-\contentsline {section}{\numberline {2}File Responsibilities}{43}{section.A.2}%
-\contentsline {section}{\numberline {3}Cross-Module Execution Path}{44}{section.A.3}%
-\contentsline {chapter}{\numberline {B}API Endpoint Reference}{45}{appendix.B}%
-\contentsline {section}{\numberline {1}Node Automation Bridge (Ai-Agent)}{45}{section.B.1}%
-\contentsline {section}{\numberline {2}LangGraph Runtime API Operations (Frontend Usage)}{45}{section.B.2}%
-\contentsline {section}{\numberline {3}Python FastAPI Service Endpoints}{46}{section.B.3}%
-\contentsline {chapter}{\numberline {C}System Prompt Specification}{47}{appendix.C}%
+\contentsline {section}{\numberline {5}Portability and Adaptation to Other Platforms}{32}{section.4.5}%
+\contentsline {subsection}{\numberline {5.1}Architectural Separation Principle}{32}{subsection.4.5.1}%
+\contentsline {subsection}{\numberline {5.2}Automation Bridge: Generic vs.\ Platform-Specific Endpoints}{32}{subsection.4.5.2}%
+\contentsline {subsection}{\numberline {5.3}Orchestration Layer: Prompt as the Domain Interface}{33}{subsection.4.5.3}%
+\contentsline {subsection}{\numberline {5.4}Frontend Integration: Embeddable Chat Runtime}{34}{subsection.4.5.4}%
+\contentsline {subsection}{\numberline {5.5}Summary of Adaptation Points}{34}{subsection.4.5.5}%
+\contentsline {chapter}{\numberline {V}Evaluation}{37}{chapter.5}%
+\contentsline {section}{\numberline {1}Evaluation Goals}{37}{section.5.1}%
+\contentsline {section}{\numberline {2}Experimental Setup}{37}{section.5.2}%
+\contentsline {subsection}{\numberline {2.1}System Configuration}{37}{subsection.5.2.1}%
+\contentsline {subsection}{\numberline {2.2}Task Design}{38}{subsection.5.2.2}%
+\contentsline {subsection}{\numberline {2.3}Participants and Procedure}{38}{subsection.5.2.3}%
+\contentsline {section}{\numberline {3}Metrics}{38}{section.5.3}%
+\contentsline {subsection}{\numberline {3.1}Efficiency Metrics}{38}{subsection.5.3.1}%
+\contentsline {subsection}{\numberline {3.2}Effort and Accessibility Metrics}{38}{subsection.5.3.2}%
+\contentsline {subsection}{\numberline {3.3}Quality and Reliability Metrics}{39}{subsection.5.3.3}%
+\contentsline {section}{\numberline {4}Results by Research Question}{39}{section.5.4}%
+\contentsline {subsection}{\numberline {4.1}RQ1: Reduction of Modeling Effort}{39}{subsection.5.4.1}%
+\contentsline {subsection}{\numberline {4.2}RQ2: Lowering Entry Barriers}{39}{subsection.5.4.2}%
+\contentsline {subsection}{\numberline {4.3}RQ3: Efficiency and Quality in Collaborative Development}{40}{subsection.5.4.3}%
+\contentsline {section}{\numberline {5}Threats to Validity}{40}{section.5.5}%
+\contentsline {subsection}{\numberline {5.1}Internal Validity}{40}{subsection.5.5.1}%
+\contentsline {subsection}{\numberline {5.2}External Validity}{40}{subsection.5.5.2}%
+\contentsline {subsection}{\numberline {5.3}Construct Validity}{40}{subsection.5.5.3}%
+\contentsline {section}{\numberline {6}Summary}{40}{section.5.6}%
+\contentsline {chapter}{\numberline {VI}Conclusion}{41}{chapter.6}%
+\contentsline {section}{\numberline {1}Summary}{41}{section.6.1}%
+\contentsline {section}{\numberline {2}Limitations and Future Work}{42}{section.6.2}%
+\contentsline {subsection}{\numberline {2.1}Current Limitations}{42}{subsection.6.2.1}%
+\contentsline {subsection}{\numberline {2.2}Future Directions}{42}{subsection.6.2.2}%
+\contentsline {chapter}{\nonumberline Bibliography}{43}{chapter*.11}%
+\contentsline {chapter}{\numberline {A}Implementation File Structure}{47}{chapter.A}%
+\contentsline {section}{\numberline {1}High-Level Repository Layout}{47}{section.A.1}%
+\contentsline {section}{\numberline {2}File Responsibilities}{48}{section.A.2}%
+\contentsline {section}{\numberline {3}Cross-Module Execution Path}{48}{section.A.3}%
+\contentsline {chapter}{\numberline {B}API Endpoint Reference}{51}{chapter.B}%
+\contentsline {section}{\numberline {1}Node Automation Bridge (\texttt {AI-Collaborator/puppeteer-server})}{51}{section.B.1}%
+\contentsline {section}{\numberline {2}LangGraph Runtime API Operations (Frontend Usage)}{52}{section.B.2}%
+\contentsline {chapter}{\numberline {C}System Prompt Specification}{53}{chapter.C}%
 \def \@chapapp {\appendixname }
 \providecommand \tocbasic@end@toc@file {}\tocbasic@end@toc@file 

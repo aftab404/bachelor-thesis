@@ -57,7 +57,7 @@ Operationally, \texttt{inviteAI()} performs the following sequence:
     \item Update frontend UI state to expose the AI collaborator controls after successful invocation.
 \end{enumerate}
 
-On the backend side, this endpoint is implemented in the Node/Express bridge service (\texttt{Ai-Agent/index.js}) as \texttt{POST /puppet}. When called, the endpoint invokes a Puppeteer initialization routine that launches a server-side headless Chrome browser session. The automation routine first logs the agent into the platform using its own dedicated login credentials, then navigates to the provided collaborative write URL. This browser session serves as the AI agent's execution environment, enabling the agent to join the current collaboration session as an editing participant and interact with the same live modeler state as human users.
+On the backend side, this endpoint is implemented in the Node/Express bridge service (\texttt{AI-Collaborator/puppeteer-server/index.js}) as \texttt{POST /puppet}. When called, the endpoint invokes a Puppeteer initialization routine that launches a server-side Chrome session. The automation routine logs the agent into the platform using dedicated credentials, then navigates to the provided collaborative write URL. This browser session serves as the AI agent's execution environment, enabling the agent to join the current collaboration session as an editing participant and interact with the same live modeler state as human users.
 
 The invitation path remains role-aware because it reuses the platform's existing edit/read collaboration semantics. Therefore, no parallel permission model is introduced; the AI participant is integrated through the same collaboration boundary already used for human users.
 
@@ -101,7 +101,8 @@ Operationally, assistant-ui uses these API primitives to drive LangGraph executi
 At graph level, the implemented flow includes:
 \begin{itemize}
     \item an LLM node for proposal generation,
-    \item a tool node for external actions,
+    \item validation and repair nodes that gate model updates,
+    \item an apply node that writes changes to the live workspace,
     \item and a human-feedback node for interrupt/resume control.
 \end{itemize}
 
@@ -125,27 +126,34 @@ This state is responsible for proposal generation. It receives the composite con
 \end{itemize}
 In other words, this state determines \emph{what} should happen next.
 
-\textbf{Tools State (Execution State).}
-This state executes external actions through bound tools, such as opening/joining a collaborative workspace session, reading the current model content, or applying generated model updates through the automation bridge. Tool outputs are fed back into graph state so the next LLM step can reason over fresh environment results. This state therefore implements \emph{environment-grounded execution} rather than pure text generation.
+\textbf{Execution State (Validation/Apply).}
+These states execute external actions through HTTP calls to the automation bridge, such as validating candidate markup, reading current model content, or applying updates to the active workspace. The results of these calls are fed back into graph state so the next LLM step can reason over fresh environment results. This state therefore implements \emph{environment-grounded execution} rather than pure text generation.
 
 \textbf{HITL State (Approval/Feedback State).}
 This state materializes human-in-the-loop control through interrupt and resume semantics. When user confirmation is required, the graph emits an interrupt that is surfaced to the frontend. The user can then approve, reject, or provide refinement feedback; the returned command resumes graph execution from the suspended state. This keeps user authority inside the orchestration loop rather than outside it.
 
 \textbf{Validation State (Reliability State).}
-A dedicated validation state has been integrated into the implemented graph. This state executes before the final commit and verifies that AI-generated output conforms to modeler constraints and schema expectations. Instead of introducing an ad-hoc validator, the implementation reuses the validation logic already present in the modeler stack (i.e., existing modeler validators and checks) as callable validation tools within the graph. This provides a deterministic acceptance gate:
+A dedicated validation state has been integrated into the implemented graph. This state executes before the final commit and verifies that AI-generated output conforms to modeler constraints and schema expectations. Instead of introducing an ad-hoc validator, the implementation reuses the validation logic already present in the modeler stack (i.e., existing modeler validators and checks) by calling the automation bridge \texttt{POST /validate-html} endpoint. This provides a deterministic acceptance gate:
 \[
 \text{generated output} \rightarrow \text{modeler validator checks} \rightarrow (\text{accept} \mid \text{return errors for refinement})
 \]
 and would further reduce the risk of structurally valid but semantically inconsistent updates.
 
-\subsection{Tool Binding and External Actions}
-The orchestration service binds explicit tool functions to the LangGraph tool node. Tool binding means that callable Python functions are registered as agent-available actions; when the LLM decides that external execution is required, it emits a tool call instead of plain text, and LangGraph dispatches that call to the bound function.
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=\linewidth]{static/graphstates.pdf}
+  \caption{Implemented LangGraph state graph with generation, validation, apply, and human-feedback states.}
+  \label{fig:graphstates}
+\end{figure}
 
-The relevant runtime tools are:
+\subsection{External Actions and Bridge Calls}
+The orchestration service triggers external actions by calling the Node automation bridge over HTTP. Instead of a separate tool node, these actions are represented as explicit graph states that call bridge endpoints and feed responses back into the LangGraph state.
+
+The relevant runtime actions are:
 \begin{itemize}
-    \item \textbf{\texttt{open\_webbrowser(url)}}: Initializes environment access by calling the automation bridge endpoint for browser/session startup and workspace join. This is used to attach the agent to a collaborative modeler session.
-    \item \textbf{\texttt{get\_current\_html()}}: Retrieves the current model representation from the active browser-side modeler instance. This is used when the agent needs fresh environment state before generating or refining an update.
-    \item \textbf{\texttt{update\_html(new\_html)}}: Applies generated model content back to the live modeler DOM through the automation bridge. This is the execution step that materializes the agent proposal in the shared workspace.
+    \item \textbf{\texttt{get\_current\_html()}}: Retrieves the current model representation from the active browser-side modeler instance via \texttt{GET /get-html}. This is used when the agent needs fresh environment state before generating or refining an update.
+    \item \textbf{\texttt{validate\_html(new\_html)}}: Validates candidate markup using the modeler validators exposed through \texttt{POST /validate-html}. Validation errors are routed into the repair path.
+    \item \textbf{\texttt{update\_html(new\_html)}}: Applies generated model content back to the live modeler DOM through \texttt{POST /update-html}. This is the execution step that materializes the agent proposal in the shared workspace.
 \end{itemize}
 
 In addition, development/testing helper tools (e.g., arithmetic helpers used during graph experiments) can be bound in the same mechanism, but they are not part of the production modeling flow.
@@ -219,17 +227,101 @@ After initialization, the runtime follows a concrete execution path for each use
     \[
     \{\texttt{"newHTML"}:\ \texttt{<generated-model-markup>}\}
     \]
-    This endpoint is handled in \texttt{Ai-Agent/index.js}, where the request is forwarded to \texttt{puppetEditModel(newHTML)}.
+    This endpoint is handled in \texttt{AI-Collaborator/puppeteer-server/index.js}, where the request is forwarded to \texttt{puppetEditModel(newHTML)}.
 
     \item \textbf{Browser-side model update:} \\
-    Inside \texttt{puppetEditModel} (\texttt{Ai-Agent/puppet.js}), Puppeteer executes:
+    Inside \texttt{puppetEditModel} (\texttt{AI-Collaborator/puppeteer-server/puppet.js}), Puppeteer calls a modeler-native update hook:
     \[
-    \texttt{page.\$eval('div[name="Inst1"]', (el, newHTML) => el.innerHTML = newHTML)}
+    \texttt{window.Modeler.updateModelViewHTML(newHTML)}
     \]
-    This operation replaces the content of the active model instance container in the live modeler session. The selector \texttt{div[name="Inst1"]} targets the currently open model instance view used by the platform runtime.
+    This operation replaces the content of the active model instance through the modeler runtime API rather than direct DOM mutation.
 
     \item \textbf{Propagation to collaborators:} \\
     Because the mutation occurs directly in the live collaborative modeler DOM, the platform's existing synchronization channel propagates the resulting workspace change to connected participants. Thus, the agent update appears in the same shared session context as human edits.
 \end{enumerate}
 
-Additionally, read operations are available through \texttt{get\_current\_html()} (Python tool) and \texttt{GET /get-html} (Node bridge), enabling the agent to fetch the latest workspace state before subsequent generation cycles.
+Additionally, read operations are available through \texttt{get\_current\_html()} (Python action) and \texttt{GET /get-html} (Node bridge), enabling the agent to fetch the latest workspace state before subsequent generation cycles. Validation is executed through \texttt{POST /validate-html}, which delegates to \texttt{window.Modeler.validateHTML(newHTML)} inside the Puppeteer session.
+
+\section{Portability and Adaptation to Other Platforms}
+While the implementation described in the preceding sections targets the Optimization Platform's modeler, the architecture was designed with explicit separation between \emph{platform-agnostic infrastructure} and \emph{platform-specific integration points}. This section identifies the concrete adaptation boundaries and explains how the same architecture can be ported to a different web application with minimal structural changes.
+
+\subsection{Architectural Separation Principle}
+The AI-collaboration pipeline is organized into three layers, each with a different scope of platform coupling:
+
+\begin{enumerate}
+    \item \textbf{Orchestration layer (Python/LangGraph):} Stateful workflow execution, LLM invocation, human-in-the-loop control, and conditional graph routing. This layer is fully platform-agnostic; it communicates with the environment exclusively through HTTP calls to the automation bridge. No platform-specific logic resides here except for the system prompt content.
+    \item \textbf{Automation bridge (Node.js/Puppeteer):} Browser session management and HTTP endpoint exposure. The bridge is split into a generic session initialization component and platform-specific read/write/validate operations.
+    \item \textbf{Frontend integration (chat runtime):} The assistant-ui chat runtime and its LangGraph adapter. The chat widget itself is framework-independent (React-based, embeddable); only the model-context injection logic is coupled to the host application's state representation.
+\end{enumerate}
+
+This layering means that porting the architecture to a different platform requires changes only at well-defined integration points, without restructuring the orchestration graph, the chat runtime protocol, or the bridge server skeleton.
+
+\subsection{Automation Bridge: Generic vs.\ Platform-Specific Endpoints}
+In the implemented bridge service (\texttt{AI-Collaborator/puppeteer-server/}), the code explicitly separates generic and platform-specific concerns. The session initialization endpoint (\texttt{POST /puppet}) and the Puppeteer bootstrap routine (\texttt{puppetInit}) are designed to work with any web application that has a login page. Authentication details are externalized as named constants:
+
+\begin{itemize}
+    \item \texttt{PLATFORM\_LOGIN\_URL}: the URL of the target application's login page.
+    \item \texttt{PLATFORM\_EMAIL\_LOCATOR}, \texttt{PLATFORM\_PASSWORD\_LOCATOR},\\
+    \texttt{PLATFORM\_SUBMIT\_BUTTON\_LOCATOR}: CSS selectors for the authentication form elements.
+    \item \texttt{AI\_USER\_EMAIL}, \texttt{AI\_USER\_PASSWORD}: dedicated agent credentials.
+\end{itemize}
+
+To adapt session initialization to a different platform, a developer replaces these constants with values matching the target application's login page structure. The initialization flow itself (launch browser, navigate, authenticate, attach to workspace URL) remains unchanged.
+
+The platform-specific endpoints (\texttt{POST /update-html}, \texttt{GET /get-html}, \texttt{POST /validate-html}) and their corresponding Puppeteer functions (\texttt{puppetEditModel}, \texttt{puppetGetModel}, \texttt{puppetValidateModel}) are explicitly documented as platform-dependent. These functions assume that the target application exposes certain methods on a global JavaScript object (in this case, \texttt{window.Modeler}) that the Puppeteer session can call via \texttt{page.evaluate()}. For a different platform, a developer would:
+
+\begin{enumerate}
+    \item Define equivalent read, write, and validate operations for the target application's DOM or API surface.
+    \item Implement corresponding \texttt{page.evaluate()} calls that invoke the target application's exposed hooks.
+    \item If the target application does not expose such hooks natively, implement thin adapter methods in the application's frontend code that bridge between the Puppeteer call and the internal application state.
+\end{enumerate}
+
+The bridge endpoint signatures (HTTP verbs, payload shapes, response formats) can remain identical, which means the orchestration layer requires no changes when the bridge internals are swapped.
+
+\subsection{Orchestration Layer: Prompt as the Domain Interface}
+The LangGraph workflow graph (node topology, conditional edges, interrupt/resume logic) is entirely domain-independent. The graph structure shown in the preceding sections -- generation, validation, repair, apply, and human-feedback states -- applies to any scenario where an LLM proposes structured changes to an editable workspace and a human reviews them before commitment.
+
+The only component in the orchestration layer that carries platform-specific semantics is the \textbf{system prompt}. In the current implementation, the system prompt encodes the grammar rules, structural constraints, and output format expectations of the optimization modeler's markup language. For a different platform, the system prompt would be replaced with an equivalent specification of the target domain's representation language or editing conventions.
+
+In practice, adapting the orchestration layer to a new domain requires:
+\begin{itemize}
+    \item writing a new system prompt that defines the target output format, structural rules, and domain role,
+    \item and optionally adjusting the validation/repair prompts (\texttt{system\_prompt\_fix\_html}, \texttt{system\_prompt\_update\_html}) to reference the new domain's error semantics.
+\end{itemize}
+
+No changes to the graph topology, state schema, or routing logic are necessary.
+
+\subsection{Frontend Integration: Embeddable Chat Runtime}
+The assistant-ui chat widget communicates with the LangGraph backend through a standardized thread-and-run API contract (create, load, stream). This contract is not specific to any host application; it depends only on the LangGraph server endpoint and a graph identifier. Therefore, embedding the chat interface into a different web application requires:
+
+\begin{enumerate}
+    \item mounting the assistant-ui React component in the target application's UI container,
+    \item configuring the LangGraph client URL and graph ID in the chat API module,
+    \item and implementing a context-injection hook that retrieves the current application state and prepends it to each user message.
+\end{enumerate}
+
+The context-injection hook is the primary platform-specific adaptation point on the frontend side. In the current implementation, it queries the modeler's HTML representation; in a different application, it would query whatever state representation the target platform uses (e.g., a JSON document, a canvas state, or a code editor buffer).
+
+\subsection{Summary of Adaptation Points}
+\Cref{tab:adaptation-points} summarizes the concrete changes required to port the architecture to a different web platform.
+
+\begin{table}[ht]
+\centering
+\caption{Platform-specific adaptation points for porting the AI collaborator architecture.}
+\label{tab:adaptation-points}
+\begin{tabular}{p{3.2cm} p{4.5cm} p{5.5cm}}
+\toprule
+\textbf{Layer} & \textbf{What to change} & \textbf{What remains unchanged} \\
+\midrule
+Automation bridge (init) & Login URL, form selectors, agent credentials & Browser launch, viewport setup, workspace-attach flow \\
+\addlinespace
+Automation bridge (ops) & \texttt{page.evaluate()} hooks for read/write/validate & HTTP endpoint signatures, bridge server skeleton \\
+\addlinespace
+Orchestration (Python) & System prompt, repair/update prompt templates & Graph topology, state schema, routing, HITL logic \\
+\addlinespace
+Frontend (chat) & Context-injection hook, UI mount point & assistant-ui runtime, LangGraph adapter, thread API \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Because the platform-specific surface is limited to configuration constants, a small set of browser-side hooks, and prompt content, the overall architecture can be reused across web applications without reimplementing the orchestration, chat runtime, or automation infrastructure.
