@@ -139,12 +139,6 @@ A dedicated validation state has been integrated into the implemented graph. Thi
 \]
 and would further reduce the risk of structurally valid but semantically inconsistent updates.
 
-\begin{figure}[ht]
-  \centering
-  \includegraphics[width=\linewidth]{static/graphstates.pdf}
-  \caption{Implemented LangGraph state graph with generation, validation, apply, and human-feedback states.}
-  \label{fig:graphstates}
-\end{figure}
 
 \subsection{External Actions and Bridge Calls}
 The orchestration service triggers external actions by calling the Node automation bridge over HTTP. Instead of a separate tool node, these actions are represented as explicit graph states that call bridge endpoints and feed responses back into the LangGraph state.
