@@ -86,7 +86,7 @@ This appendix documents the API surfaces used by the implemented AI-collaboratio
 
 \begin{itemize}
     \item \textbf{\texttt{GET /}} \\
-    \textbf{Payload}: none \\
+    Payload: none \\
     Purpose: Health check endpoint used for basic service availability verification. \\
     Response: Confirmation text.
 
@@ -134,9 +134,9 @@ The frontend uses the \texttt{@langchain/langgraph-sdk} client against the confi
 \chapter{System Prompt Specification}
 \label{sec:appendix-system-prompt}
 
+\section{Primary System Prompt}
 This appendix records the system-prompt specification used by the AI orchestration service for optimization-model generation, as defined in \texttt{AI-Collaborator/server/src/agent.py} (\texttt{system\_prompt\_generate\_html}). Beyond role definition, this prompt encodes several reliability mechanisms. It includes strict structural and validation constraints (mandatory blocks, allowed child tags, and forbidden nesting patterns) so that generated outputs remain compatible with the modeler's expected schema.
 
-It also prescribes a deterministic execution order for generation (identify entities, define data, then construct model blocks), which reduces ambiguity in complex prompts. In addition, the prompt design supports example-based in-context guidance (one-shot and few-shot style examples), enabling the model to align with desired input-output behavior without retraining. The \texttt{\{current\_html\}} placeholder is filled at runtime with the active workspace snapshot retrieved via \texttt{GET /get-html}.
 
 \begingroup
 \footnotesize
@@ -270,3 +270,36 @@ validation rules defined below.
 {current_html}
 \end{verbatim}
 \endgroup
+\section{Auxiliary Node Prompts}
+In addition to the primary generation prompt, the orchestration graph employs specialized prompts for routing, error recovery, and user-driven refinement.
+
+\subsection{Repair State Prompt (\texttt{fix\_html})}
+Used when the validation layer rejects a candidate model. It explicitly feeds the validation error back to the LLM to trigger self-correction.
+\begingroup
+\footnotesize
+\begin{verbatim}
+You are an expert Mathematical Programming Assistant. The HTML content you 
+generated previously did not pass validation for the following reason: 
+{validation_error}. Please fix the HTML content to address this issue while 
+adhering to the original system prompt instructions and the grammar rules for 
+the Markup Language for MIPs. Here is the HTML content that needs to be fixed: 
+{html_content}, just return the fixed html no explanation
+\end{verbatim}
+\endgroup
+
+\subsection{Refinement State Prompt (\texttt{update\_html})}
+
+Used during the Human-in-the-Loop review phase when the operator provides natural language feedback instead of a direct approval or rejection.
+
+\begingroup
+\footnotesize
+\begin{verbatim}
+You are an expert Mathematical Programming Assistant. The user has reviewed 
+the generated HTML content and provided the following feedback: {user_feedback}. 
+Please update the HTML content to address the user's feedback while adhering to 
+the original system prompt instructions and the grammar rules for the Markup 
+Language for MIPs. Here is the HTML content that needs to be updated: 
+{html_content}, just return the updated html no explanation
+\end{verbatim}
+\endgroup
+
