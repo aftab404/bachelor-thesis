@@ -81,12 +81,12 @@ The operational call chain spans the listed modules as follows:
 
 This appendix documents the API surfaces used by the implemented AI-collaboration pipeline. It includes the Node automation bridge endpoints and the LangGraph runtime operations used by the frontend.
 
-\section{Node Automation Bridge (\texttt{AI-Collaborator/puppeteer-server})}
+\section{Node Automation Bridge}
 \label{sec:appendix-api-node-bridge}
 
 \begin{itemize}
     \item \textbf{\texttt{GET /}} \\
-    Payload: none \\
+    \textbf{Payload}: none \\
     Purpose: Health check endpoint used for basic service availability verification. \\
     Response: Confirmation text.
 
@@ -107,7 +107,8 @@ This appendix documents the API surfaces used by the implemented AI-collaboratio
 
     \item \textbf{\texttt{POST /validate-html}} \\
     Payload: \texttt{\{"newHTML": <markup>\}} \\
-    Purpose: Validates candidate markup against modeler constraints via \texttt{window.Modeler.validateHTML(newHTML)} inside the Puppeteer session. \\
+    Purpose: Validates candidate markup against modeler constraints via \\ 
+    \texttt{window.Modeler.validateHTML(newHTML)} inside the Puppeteer session. \\
     Response: Validation result (success flag and error details).
 \end{itemize}
 

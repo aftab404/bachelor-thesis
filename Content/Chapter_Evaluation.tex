@@ -1,135 +1,133 @@
 \chapter{Evaluation}
 
 \section{Evaluation Goals}
-This chapter evaluates whether the implemented AI collaborator addresses the research questions formulated in the introduction:
+This chapter evaluates whether the implemented AI collaborator addresses the core objectives formulated in the introduction. Specifically, the evaluation seeks to answer the following research questions:
 \begin{itemize}
-    \item Can an integrated, stateful, and supervised agent architecture reduce modeling effort for routine and repetitive tasks?
-    \item Can such an architecture lower entry barriers for users with limited optimization expertise?
-    \item Can it improve the efficiency and quality of collaborative MILP model development?
+    \item \textbf{RQ1 (AI Generation \& Efficiency):} To what extent does the integration of an AI-based collaborator reduce the time and manual effort required to construct MILP models compared to purely manual development?
+    \item \textbf{RQ2 (Validation \& Accuracy):} How accurately can the AI agent generate mathematically and syntactically valid model structures, and how effectively does the system's validation layer prevent erroneous modifications?
+    \item \textbf{RQ3 (Human-in-the-Loop \& Feedback):} How effectively does the iterative human-in-the-loop feedback mechanism enable the operator to recover from AI-generated errors and converge on a correct formulation?
 \end{itemize}
 
-To answer these questions, we evaluate the system along three dimensions: efficiency, accessibility, and output quality under human supervision.
+To answer these questions, we evaluate the system architecture using a benchmark dataset of optimization problems tested across multiple Large Language Models (LLMs) of varying sizes.
 
 \section{Experimental Setup}
 \subsection{System Configuration}
-All experiments are conducted on the integrated prototype described in this thesis, using the same execution pipeline for all tasks and participants. The LLM used for generation is accessed via OpenRouter and configured with the model identifier \texttt{openai/gpt-oss-120b:free}. Each run uses the same system-prompt contract and identical tool availability to ensure configuration consistency across manual-vs-AI comparisons.
+All experiments are conducted on the integrated prototype described in this thesis, using the identical execution pipeline for all tasks. To understand how the system's performance scales with the underlying intelligence of the agent, the evaluation is performed across three different LLMs accessed via OpenRouter, representing small, medium, and large model classes. Each run uses the same system-prompt contract and identical tool availability to ensure configuration consistency.
 
-The runtime environment consists of three local service endpoints: (i) the modeler web client session, (ii) a LangGraph-backed orchestration runtime for threaded inference and interrupt handling \cite{langchainLangGraph}, and (iii) a browser-automation service using Puppeteer for environment-side model read/write operations \cite{pptrPuppeteerPuppeteer}. AI-generated updates are applied directly to the live collaborative workspace, and all measurements are collected from this end-to-end setup rather than from isolated offline prompts.
+The runtime environment consists of the modeler web client session, a LangGraph-backed orchestration runtime for threaded inference \cite{langchainLangGraph}, and a browser-automation service using Puppeteer for model read/write operations \cite{pptrPuppeteerPuppeteer}.
 
-\subsection{Task Design}
-We use a set of representative MILP modeling tasks with increasing complexity (small, medium, and large). Each task requires users to create or modify variables, objectives, and constraints in the modeler. For each task, two execution modes are compared:
+\subsection{Dataset and Task Design}
+Instead of relying on a user study, the evaluation employs a dataset-driven benchmarking approach. The dataset consists of 10 representative MILP modeling tasks:
+\begin{itemize}
+    \item \textbf{7 Easy Problems:} Standard formulations (e.g., simple Knapsack, Diet Problem) requiring fewer variables and constraints.
+    \item \textbf{3 Hard Problems:} Complex formulations (e.g., Facility Location, Multi-commodity Flow) requiring advanced structural adjustments and multiple interacting constraints.
+\end{itemize}
+
+For each problem in the dataset, two execution modes are measured:
 \begin{enumerate}
-    \item \textbf{Manual mode:} modeling only through direct UI interaction.
-    \item \textbf{AI-assisted mode:} modeling with the first-class AI collaborator through natural-language requests and iterative feedback.
+    \item \textbf{Manual mode:} The operator models the problem entirely through direct UI interaction.
+    \item \textbf{AI-assisted mode:} The operator models the problem with the AI collaborator through natural-language requests, providing iterative feedback when necessary.
 \end{enumerate}
 
-\subsection{Participants and Procedure}
-Participants are grouped by experience level (e.g., beginner/intermediate/advanced with optimization modeling). Each participant solves the same task set in both modes. To reduce learning effects, task order should be counter-balanced across participants.
+\subsection{Evaluation Procedure}
+For each sample problem, the operator attempts to generate a correct, feasible model using both modes. During the AI-assisted mode, the initial prompt is provided, and the system's first generated output is evaluated. If the model is incorrect or syntactically invalid, the operator provides corrective natural-language feedback until a valid model is achieved. 
 
-For each run, we log completion time, interaction effort, number of correction cycles, and final model validity. The same acceptance criteria are used for manual and AI-assisted runs.
+Throughout this process, the following data points are recorded: manual modeling time, AI modeling time, first-go correctness, validation layer interventions, and the number of feedback iterations required.
 
-\section{Metrics}
-\subsection{Efficiency Metrics}
+\section{Evaluation Metrics}
+
+\subsection{Efficiency Metrics (RQ1)}
 \begin{itemize}
-    \item \textbf{Task Completion Time (TCT):} end-to-end time from task start to accepted final model.
-    \item \textbf{Modeling Speed:} number of completed modeling operations per minute.
-    \item \textbf{Speedup Factor:}
-    \[
-    \text{Speedup} = \frac{T_{\text{manual}}}{T_{\text{AI}}}
-    \]
-    where values $>1$ indicate faster completion with AI assistance.
+    \item \textbf{Manual Modeling Time:} Total time required to manually build the model.
+    \item \textbf{AI-Assisted Modeling Time:} Total time required to build the model using the AI, including prompt writing and review time.
+    \item \textbf{Speedup Factor:} The ratio of manual time to AI-assisted time.
 \end{itemize}
 
-\subsection{Effort and Accessibility Metrics}
+\subsection{Accuracy and Validation Metrics (RQ2)}
 \begin{itemize}
-    \item \textbf{Interaction Count:} number of UI operations (manual mode) versus number of prompts/feedback turns (AI mode).
-    \item \textbf{Correction Iterations:} number of refinement cycles until user acceptance.
-    \item \textbf{Onboarding Performance:} task success rate and completion time for low-experience users.
+    \item \textbf{First-Go Correctness:} The percentage of tasks where the AI generated a mathematically correct and syntactically valid model on its first attempt.
+    \item \textbf{Validation Catch Rate:} The number of times the system's validation layer successfully intercepted and blocked an invalid or hallucinated artifact before it could corrupt the workspace.
 \end{itemize}
 
-\subsection{Quality and Reliability Metrics}
+\subsection{Human-in-the-Loop Metrics (RQ3)}
 \begin{itemize}
-    \item \textbf{Syntactic Validity Rate:} fraction of generated updates passing structural checks.
-    \item \textbf{Accepted Suggestion Ratio:} accepted proposals divided by total AI proposals.
-    \item \textbf{Final Model Quality:} whether resulting models satisfy task requirements and solver feasibility conditions.
+    \item \textbf{Correction Iterations:} For models not correct on the first go, the average number of additional human-feedback prompts required to fix the errors.
+    \item \textbf{Final Success Rate:} The percentage of tasks successfully completed after iterative human refinement.
 \end{itemize}
 
-\section{Results by Research Question}
-\subsection{RQ1: Reduction of Modeling Effort}
-To answer RQ1, we compare manual and AI-assisted completion times and interaction counts for routine and repetitive modeling tasks.
+\section{Results}
+\subsection{RQ1: AI Generation \& Efficiency}
+To answer RQ1, we compare the manual and AI-assisted completion times across the easy and hard datasets for the different LLMs.
 
 \begin{table}[h]
 \centering
-\caption{Manual vs AI-assisted efficiency comparison (fill with measured values).}
+\caption{Efficiency comparison across model sizes and task complexities.}
 \label{tab:rq1_efficiency}
-\begin{tabular}{lccc}
+\begin{tabular}{lcccc}
 \hline
-\textbf{Task} & \textbf{Manual Time (min)} & \textbf{AI Time (min)} & \textbf{Speedup} \\
+\textbf{Model Size} & \textbf{Task Level} & \textbf{Manual Time (avg)} & \textbf{AI Time (avg)} & \textbf{Speedup} \\
 \hline
-Small task & -- & -- & -- \\
-Medium task & -- & -- & -- \\
-Large task & -- & -- & -- \\
+Small LLM & Easy (7) & -- & -- & -- \\
+Small LLM & Hard (3) & -- & -- & -- \\
+Medium LLM & Easy (7) & -- & -- & -- \\
+Medium LLM & Hard (3) & -- & -- & -- \\
+Large LLM & Easy (7) & -- & -- & -- \\
+Large LLM & Hard (3) & -- & -- & -- \\
 \hline
 \end{tabular}
 \end{table}
 
-Interpretation criterion: if AI-assisted runs show consistently lower completion time and reduced interaction overhead, RQ1 is supported.
+Table~\ref{tab:rq1_efficiency} presents the core efficiency metrics recorded during the evaluation. The \textit{Manual Time} serves as the baseline, representing the operator's speed when using the platform without AI assistance. The \textit{AI Time} captures the end-to-end duration from submitting the initial natural language prompt to the final acceptance of the model, including any necessary review or wait times. The \textit{Speedup} factor is calculated as the ratio of manual time to AI time. A speedup factor greater than 1.0 indicates that the AI collaborator successfully accelerated the modeling process. By categorizing the results into Easy and Hard tasks, this table allows us to observe whether the efficiency gains are consistent across varying levels of problem complexity, and whether larger, slower LLMs negatively impact overall modeling speed due to high inference latency.
 
-\subsection{RQ2: Lowering Entry Barriers}
-To answer RQ2, we focus on participants with limited optimization/modeler experience and compare:
-\begin{itemize}
-    \item task completion rate,
-    \item completion time,
-    \item and number of blocked situations (periods where users cannot proceed without support).
-\end{itemize}
+\subsection{RQ2: Validation \& Accuracy}
+To answer RQ2, we measure the system's ability to generate valid models on the first attempt and the effectiveness of the validation layer in intercepting errors.
 
 \begin{table}[h]
 \centering
-\caption{Accessibility indicators for low-experience users (fill with measured values).}
-\label{tab:rq2_accessibility}
+\caption{First-go accuracy and validation performance across LLMs.}
+\label{tab:rq2_accuracy}
 \begin{tabular}{lccc}
 \hline
-\textbf{Metric} & \textbf{Manual} & \textbf{AI-Assisted} & \textbf{Improvement} \\
+\textbf{Model Size} & \textbf{First-Go Correct (\%)} & \textbf{Caught by Val.} & \textbf{Uncaught Errors} \\
 \hline
-Completion rate (\%) & -- & -- & -- \\
-Avg. completion time (min) & -- & -- & -- \\
-Blocked situations per task & -- & -- & -- \\
+Small LLM & -- & -- & -- \\
+Medium LLM & -- & -- & -- \\
+Large LLM & -- & -- & -- \\
 \hline
 \end{tabular}
 \end{table}
 
-Interpretation criterion: improved completion outcomes and fewer blocked situations in AI-assisted mode support RQ2.
+The metrics in Table~\ref{tab:rq2_accuracy} illustrate the raw generation capability and safety of the architecture. \textit{First-Go Correct (\%)} indicates the proportion of tasks where the AI successfully generated a fully valid and mathematically accurate model without requiring any human intervention. When the model failed to produce a correct formulation on the first attempt, the errors were either intercepted by the system or reached the user. \textit{Caught by Val.} tracks the number of times the architectural validation layer successfully identified and blocked syntactically invalid or hallucinated artifacts, proving the effectiveness of the system's safety mechanisms. Conversely, \textit{Uncaught Errors} represents logical flaws that bypassed technical validation and required human identification, directly informing the necessity of the human-in-the-loop workflow evaluated in the next section.
 
-\subsection{RQ3: Efficiency and Quality in Collaborative Development}
-To answer RQ3, we evaluate collaborative sessions where users and the AI agent co-develop a model through iterative proposal-review cycles.
+\subsection{RQ3: Human-in-the-Loop \& Feedback}
+To answer RQ3, we analyze the correction overhead required when the AI fails to produce a correct model initially.
 
 \begin{table}[h]
 \centering
-\caption{Collaborative quality and supervision metrics (fill with measured values).}
-\label{tab:rq3_quality}
-\begin{tabular}{lcc}
+\caption{Iterative correction cycles required to achieve a valid model.}
+\label{tab:rq3_hitl}
+\begin{tabular}{lccc}
 \hline
-\textbf{Metric} & \textbf{Value} & \textbf{Interpretation} \\
+\textbf{Model Size} & \textbf{Avg. Corrections} & \textbf{Max Iterations} & \textbf{Final Success (\%)} \\
 \hline
-Syntactic validity rate (\%) & -- & Structural reliability of generated updates \\
-Accepted suggestion ratio (\%) & -- & Practical usefulness of proposals \\
-Avg. correction iterations & -- & Refinement overhead under HITL \\
-Final feasible models (\%) & -- & End-state model quality \\
+Small LLM & -- & -- & -- \\
+Medium LLM & -- & -- & -- \\
+Large LLM & -- & -- & -- \\
 \hline
 \end{tabular}
 \end{table}
 
-Interpretation criterion: high validity and feasibility with manageable correction loops support RQ3, showing that collaboration quality improves without removing user control.
+Table~\ref{tab:rq3_hitl} evaluates the effectiveness of the iterative feedback mechanism for the subset of tasks that were not solved correctly on the first attempt. The \textit{Avg. Corrections} metric tracks the average number of follow-up prompts the operator had to provide to guide the AI toward a correct solution. A low average indicates that the AI agent successfully maintains context and incorporates human feedback efficiently. \textit{Max Iterations} highlights the worst-case scenario encountered during testing, indicating potential failure states or "prompt loops." Finally, the \textit{Final Success (\%)} demonstrates the ultimate reliability of the platform; it shows the percentage of tasks that were eventually solved correctly when combining the AI's generation capabilities with human supervision, regardless of initial failures.
 
 \section{Threats to Validity}
 \subsection{Internal Validity}
-Learning effects and prompt-quality variance may influence measured performance. Counter-balanced task ordering and standardized task instructions mitigate these effects.
+The evaluation relies on a predefined dataset of optimization problems. The prompts used to describe these problems may contain implicit biases based on the operator's formulation style. To mitigate this, standard problem descriptions from optimization literature are used where possible.
 
 \subsection{External Validity}
-Results from prototype tasks and a limited participant set may not generalize to all optimization domains. Future studies should include broader industrial case studies and larger user cohorts.
+The 10 selected problems represent a subset of possible MILP formulations and may not generalize to highly specific industrial applications. Furthermore, \textbf{LLM Bias} acts as a significant threat to external validity: the architecture's output quality is inherently bounded by the capabilities of the underlying LLMs. While testing across three model sizes mitigates this by showing performance variance, future advancements or regressions in LLM capabilities will directly impact the measured efficiency and accuracy of the platform.
 
 \subsection{Construct Validity}
-Time-based metrics alone cannot capture all benefits of collaboration quality. Therefore, efficiency metrics are complemented by validity, acceptance, and refinement metrics.
+Measuring efficiency via time comparison assumes the manual operator is proficient. Differences in the operator's manual modeling speed could skew the speedup factor.
 
 \section{Summary}
-This evaluation framework directly addresses all three research questions by combining quantitative efficiency comparisons (manual versus AI-assisted), accessibility indicators for less-experienced users, and quality/reliability metrics for collaborative HITL modeling. The resulting evidence determines whether the implemented first-class AI collaborator improves modeling speed, reduces entry barriers, and increases collaborative model-development quality.
+This chapter introduced a dataset-driven evaluation methodology to assess the proposed AI collaborator. By benchmarking 10 optimization tasks across three different LLM sizes, the evaluation provides quantitative insights into the system's efficiency gains (RQ1), architectural accuracy and safety (RQ2), and the effectiveness of the human-in-the-loop feedback mechanism for error recovery (RQ3).

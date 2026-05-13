@@ -21,23 +21,17 @@ Multi-user collaboration is realized through a shared workspace session with rol
 
 Change propagation therefore follows a \emph{single-source-of-truth} pattern: updates are applied to the active workspace representation, broadcast to collaborators, and rendered in their current modeler context. This reduces merge conflicts typical of file-based workflows and enables synchronous co-modeling. At the same time, role separation remains important: users with write permissions can produce state transitions, while read-only participants observe the same evolving model without mutating it.
 
-From a conceptual perspective, this has two direct implications for AI integration. First, the agent must operate on the \emph{current workspace state} rather than on isolated prompts. Second, model updates must preserve structural consistency with the platform-specific schema used by the modeler. Consequently, the agent is not designed as a generic text completion system; it is designed as a context-aware transformation component that produces valid, executable modeling artifacts.
+From a conceptual perspective, this has two direct implications for AI integration. First, the agent must operate on the \emph{current workspace state} rather than on isolated prompts. Second, model updates must preserve structural consistency with the platform-specific schema used by the modeler. Consequently, the agent is not designed as a generic text completion system, it is designed as a context-aware transformation component that produces valid, executable modeling artifacts.
 
 The proposed concept therefore adopts an in-place collaboration strategy: the AI agent is invited into the same workspace channel as human collaborators and acts on the same editable model representation. This avoids synchronization issues between separate tools, preserves the platform's existing collaboration semantics, and keeps the user in a familiar workflow.
 
-\begin{figure}[ht]
-  \centering
-  \includegraphics[width=\linewidth]{static/optimization-model-ai.pdf}
-  \caption{Optimization model with AI agent integrated into the collaborative workspace.}
-  \label{fig:optimization-model-ai}
-\end{figure}
 
 \section{Large Language Models (LLMs)}
 Large Language Models (LLMs) \cite{wikipediaLargeLanguage} provide the semantic interface between human intent and formal model edits. In this thesis, the LLM layer is responsible for mapping natural-language requests to platform-specific markup while respecting optimization semantics and syntactic constraints. Unlike standard code completion tasks, this mapping requires both domain-aware reasoning and strict output-shape control.
 
 At a technical level, contemporary LLMs are predominantly transformer-based sequence models that predict the next token conditioned on prior context \cite{vaswani2023attentionneed}. During pretraining, models ingest large-scale text and code corpora and learn statistical regularities of language, structure, and reasoning patterns. After pretraining, they are typically adapted through instruction tuning \cite{zhang2025instructiontuninglargelanguage} and preference alignment so that they better follow user intent, produce more useful responses, and reduce unsafe behavior. In practical use, user prompts are converted into token sequences, processed through stacked self-attention and feed-forward layers, and decoded into output tokens that form the final response.
 
-The current LLM landscape is characterized by rapid iteration along three dimensions: (i) \emph{capability}, including stronger reasoning and code generation performance; (ii) \emph{interaction modality}, including support for text, code, and increasingly multimodal inputs; and (iii) \emph{deployment model}, spanning proprietary hosted APIs and open-weight/self-hosted alternatives \cite{Jiang_2026, yang2025codefoundationmodelsagents, zhao2026surveylargelanguagemodels}. For engineering applications, this means model choice is no longer purely about benchmark scores; it is also about latency, cost, controllability, context-window limits, and integration ergonomics.
+The current LLM landscape is characterized by rapid iteration along three dimensions: (i) \emph{capability}, including stronger reasoning and code generation performance; (ii) \emph{interaction modality}, including support for text, code, and increasingly multimodal inputs, and (iii) \emph{deployment model}, spanning proprietary hosted APIs and open-weight/self-hosted alternatives \cite{Jiang_2026, yang2025codefoundationmodelsagents, zhao2026surveylargelanguagemodels}. For engineering applications, this means model choice is no longer purely about benchmark scores, it is also about latency, cost, controllability, context-window limits, and integration ergonomics.
 
 In this context, an \emph{LLM API} is the operational interface that allows external systems to call a hosted model service programmatically. Instead of running the model weights locally, the client sends structured requests (e.g., messages, system instructions, tool schemas, generation parameters) to a remote endpoint and receives generated outputs, often with optional streaming. A representative example is the OpenAI API \cite{openaiPlatform}, where applications send chat-completion style requests and receive token-generated responses that can be consumed in real time. Conceptually, APIs decouple model consumption from model hosting: the application focuses on orchestration logic, while model serving, scaling, and infrastructure maintenance remain with the provider.
 
@@ -52,11 +46,11 @@ Several alternatives are plausible for this layer:
 \end{itemize}
 
 \subsection{Choice}
-The implemented concept uses \textbf{OpenRouter} \cite{openrouterOpenRouter} as the model-provider abstraction layer. OpenRouter is a hosted routing service that exposes an OpenAI-compatible API \cite{openaiOverview} surface while allowing requests to be dispatched to different underlying model providers through a unified interface. In practice, the client sends a standard chat-completion style request to OpenRouter together with a model identifier; OpenRouter then forwards the request to the selected backend model and returns the generated response in a compatible format.
+The implemented concept uses \textbf{OpenRouter} \cite{openrouterOpenRouter} as the model-provider abstraction layer. OpenRouter is a hosted routing service that exposes an OpenAI-compatible API \cite{openaiOverview} surface while allowing requests to be dispatched to different underlying model providers through a unified interface. In practice, the client sends a standard chat-completion style request to OpenRouter together with a model identifier, OpenRouter then forwards the request to the selected backend model and returns the generated response in a compatible format. Figure \ref{fig:openrouter} shows a simple graph of the architecture.
 
 \begin{figure}[ht]
   \centering
-  \includegraphics[width=\linewidth]{static/openrouter.pdf}
+  \includegraphics[width=13cm]{static/openrouter.pdf}
   \caption{OpenRouter as a model-provider abstraction layer routing requests to different LLM backends.}
   \label{fig:openrouter}
 \end{figure}
@@ -64,7 +58,7 @@ The implemented concept uses \textbf{OpenRouter} \cite{openrouterOpenRouter} as 
 Relative to alternatives such as a custom provider gateway or a LiteLLM \cite{litellmLiteLLM}-based self-managed abstraction, this choice favors lower operational overhead in the thesis context: multi-model routing is available immediately without introducing an additional in-house proxy service that must be deployed and maintained. In this project, the choice is motivated by the following concrete implementation requirements:
 \begin{enumerate}
     \item \textbf{Provider-level model portability:} The implementation can change model backends by updating the model identifier and provider configuration, while preserving the same request contract in the orchestration layer.
-    \item \textbf{Fast experimentation across model variants:} The project can evaluate different cost/latency/quality trade-offs during development without redesigning the surrounding tool-calling workflow.
+    \item \textbf{Fast experimentation across model variants:} The project can evaluate different cost/latency/quality trade-offs during development and evaluation without redesigning the surrounding tool-calling workflow.
     \item \textbf{Lower operational burden than self-managed routing:} Compared with running an internal proxy abstraction layer, the hosted routing approach avoids additional service deployment, monitoring, and maintenance tasks in this thesis scope.
 \end{enumerate}
 
@@ -90,14 +84,14 @@ Common alternatives include:
 \subsection{Choice}
 The implemented concept uses \textbf{Puppeteer} \cite{pptrPuppeteerPuppeteer}. For the current platform architecture, this is advantageous because:
 \begin{enumerate}
-    \item \textbf{Native Chromium \cite{chromiumHome} focus:} The modeler workflow is browser-centric and JavaScript-heavy; Puppeteer provides tight control over page navigation and DOM operations in this context.
+    \item \textbf{Native Chromium \cite{chromiumHome} focus:} The modeler workflow is browser-centric and JavaScript-heavy, Puppeteer provides tight control over page navigation and DOM operations in this context.
     \item \textbf{Low conceptual overhead:} The API supports direct element evaluation and straightforward automation scripts for login, session joining, and model updates.
 \end{enumerate}
 
 Given the thesis objective (functional AI collaboration in a real platform), this choice offers the best trade-off between engineering effort and operational capability.
 
 \section{Chat-User Interaction}
-For first-class collaboration, the user-agent channel must be embedded directly in the modeler, maintain conversational context, and support iterative refinement instead of one-shot commands. In practice, chat interaction in this system is not treated as an auxiliary feature; it is the primary coordination mechanism between user intent and agent execution. Users describe desired model changes in natural language, inspect generated responses in the same interface, and continue with clarification or corrective feedback when needed.
+For first-class collaboration, the user-agent channel must be embedded directly in the modeler, maintain conversational context, and support iterative refinement instead of one-shot commands. In practice, chat interaction in this system is not treated as an auxiliary feature, it is the primary coordination mechanism between user intent and agent execution. Users describe desired model changes in natural language, inspect generated responses in the same interface, and continue with clarification or corrective feedback when needed.
 
 From a conceptual standpoint, this interaction model has three requirements. First, the chat must remain \emph{workspace-aware}, so that responses are grounded in the current model state rather than in isolated prompts. Second, it must support \emph{persistent multi-turn state}, because optimization edits frequently require incremental negotiation (e.g., add a variable, then constrain it, then revise objective coefficients). Third, it must support \emph{low-friction UX patterns} (message history, typing and loading states, structured rendering, clear action affordances) so that users can focus on model logic instead of interaction mechanics.
 
@@ -110,7 +104,7 @@ Three major alternatives were considered:
 \end{itemize}
 
 \subsection{Choice}
-The selected implementation embeds an in-modeler conversational UI based on \textbf{assistant-ui} with runtime integration for stateful agent communication \cite{assistantui, langchainLangGraph}. The frontend implementation combines \textbf{React} \cite{reactReact}, \textbf{shadcn/ui} \cite{shadcnFoundationYour}-style component primitives, and \textbf{Tailwind CSS} \cite{tailwindcssTailwindRapidly} utility styling. Together, these layers provide a composable foundation where agent-specific behavior can be integrated without rebuilding standard chat infrastructure from scratch.
+The selected implementation embeds an in-modeler conversational UI based on \textbf{assistant-ui} with runtime integration for stateful agent communication using \textbf{LangGraph} \cite{assistantui, langchainLangGraph}. The frontend implementation combines \textbf{React} \cite{reactReact}, \textbf{shadcn/ui} \cite{shadcnFoundationYour}-style component primitives, and \textbf{Tailwind CSS} \cite{tailwindcssTailwindRapidly} utility styling. Together, these layers provide a composable foundation where agent-specific behavior can be integrated without rebuilding standard chat infrastructure from scratch.
 
 Concretely, React provides declarative state management for message streams and UI updates, assistant-ui contributes domain-specific interaction primitives (thread containers, runtime providers, transport abstractions), shadcn/ui-style components provide accessible and reusable UI building blocks, and Tailwind enables rapid and consistent visual composition within the existing modeler interface. This stack lets the implementation focus on collaboration logic (thread state, model context injection, approval flow) rather than reinventing baseline UI concerns such as layout scaffolding, interaction widgets, and component wiring.
 
@@ -128,11 +122,11 @@ Human-in-the-loop (HITL) is a collaboration concept in which AI generation and h
 
 This concept is necessary because optimization modeling has high semantic sensitivity: an output can be syntactically valid and still be mathematically inappropriate (e.g., incorrect bounds, missing constraints, wrong objective intent). For that reason, correctness cannot rely on generation alone. It must emerge from a joint process in which the agent accelerates drafting and the user validates domain intent.
 
-Operationally, this introduces a loop-type structure: \emph{user request} $\rightarrow$ \emph{agent proposal} $\rightarrow$ \emph{validation and presentation} $\rightarrow$ \emph{user feedback/approval} $\rightarrow$ \emph{regeneration or commit}. Implementing this reliably requires an orchestration library that can represent explicit states, conditional transitions, tool invocation, and interruption points for human feedback.
+Operationally, this introduces a loop-type structure: \emph{user request} $\rightarrow$ \emph{agent proposal} $\rightarrow$ \emph{user feedback} $\rightarrow$ \emph{approval or rejection}. This sequence can be understood simply by Figure \ref{fig:hitl}. Implementing this reliably requires an orchestration library that can represent explicit states, conditional transitions, tool invocation, and interruption points for human feedback.
 
 \begin{figure}[ht]
   \centering
-  \includegraphics[width=\linewidth]{static/hitl.pdf}
+  \includegraphics[width=10cm]{static/hitl.pdf}
   \caption{Human-in-the-loop decision cycle for AI-assisted optimization modeling.}
   \label{fig:hitl}
 \end{figure}
@@ -143,7 +137,7 @@ At the orchestration-framework level, several alternatives are possible:
     \item \textbf{LangChain \cite{langchainLangChainOverview} Agents:} Fast to prototype for tool-calling scenarios, but less explicit for graph-level state transitions in complex iterative approval flows.
     \item \textbf{LangGraph \cite{langchainLangGraph}:} Graph-based orchestration with explicit nodes, edges, conditional routing, and interruption primitives for human approval.
     \item \textbf{n8n \cite{n8nN8nioWorkflow}:} Strong visual workflow automation and integration ecosystem, but less specialized for fine-grained in-process conversational state management in code-centric agent loops.
-    \item \textbf{Microsoft AutoGen / Semantic Kernel style agent frameworks \cite{wu2023autogenenablingnextgenllm}:} Useful for multi-agent and enterprise integration patterns, but often heavier than needed for a single-agent, workspace-centric HITL loop.
+    \item \textbf{Microsoft AutoGen \cite{wu2023autogenenablingnextgenllm}:} Useful for multi-agent and enterprise integration patterns, but often heavier than needed for a single-agent, workspace-centric HITL loop.
     \item \textbf{Custom orchestration from scratch:} Maximum flexibility, but high implementation and maintenance overhead for retry logic, state persistence, interrupt handling, and debugging.
 \end{itemize}
 
@@ -166,7 +160,7 @@ The backend concept follows a service-oriented architecture that separates orche
 
 At the infrastructure level, both components are exposed as HTTP servers \cite{mozillaWhatServer}. An HTTP server is a process that listens for network requests on defined endpoints (routes), executes application logic, and returns structured responses (typically JSON). This is important for the present system because it creates a clean contract between components: the modeler-facing side can call backend capabilities through stable API endpoints without depending on internal implementation details.
 
-Using HTTP-based services offers three practical advantages in this architecture. First, it provides language-agnostic interoperability, allowing Python and JavaScript services to collaborate through a common protocol. Second, it improves modularity by enabling each service (agent orchestration, browser control, validation) to evolve independently. Third, it supports deployment flexibility, since services can run on separate processes or hosts while preserving the same request interface.
+Using HTTP-based services offers three practical advantages in this architecture. First, it provides language-agnostic interoperability, allowing Python and JavaScript services to collaborate through a common protocol. Second, it improves modularity by enabling each service (agent orchestration, browser control, validation) to evolve independently. Third, it supports deployment flexibility, since services can run on separate processes or hosts while preserving the same request interface. 
 
 \subsection{Alternatives}
 Architecturally, at least three alternatives exist:
@@ -186,4 +180,11 @@ The selected architecture uses \textbf{FastAPI \cite{tiangoloFastAPI} + LangGrap
     \item \textbf{Modular evolution:} Each service can be replaced or scaled independently (e.g., model backend changes without rewriting browser control).
 \end{enumerate}
 
-This separation also supports future enhancements such as stronger validation services, improved observability, and safer deployment boundaries.
+This separation also supports future enhancements such as stronger validation services, improved observability, and safer deployment boundaries. The overall architecture can be seen in the Figure \ref{fig:optimization-model-ai}
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=\linewidth]{static/optimization-model-ai.pdf}
+  \caption{Optimization model with AI agent integrated into the collaborative workspace.}
+  \label{fig:optimization-model-ai}
+\end{figure}
