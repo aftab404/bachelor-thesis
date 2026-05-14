@@ -13,6 +13,9 @@ Another significant contribution is \textbf{LLMOPT} \cite{jiang2025llmoptlearnin
 \subsection{LLM Benchmark for Optimization Modeling}
 While the aforementioned frameworks focus on generation, \textbf{Mamo} \cite{huang2025llmsmathematicalmodelingbridging} provides a specialized benchmark to evaluate these modeling capabilities. Mamo consists of 1,209 meticulously curated questions spanning Ordinary Differential Equations (ODEs), Linear Programming (LP), and Mixed-Integer Linear Programming (MILP). Unlike traditional result-oriented metrics, Mamo utilizes a ``model generation and numerical validation'' approach. An LLM is tasked with formulating a model from the dataset, which is then executed by a solver; the resulting numerical answer is compared against the provided ground truth. 
 
+Complementary to Mamo, the \textbf{NLP4LP} dataset \cite{ahmaditeshnizi2023optimusoptimizationmodelingusing} was introduced alongside the \textbf{OptiMUS} framework to further benchmark the formulation of LP and MILP problems from natural language descriptions. While OptiMUS serves as an autonomous LLM-based agent capable of drafting, debugging, and testing solver code, its accompanying NLP4LP dataset provides a rigorous testing ground for evaluating such capabilities. By challenging agents to generate executable mathematical models from text and verifying the resulting solutions, NLP4LP establishes a clear baseline for measuring how effectively an AI can interpret complex optimization constraints. Together, datasets like Mamo and NLP4LP provide the necessary quantitative foundation for assessing the accuracy and robustness of LLM-driven modeling tools. Crucially, a selected subset of the NLP4LP dataset serves as the core benchmark for the experimental evaluation conducted later in this thesis.
+
+
 \section{AI Code Generation}
 
 \subsection{Current State}

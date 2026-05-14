@@ -3,21 +3,27 @@
 \section{Evaluation Goals}
 This chapter evaluates whether the implemented AI collaborator addresses the core objectives formulated in the introduction. Specifically, the evaluation seeks to answer the following research questions:
 \begin{itemize}
-    \item \textbf{RQ1 (AI Generation \& Efficiency):} To what extent does the integration of an AI-based collaborator reduce the time and manual effort required to construct MILP models compared to purely manual development?
-    \item \textbf{RQ2 (Validation \& Accuracy):} How accurately can the AI agent generate mathematically and syntactically valid model structures, and how effectively does the system's validation layer prevent erroneous modifications?
-    \item \textbf{RQ3 (Human-in-the-Loop \& Feedback):} How effectively does the iterative human-in-the-loop feedback mechanism enable the operator to recover from AI-generated errors and converge on a correct formulation?
+    \item \textbf{RQ1: How much does the AI collaborator reduce the time and manual effort required to construct MILP models compared to purely manual development?}
+    \item \textbf{RQ2: How accurately does the AI generate valid model structures, and how well does the validation layer prevent erroneous updates?}
+    \item \textbf{RQ3: How effectively does the human-in-the-loop feedback mechanism enable the operator to correct AI-generated errors and achieve a valid formulation?}
 \end{itemize}
+
 
 To answer these questions, we evaluate the system architecture using a benchmark dataset of optimization problems tested across multiple Large Language Models (LLMs) of varying sizes.
 
 \section{Experimental Setup}
 \subsection{System Configuration}
-All experiments are conducted on the integrated prototype described in this thesis, using the identical execution pipeline for all tasks. To understand how the system's performance scales with the underlying intelligence of the agent, the evaluation is performed across three different LLMs accessed via OpenRouter, representing small, medium, and large model classes. Each run uses the same system-prompt contract and identical tool availability to ensure configuration consistency.
+All experiments are conducted on the integrated prototype described in this thesis, using the identical execution pipeline for all tasks. To understand how the system's performance scales with the underlying intelligence of the agent, the evaluation is performed across three distinct OpenAI model tiers \cite{openaiCompareModels}, representing small, medium, and large capability classes:
+\begin{itemize}
+    \item \textbf{Small:} \texttt{gpt-5.4-nano} (fast, cost-effective baseline)
+    \item \textbf{Medium:} \texttt{gpt-5.5} (standard high-performance flagship)
+    \item \textbf{Large (Reasoning):} \texttt{o3} (advanced reasoning model for complex logical planning)
+\end{itemize}
 
-The runtime environment consists of the modeler web client session, a LangGraph-backed orchestration runtime for threaded inference \cite{langchainLangGraph}, and a browser-automation service using Puppeteer for model read/write operations \cite{pptrPuppeteerPuppeteer}.
+The runtime environment consists of the modeler web client session, a LangGraph-backed orchestration runtime for threaded inference, and a browser-automation service using Puppeteer for model read/write operations.
 
 \subsection{Dataset and Task Design}
-Instead of relying on a user study, the evaluation employs a dataset-driven benchmarking approach. The dataset consists of 10 representative MILP modeling tasks:
+The evaluation employs a dataset-driven benchmarking approach. The dataset consists of 10 representative MILP modeling tasks taken from the NLP4LP \cite{ahmaditeshnizi2023optimusoptimizationmodelingusing} dataset:
 \begin{itemize}
     \item \textbf{7 Easy Problems:} Standard formulations (e.g., simple Knapsack, Diet Problem) requiring fewer variables and constraints.
     \item \textbf{3 Hard Problems:} Complex formulations (e.g., Facility Location, Multi-commodity Flow) requiring advanced structural adjustments and multiple interacting constraints.
@@ -67,12 +73,12 @@ To answer RQ1, we compare the manual and AI-assisted completion times across the
 \hline
 \textbf{Model Size} & \textbf{Task Level} & \textbf{Manual Time (avg)} & \textbf{AI Time (avg)} & \textbf{Speedup} \\
 \hline
-Small LLM & Easy (7) & -- & -- & -- \\
-Small LLM & Hard (3) & -- & -- & -- \\
-Medium LLM & Easy (7) & -- & -- & -- \\
-Medium LLM & Hard (3) & -- & -- & -- \\
-Large LLM & Easy (7) & -- & -- & -- \\
-Large LLM & Hard (3) & -- & -- & -- \\
+Small LLM & Easy (4) & 430.5 & 4.79 & 89x \\
+Small LLM & Hard (6) & 786 & 4.98 & 157x  \\
+Medium LLM & Easy (4) & 430.5 & 9.51 & 45x \\
+Medium LLM & Hard (6) & 786 & 20.93 & 37x \\
+Large LLM & Easy (4) & 430.5 & 20.53 & 20x \\
+Large LLM & Hard (6) & 786 & 23.86 & 32x \\
 \hline
 \end{tabular}
 \end{table}
@@ -88,11 +94,11 @@ To answer RQ2, we measure the system's ability to generate valid models on the f
 \label{tab:rq2_accuracy}
 \begin{tabular}{lccc}
 \hline
-\textbf{Model Size} & \textbf{First-Go Correct (\%)} & \textbf{Caught by Val.} & \textbf{Uncaught Errors} \\
+\textbf{Model Size} & \textbf{First-Go Correct (\%)} & \textbf{Validation Error (\%)} & \textbf{Uncaught Error (\%)} \\
 \hline
-Small LLM & -- & -- & -- \\
-Medium LLM & -- & -- & -- \\
-Large LLM & -- & -- & -- \\
+Small LLM & 40 & 10 & 60 \\
+Medium LLM & 80 & 0 & 20 \\
+Large LLM & 90 & 0 & 10 \\
 \hline
 \end{tabular}
 \end{table}
@@ -108,16 +114,16 @@ To answer RQ3, we analyze the correction overhead required when the AI fails to 
 \label{tab:rq3_hitl}
 \begin{tabular}{lccc}
 \hline
-\textbf{Model Size} & \textbf{Avg. Corrections} & \textbf{Max Iterations} & \textbf{Final Success (\%)} \\
+\textbf{Model Size} & \textbf{Avg. Corrections}& \textbf{Final Success (\%)} \\
 \hline
-Small LLM & -- & -- & -- \\
-Medium LLM & -- & -- & -- \\
-Large LLM & -- & -- & -- \\
+Small LLM & 2 & 40 \\
+Medium LLM & 0.4 & 90  \\
+Large LLM & 0 & 100 \\
 \hline
 \end{tabular}
 \end{table}
 
-Table~\ref{tab:rq3_hitl} evaluates the effectiveness of the iterative feedback mechanism for the subset of tasks that were not solved correctly on the first attempt. The \textit{Avg. Corrections} metric tracks the average number of follow-up prompts the operator had to provide to guide the AI toward a correct solution. A low average indicates that the AI agent successfully maintains context and incorporates human feedback efficiently. \textit{Max Iterations} highlights the worst-case scenario encountered during testing, indicating potential failure states or "prompt loops." Finally, the \textit{Final Success (\%)} demonstrates the ultimate reliability of the platform; it shows the percentage of tasks that were eventually solved correctly when combining the AI's generation capabilities with human supervision, regardless of initial failures.
+Table~\ref{tab:rq3_hitl} evaluates the effectiveness of the iterative feedback mechanism for the subset of tasks that were not solved correctly on the first attempt. The \textit{Avg. Corrections} metric tracks the average number of follow-up prompts the operator had to provide to guide the AI toward a correct solution. A low average indicates that the AI agent successfully maintains context and incorporates human feedback efficiently. Finally, the \textit{Final Success (\%)} demonstrates the ultimate reliability of the platform, it shows the percentage of tasks that were eventually solved correctly when combining the AI's generation capabilities with human supervision, regardless of initial failures.
 
 \section{Threats to Validity}
 \subsection{Internal Validity}
