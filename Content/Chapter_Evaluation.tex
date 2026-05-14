@@ -25,8 +25,8 @@ The runtime environment consists of the modeler web client session, a LangGraph-
 \subsection{Dataset and Task Design}
 The evaluation employs a dataset-driven benchmarking approach. The dataset consists of 10 representative MILP modeling tasks taken from the NLP4LP \cite{ahmaditeshnizi2023optimusoptimizationmodelingusing} dataset:
 \begin{itemize}
-    \item \textbf{7 Easy Problems:} Standard formulations (e.g., simple Knapsack, Diet Problem) requiring fewer variables and constraints.
-    \item \textbf{3 Hard Problems:} Complex formulations (e.g., Facility Location, Multi-commodity Flow) requiring advanced structural adjustments and multiple interacting constraints.
+    \item \textbf{4 Easy Problems:} Standard formulations (e.g., simple Knapsack, Diet Problem) requiring fewer variables and constraints. Specifically problem IDs 17, 1, 3, 4 From NLP4LP.
+    \item \textbf{6 Hard Problems:} Complex formulations (e.g., Facility Location, Multi-commodity Flow) requiring advanced structural adjustments and multiple interacting constraints. Specifically problem IDs 301, 302, 303, 304, 305, 306 From NLP4LP.
 \end{itemize}
 
 For each problem in the dataset, two execution modes are measured:
@@ -125,7 +125,7 @@ Large LLM & 0 & 100 \\
 \end{tabular}
 \end{table}
 
-As shown in Table \ref{tab:rq3_hitl}, the iterative Human-in-the-Loop mechanism effectively bridges the gap between initial generation accuracy and final model validity, provided the underlying model possesses sufficient reasoning capability. The Large LLM achieved a perfect 100\% final success rate, while the Medium LLM reached 90\% success with minimal human intervention (averaging 0.4 corrections). However, the Small LLM failed to benefit from iterative feedback; it plateaued at a 40\% final success rate despite requiring an average of 2 correction iterations per task. This indicates that while the HITL architecture is highly effective for capable models, it cannot fully compensate for fundamental reasoning deficits in smaller models.
+As shown in Table \ref{tab:rq3_hitl}, the iterative Human-in-the-Loop mechanism effectively bridges the gap between initial generation accuracy and final model validity, provided the underlying model possesses sufficient reasoning capability. The Large LLM achieved a perfect 100\% final success rate, while the Medium LLM reached 90\% success with minimal human intervention (averaging 0.4 corrections). However, the Small LLM failed to benefit from iterative feedback, it plateaued at a 40\% final success rate despite requiring an average of 2 correction iterations per task. This indicates that while the HITL architecture is highly effective for capable models, it cannot fully compensate for fundamental reasoning deficits in smaller models.
 
 
 \section{Threats to Validity}
