@@ -15,7 +15,7 @@ To answer these questions, we evaluate the system architecture using a benchmark
 \subsection{System Configuration}
 All experiments are conducted on the integrated prototype described in this thesis, using the identical execution pipeline for all tasks. To understand how the system's performance scales with the underlying intelligence of the agent, the evaluation is performed across three distinct OpenAI model tiers \cite{openaiCompareModels}, representing small, medium, and large capability classes:
 \begin{itemize}
-    \item \textbf{Small:} \texttt{gpt-5.4-nano} (fast, cost-effective baseline)
+    \item \textbf{Small:} \texttt{gpt-5.5-mini} (fast, cost-effective baseline)
     \item \textbf{Medium:} \texttt{gpt-5.5} (standard high-performance flagship)
     \item \textbf{Large (Reasoning):} \texttt{o3} (advanced reasoning model for complex logical planning)
 \end{itemize}
@@ -83,7 +83,8 @@ Large LLM & Hard (6) & 786 & 23.86 & 32x \\
 \end{tabular}
 \end{table}
 
-Table~\ref{tab:rq1_efficiency} presents the core efficiency metrics recorded during the evaluation. The \textit{Manual Time} serves as the baseline, representing the operator's speed when using the platform without AI assistance. The \textit{AI Time} captures the end-to-end duration from submitting the initial natural language prompt to the final acceptance of the model, including any necessary review or wait times. The \textit{Speedup} factor is calculated as the ratio of manual time to AI time. A speedup factor greater than 1.0 indicates that the AI collaborator successfully accelerated the modeling process. By categorizing the results into Easy and Hard tasks, this table allows us to observe whether the efficiency gains are consistent across varying levels of problem complexity, and whether larger, slower LLMs negatively impact overall modeling speed due to high inference latency.
+The results in Table \ref{tab:rq1_efficiency} demonstrate massive efficiency gains across all models, with speedups ranging from 20x to 157x compared to manual modeling. The Small LLM exhibits the highest speedup factor due to its extremely low inference latency (averaging under 5 seconds). In contrast, the Large LLM takes longer (averaging over 20 seconds) due to its advanced reasoning overhead. However, despite the lower relative speedup multiplier, even the Large LLM completes complex tasks in a fraction of the time required for manual formulation, proving the profound time-saving potential of the AI collaborator.
+
 
 \subsection{RQ2: Validation \& Accuracy}
 To answer RQ2, we measure the system's ability to generate valid models on the first attempt and the effectiveness of the validation layer in intercepting errors.
@@ -103,7 +104,8 @@ Large LLM & 90 & 0 & 10 \\
 \end{tabular}
 \end{table}
 
-The metrics in Table~\ref{tab:rq2_accuracy} illustrate the raw generation capability and safety of the architecture. \textit{First-Go Correct (\%)} indicates the proportion of tasks where the AI successfully generated a fully valid and mathematically accurate model without requiring any human intervention. When the model failed to produce a correct formulation on the first attempt, the errors were either intercepted by the system or reached the user. \textit{Caught by Val.} tracks the number of times the architectural validation layer successfully identified and blocked syntactically invalid or hallucinated artifacts, proving the effectiveness of the system's safety mechanisms. Conversely, \textit{Uncaught Errors} represents logical flaws that bypassed technical validation and required human identification, directly informing the necessity of the human-in-the-loop workflow evaluated in the next section.
+Table \ref{tab:rq2_accuracy} highlights a clear correlation between model scale and generation accuracy. The Large LLM achieved an impressive 90\% first-go correctness, with the Medium LLM following closely at 80\%. Conversely, the Small LLM struggled significantly, managing only 40\% correctness on the first attempt and producing a high rate of uncaught logical errors (60\%). Notably, the architectural validation layer successfully intercepted 10\% of the Small LLM's errors, preventing syntactically invalid or hallucinated structures from being applied to the collaborative workspace.
+
 
 \subsection{RQ3: Human-in-the-Loop \& Feedback}
 To answer RQ3, we analyze the correction overhead required when the AI fails to produce a correct model initially.
@@ -123,7 +125,8 @@ Large LLM & 0 & 100 \\
 \end{tabular}
 \end{table}
 
-Table~\ref{tab:rq3_hitl} evaluates the effectiveness of the iterative feedback mechanism for the subset of tasks that were not solved correctly on the first attempt. The \textit{Avg. Corrections} metric tracks the average number of follow-up prompts the operator had to provide to guide the AI toward a correct solution. A low average indicates that the AI agent successfully maintains context and incorporates human feedback efficiently. Finally, the \textit{Final Success (\%)} demonstrates the ultimate reliability of the platform, it shows the percentage of tasks that were eventually solved correctly when combining the AI's generation capabilities with human supervision, regardless of initial failures.
+As shown in Table \ref{tab:rq3_hitl}, the iterative Human-in-the-Loop mechanism effectively bridges the gap between initial generation accuracy and final model validity, provided the underlying model possesses sufficient reasoning capability. The Large LLM achieved a perfect 100\% final success rate, while the Medium LLM reached 90\% success with minimal human intervention (averaging 0.4 corrections). However, the Small LLM failed to benefit from iterative feedback; it plateaued at a 40\% final success rate despite requiring an average of 2 correction iterations per task. This indicates that while the HITL architecture is highly effective for capable models, it cannot fully compensate for fundamental reasoning deficits in smaller models.
+
 
 \section{Threats to Validity}
 \subsection{Internal Validity}

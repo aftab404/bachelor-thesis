@@ -1,18 +1,18 @@
 [0] Config.pm:328> INFO - This is Biber 2.21
 [0] Config.pm:331> INFO - Logfile is 'Thesis.blg'
-[138] biber-MSWIN64:342> INFO - === 
-[180] Biber.pm:421> INFO - Reading 'Thesis.bcf'
-[343] Biber.pm:1002> INFO - Found 56 citekeys in bib section 0
-[363] Biber.pm:4487> INFO - Processing section 0
-[378] Biber.pm:4678> INFO - Looking for bibtex file 'Literature.bib' for section 0
-[443] bibtex.pm:1713> INFO - LaTeX decoding ...
-[526] bibtex.pm:1519> INFO - Found BibTeX data source 'Literature.bib'
-[1010] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'normalization = NFD' with 'normalization = prenormalized'
-[1010] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'variable = shifted' with 'variable = non-ignorable'
-[1010] Biber.pm:4307> INFO - Sorting list 'nty/global//global/global/global' of type 'entry' with template 'nty' and locale 'en-US'
-[1010] Biber.pm:4313> INFO - No sort tailoring available for locale 'en-US'
-[1073] bbl.pm:676> INFO - Writing 'Thesis.bbl' with encoding 'UTF-8'
-[1151] bbl.pm:779> INFO - Output to Thesis.bbl
-[1151] Biber.pm:132> WARN - Duplicate entry key: 'wikipediaLargeLanguage' in file 'Literature.bib', skipping ...
-[1151] Biber.pm:132> WARN - Duplicate entry key: 'mozillaDocumentObject' in file 'Literature.bib', skipping ...
-[1151] Biber.pm:134> INFO - WARNINGS: 2
+[220] biber-MSWIN64:342> INFO - === 
+[284] Biber.pm:421> INFO - Reading 'Thesis.bcf'
+[485] Biber.pm:1002> INFO - Found 59 citekeys in bib section 0
+[510] Biber.pm:4487> INFO - Processing section 0
+[526] Biber.pm:4678> INFO - Looking for bibtex file 'Literature.bib' for section 0
+[657] bibtex.pm:1713> INFO - LaTeX decoding ...
+[787] bibtex.pm:1519> INFO - Found BibTeX data source 'Literature.bib'
+[1429] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'normalization = NFD' with 'normalization = prenormalized'
+[1430] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'variable = shifted' with 'variable = non-ignorable'
+[1430] Biber.pm:4307> INFO - Sorting list 'nty/global//global/global/global' of type 'entry' with template 'nty' and locale 'en-US'
+[1430] Biber.pm:4313> INFO - No sort tailoring available for locale 'en-US'
+[1511] bbl.pm:676> INFO - Writing 'Thesis.bbl' with encoding 'UTF-8'
+[1614] bbl.pm:779> INFO - Output to Thesis.bbl
+[1614] Biber.pm:132> WARN - Duplicate entry key: 'wikipediaLargeLanguage' in file 'Literature.bib', skipping ...
+[1614] Biber.pm:132> WARN - Duplicate entry key: 'mozillaDocumentObject' in file 'Literature.bib', skipping ...
+[1614] Biber.pm:134> INFO - WARNINGS: 2
